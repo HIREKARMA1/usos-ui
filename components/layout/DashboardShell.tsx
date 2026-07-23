@@ -20,7 +20,6 @@ import {
   Coins,
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
-import { BrandStripe } from '@/components/ui/BrandStripe';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
@@ -92,7 +91,6 @@ export function DashboardShell({
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-surface-soft">
-      <BrandStripe className="shrink-0" />
       <div className="flex min-h-0 flex-1">
         <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-white lg:flex">
           <div className="shrink-0 border-b border-line px-4 py-4">
@@ -104,7 +102,7 @@ export function DashboardShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="z-20 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-line bg-white px-4 sm:px-6">
+          <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-line bg-white px-4 sm:px-6">
             <div className="flex items-center gap-3">
               <button
                 type="button"

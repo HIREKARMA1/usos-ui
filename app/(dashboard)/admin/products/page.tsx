@@ -16,11 +16,13 @@ const emptyForm = {
   name: '',
   description: '',
   price_inr: '',
-  image_url: '',
+  image_urls: [] as string[],
   stock_count: '100',
   points_per_unit: '10',
   is_active: true,
 };
+
+const MAX_IMAGES = 8;
 
 export default function AdminProductsPage() {
   const [rows, setRows] = useState<any[]>([]);
@@ -50,13 +52,19 @@ export default function AdminProductsPage() {
   }
 
   function startEdit(p: any) {
+    const urls: string[] =
+      Array.isArray(p.image_urls) && p.image_urls.length
+        ? p.image_urls
+        : p.image_url
+          ? [p.image_url]
+          : [];
     setEditingId(p.id);
     setForm({
       sku: p.sku,
       name: p.name,
       description: p.description || '',
       price_inr: String((p.price_paise || 0) / 100),
-      image_url: p.image_url || '',
+      image_urls: urls,
       stock_count: String(p.stock_count ?? 0),
       points_per_unit: String(p.points_per_unit ?? 0),
       is_active: Boolean(p.is_active),
@@ -64,33 +72,59 @@ export default function AdminProductsPage() {
     if (fileRef.current) fileRef.current.value = '';
   }
 
-  async function onImageSelected(file: File | null) {
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please choose an image file');
+  async function onImagesSelected(files: FileList | null) {
+    if (!files?.length) return;
+    const remaining = MAX_IMAGES - form.image_urls.length;
+    if (remaining <= 0) {
+      toast.error(`Maximum ${MAX_IMAGES} images allowed`);
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be under 5 MB');
-      return;
-    }
+    const selected = Array.from(files).slice(0, remaining);
     setUploading(true);
     try {
-      const { url } = await api.uploadProductImage(file);
-      setForm((f) => ({ ...f, image_url: url }));
-      toast.success('Image uploaded');
+      const uploaded: string[] = [];
+      for (const file of selected) {
+        if (!file.type.startsWith('image/')) {
+          toast.error(`${file.name}: not an image`);
+          continue;
+        }
+        if (file.size > 5 * 1024 * 1024) {
+          toast.error(`${file.name}: must be under 5 MB`);
+          continue;
+        }
+        const { url } = await api.uploadProductImage(file);
+        uploaded.push(url);
+      }
+      if (uploaded.length) {
+        setForm((f) => ({ ...f, image_urls: [...f.image_urls, ...uploaded] }));
+        toast.success(uploaded.length === 1 ? 'Image uploaded' : `${uploaded.length} images uploaded`);
+      }
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || 'Image upload failed');
-      if (fileRef.current) fileRef.current.value = '';
     } finally {
       setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
     }
+  }
+
+  function removeImage(url: string) {
+    setForm((f) => ({ ...f, image_urls: f.image_urls.filter((u) => u !== url) }));
+  }
+
+  function moveImage(index: number, dir: -1 | 1) {
+    setForm((f) => {
+      const next = [...f.image_urls];
+      const j = index + dir;
+      if (j < 0 || j >= next.length) return f;
+      [next[index], next[j]] = [next[j], next[index]];
+      return { ...f, image_urls: next };
+    });
   }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!form.image_url) {
-      toast.error('Upload a product image');
+    if (!form.image_urls.length) {
+      toast.error('Upload at least one product image');
       return;
     }
     setSaving(true);
@@ -99,7 +133,8 @@ export default function AdminProductsPage() {
       name: form.name,
       description: form.description,
       price_paise: Math.round(Number(form.price_inr) * 100),
-      image_url: form.image_url,
+      image_urls: form.image_urls,
+      image_url: form.image_urls[0],
       stock_count: Number(form.stock_count),
       points_per_unit: Number(form.points_per_unit),
       is_active: form.is_active,
@@ -136,7 +171,7 @@ export default function AdminProductsPage() {
       <div>
         <h1 className="font-display text-2xl font-extrabold text-ink">Products</h1>
         <p className="mt-1 text-sm text-ink-muted">
-          Manage repurchase catalog — price, image, description, and points per purchase.
+          Manage repurchase catalog — price, images, description, and points per purchase.
         </p>
       </div>
 
@@ -164,44 +199,67 @@ export default function AdminProductsPage() {
           ))}
 
           <div className="text-sm sm:col-span-2">
-            <span className="font-medium">Product image</span>
-            <div className="mt-1 flex flex-wrap items-start gap-4">
-              <div className="h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted">
-                {form.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={form.image_url} alt="Product preview" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-ink-muted">
-                    <Upload className="h-6 w-6" />
+            <span className="font-medium">Product images</span>
+            <p className="mt-0.5 text-xs text-ink-muted">
+              First image is the cover. Upload up to {MAX_IMAGES} images (JPEG/PNG/WEBP/GIF · max 5 MB each).
+            </p>
+            <div className="mt-3 flex flex-wrap gap-3">
+              {form.image_urls.map((url, idx) => (
+                <div key={url} className="relative w-28">
+                  <div className="h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={`Product ${idx + 1}`} className="h-full w-full object-cover" />
                   </div>
-                )}
-              </div>
-              <div className="space-y-2">
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  className="block w-full max-w-xs text-sm text-ink-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-600"
-                  onChange={(e) => onImageSelected(e.target.files?.[0] || null)}
-                  disabled={uploading || saving}
-                />
-                <p className="text-xs text-ink-muted">JPEG, PNG, WEBP or GIF · max 5 MB · stored on S3</p>
-                {uploading ? <p className="text-xs font-medium text-primary">Uploading to S3…</p> : null}
-                {form.image_url ? (
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1 text-xs font-medium text-ink-muted hover:text-accent-red"
-                    onClick={() => {
-                      setForm((f) => ({ ...f, image_url: '' }));
-                      if (fileRef.current) fileRef.current.value = '';
-                    }}
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    Remove image
-                  </button>
-                ) : null}
-              </div>
+                  {idx === 0 ? (
+                    <span className="absolute left-1 top-1 rounded bg-primary px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      Cover
+                    </span>
+                  ) : null}
+                  <div className="mt-1 flex justify-between gap-1">
+                    <button
+                      type="button"
+                      className="text-[10px] font-semibold text-ink-muted hover:text-primary disabled:opacity-30"
+                      disabled={idx === 0}
+                      onClick={() => moveImage(idx, -1)}
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-ink-muted hover:text-accent-red"
+                      onClick={() => removeImage(url)}
+                    >
+                      <X className="h-3 w-3" />
+                      Remove
+                    </button>
+                    <button
+                      type="button"
+                      className="text-[10px] font-semibold text-ink-muted hover:text-primary disabled:opacity-30"
+                      disabled={idx === form.image_urls.length - 1}
+                      onClick={() => moveImage(idx, 1)}
+                    >
+                      →
+                    </button>
+                  </div>
+                </div>
+              ))}
+              {form.image_urls.length < MAX_IMAGES ? (
+                <label className="flex h-28 w-28 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-line bg-surface-muted text-ink-muted hover:border-primary hover:text-primary">
+                  <Upload className="h-6 w-6" />
+                  <span className="mt-1 text-[10px] font-semibold">Add images</span>
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => onImagesSelected(e.target.files)}
+                    disabled={uploading || saving}
+                  />
+                </label>
+              ) : null}
             </div>
+            {uploading ? <p className="mt-2 text-xs font-medium text-primary">Uploading to S3…</p> : null}
           </div>
 
           <label className="text-sm sm:col-span-2">
@@ -241,42 +299,50 @@ export default function AdminProductsPage() {
           </div>
         ) : (
           <Table headers={['Product', 'Price', 'Points', 'Stock', 'Status', '']}>
-            {rows.map((p) => (
-              <Tr key={p.id}>
-                <Td>
-                  <div className="flex items-center gap-3">
-                    {p.image_url ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.image_url} alt="" className="h-12 w-12 rounded object-cover" />
-                    ) : (
-                      <div className="h-12 w-12 rounded bg-surface-muted" />
-                    )}
-                    <div>
-                      <p className="font-medium">{p.name}</p>
-                      <p className="text-xs text-ink-muted">{p.sku}</p>
+            {rows.map((p) => {
+              const cover =
+                (Array.isArray(p.image_urls) && p.image_urls[0]) || p.image_url || null;
+              const count = Array.isArray(p.image_urls) ? p.image_urls.length : cover ? 1 : 0;
+              return (
+                <Tr key={p.id}>
+                  <Td>
+                    <div className="flex items-center gap-3">
+                      {cover ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={cover} alt="" className="h-12 w-12 rounded object-cover" />
+                      ) : (
+                        <div className="h-12 w-12 rounded bg-surface-muted" />
+                      )}
+                      <div>
+                        <p className="font-medium">{p.name}</p>
+                        <p className="text-xs text-ink-muted">
+                          {p.sku}
+                          {count > 1 ? ` · ${count} images` : ''}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Td>
-                <Td>{formatCurrency((p.price_paise || 0) / 100)}</Td>
-                <Td>{p.points_per_unit}</Td>
-                <Td>{p.stock_count}</Td>
-                <Td>
-                  <Badge tone={p.is_active ? 'success' : 'danger'}>{p.is_active ? 'active' : 'off'}</Badge>
-                </Td>
-                <Td>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => startEdit(p)}>
-                      Edit
-                    </Button>
-                    {p.is_active ? (
-                      <Button size="sm" variant="ghost" onClick={() => deactivate(p.id)}>
-                        Deactivate
+                  </Td>
+                  <Td>{formatCurrency((p.price_paise || 0) / 100)}</Td>
+                  <Td>{p.points_per_unit}</Td>
+                  <Td>{p.stock_count}</Td>
+                  <Td>
+                    <Badge tone={p.is_active ? 'success' : 'danger'}>{p.is_active ? 'active' : 'off'}</Badge>
+                  </Td>
+                  <Td>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" onClick={() => startEdit(p)}>
+                        Edit
                       </Button>
-                    ) : null}
-                  </div>
-                </Td>
-              </Tr>
-            ))}
+                      {p.is_active ? (
+                        <Button size="sm" variant="ghost" onClick={() => deactivate(p.id)}>
+                          Deactivate
+                        </Button>
+                      ) : null}
+                    </div>
+                  </Td>
+                </Tr>
+              );
+            })}
           </Table>
         )}
       </Card>

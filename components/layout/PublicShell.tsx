@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ReactNode } from 'react';
 import { UserCircle } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
-import { BrandStripe } from '@/components/ui/BrandStripe';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
@@ -14,11 +13,11 @@ export function AuthShell({ children }: { children: ReactNode }) {
   const common = useContent('common');
   return (
     <div className="flex min-h-screen flex-col bg-surface-soft">
-      <BrandStripe />
-      <header className="flex items-center justify-between px-4 py-4 sm:px-8">
+      <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between border-b border-line bg-white px-4 py-4 sm:px-8">
         <BrandLogo showFull />
         <LanguageSwitcher />
       </header>
+      <div className="h-[4.5rem] shrink-0" aria-hidden />
       <main className="flex flex-1 items-center justify-center px-4 py-8">{children}</main>
       <footer className="px-4 py-6 text-center text-xs text-ink-muted">
         {common.brand.poweredBy} · {common.footer.rights}
@@ -34,62 +33,64 @@ export function PublicHeader() {
   const profileHref = user?.role === 'admin' ? '/admin' : '/user/profile';
 
   return (
-    <header className="sticky top-0 z-40 border-b border-line/70 bg-white/90 backdrop-blur">
-      <BrandStripe />
-      <div className="page-container flex h-16 items-center justify-between gap-4">
-        <BrandLogo showFull />
-        <nav className="hidden items-center gap-6 text-sm font-medium text-ink-secondary md:flex">
-          <a href="/#features" className="hover:text-primary">
-            {common.nav.features}
-          </a>
-          <a href="/#how" className="hover:text-primary">
-            {common.nav.howItWorks}
-          </a>
-          <a href="/#packages" className="hover:text-primary">
-            {common.nav.packages}
-          </a>
-          <Link href="/shop" className="hover:text-primary">
-            {common.nav.shop || 'Shop'}
-          </Link>
-        </nav>
-        <div className="flex items-center gap-2 sm:gap-3">
-          <LanguageSwitcher className="hidden sm:inline-flex" />
-          <Link href="/shop/cart" className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline">
-            Cart
-          </Link>
-          {!loading && isAuthenticated && user ? (
-            <>
-              <Link
-                href={dashboardHref}
-                className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline"
-              >
-                {common.nav.dashboard}
-              </Link>
-              <Link
-                href={profileHref}
-                className="inline-flex h-10 max-w-[11rem] items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-semibold text-ink hover:bg-surface-muted"
-                title={user.email}
-              >
-                <UserCircle className="h-5 w-5 shrink-0 text-primary" />
-                <span className="truncate">{user.name || 'Profile'}</span>
-              </Link>
-            </>
-          ) : !loading ? (
-            <>
-              <Link href="/login" className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline">
-                {common.nav.login}
-              </Link>
-              <Link
-                href="/register"
-                className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-white hover:bg-primary-600"
-              >
-                {common.nav.register}
-              </Link>
-            </>
-          ) : null}
+    <>
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-line/70 bg-white/95 backdrop-blur">
+        <div className="page-container flex h-16 items-center justify-between gap-4">
+          <BrandLogo showFull />
+          <nav className="hidden items-center gap-6 text-sm font-medium text-ink-secondary md:flex">
+            <a href="/#features" className="hover:text-primary">
+              {common.nav.features}
+            </a>
+            <a href="/#how" className="hover:text-primary">
+              {common.nav.howItWorks}
+            </a>
+            <a href="/#packages" className="hover:text-primary">
+              {common.nav.packages}
+            </a>
+            <Link href="/shop" className="hover:text-primary">
+              {common.nav.shop || 'Shop'}
+            </Link>
+          </nav>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageSwitcher className="hidden sm:inline-flex" />
+            <Link href="/shop/cart" className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline">
+              Cart
+            </Link>
+            {!loading && isAuthenticated && user ? (
+              <>
+                <Link
+                  href={dashboardHref}
+                  className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline"
+                >
+                  {common.nav.dashboard}
+                </Link>
+                <Link
+                  href={profileHref}
+                  className="inline-flex h-10 max-w-[11rem] items-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-semibold text-ink hover:bg-surface-muted"
+                  title={user.email}
+                >
+                  <UserCircle className="h-5 w-5 shrink-0 text-primary" />
+                  <span className="truncate">{user.name || 'Profile'}</span>
+                </Link>
+              </>
+            ) : !loading ? (
+              <>
+                <Link href="/login" className="hidden text-sm font-semibold text-ink hover:text-primary sm:inline">
+                  {common.nav.login}
+                </Link>
+                <Link
+                  href="/register"
+                  className="inline-flex h-10 items-center rounded-lg bg-primary px-4 text-sm font-semibold text-white hover:bg-primary-600"
+                >
+                  {common.nav.register}
+                </Link>
+              </>
+            ) : null}
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <div className="h-16 shrink-0" aria-hidden />
+    </>
   );
 }
 

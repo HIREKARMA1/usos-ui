@@ -319,6 +319,39 @@ class ApiClient {
     return res.data;
   }
 
+  async uploadReviewMedia(file: File) {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await this.client.post<{ url: string; media_type: 'image' | 'video' }>(
+      '/api/v1/uploads/reviews',
+      body,
+      {
+        headers: { 'Content-Type': false as unknown as string },
+      }
+    );
+    return res.data;
+  }
+
+  async getProductReviews(productId: string) {
+    return this.get<{
+      avg_rating: number;
+      review_count: number;
+      items: any[];
+    }>(`/api/v1/shop/products/${productId}/reviews`);
+  }
+
+  async submitProductReview(
+    productId: string,
+    payload: {
+      rating: number;
+      title?: string | null;
+      comment?: string | null;
+      media?: { media_type: string; url: string }[];
+    }
+  ) {
+    return this.post(`/api/v1/shop/products/${productId}/reviews`, payload);
+  }
+
   async getCart() {
     return this.get<any>('/api/v1/shop/cart');
   }
