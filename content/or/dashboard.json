@@ -1,0 +1,176 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "genealogy": "Genealogy",
+    "wallet": "Wallet",
+    "referrals": "Referrals",
+    "profile": "Profile",
+    "rewards": "Rewards"
+  },
+  "topbar": {
+    "welcome": "Welcome back",
+    "searchPlaceholder": "Search…",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+  "overview": {
+    "title": "Overview",
+    "subtitle": "Here's how your network is performing today.",
+    "stats": {
+      "totalEarnings": "Total earnings",
+      "walletBalance": "Wallet balance",
+      "directReferrals": "Direct referrals",
+      "downline": "Total downline",
+      "activeTeam": "Active team",
+      "rank": "Current rank"
+    },
+    "recentTitle": "Recent transactions",
+    "quickActionsTitle": "Quick actions",
+    "quickActions": {
+      "invite": "Invite a member",
+      "withdraw": "Withdraw funds",
+      "viewTree": "View genealogy",
+      "completeKyc": "Complete KYC"
+    }
+  },
+  "genealogy": {
+    "title": "Genealogy",
+    "subtitle": "Your referral network — everyone you invited sits directly under you.",
+    "you": "You",
+    "stats": {
+      "total": "Total downline",
+      "directs": "Direct referrals",
+      "directsShort": "direct",
+      "active": "Active members",
+      "levels": "Depth (levels)"
+    },
+    "hintDrag": "Drag to move the tree",
+    "hintZoom": "Use +/- to zoom",
+    "legend": "Legend",
+    "node": {
+      "joined": "Joined",
+      "package": "Package",
+      "code": "Code"
+    },
+    "emptyTitle": "Your network is just getting started",
+    "emptyDescription": "Share your referral link — every person you refer appears directly under you."
+  },
+  "wallet": {
+    "title": "Wallet",
+    "subtitle": "Every credit and debit across your account.",
+    "balanceLabel": "Available balance",
+    "withdrawButton": "Withdraw",
+    "requested": "Withdrawal submitted — awaiting admin approval",
+    "bankRequired": "Add bank details in Profile before withdrawing",
+    "bankHint": "Withdrawals go to your saved bank account.",
+    "bankLink": "Add bank details",
+    "requestsTitle": "Withdrawal requests",
+    "requestsSubtitle": "After admin approval, money is sent to your bank automatically.",
+    "noRequests": "No withdrawal requests yet.",
+    "totalEarned": "Total earned",
+    "totalWithdrawn": "Total withdrawn",
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "description": "Description",
+      "amount": "Amount",
+      "status": "Status",
+      "bank": "Bank"
+    },
+    "types": {
+      "referral": "Referral bonus",
+      "binary": "Binary income",
+      "reward": "Reward",
+      "withdrawal": "Withdrawal",
+      "payment": "Payment"
+    },
+    "emptyTitle": "No transactions yet",
+    "emptyDescription": "Your earnings and withdrawals will appear here."
+  },
+  "referrals": {
+    "title": "Referrals",
+    "subtitle": "Share your link and track everyone you bring in.",
+    "yourCodeLabel": "Your referral code",
+    "yourLinkLabel": "Your referral link",
+    "copyCode": "Copy code",
+    "copyLink": "Copy link",
+    "copied": "Copied to clipboard",
+    "directTeamTitle": "Your direct team",
+    "table": {
+      "name": "Name",
+      "joined": "Joined",
+      "side": "Side",
+      "package": "Package",
+      "status": "Status"
+    },
+    "side": {
+      "left": "Left",
+      "right": "Right"
+    },
+    "emptyTitle": "No referrals yet",
+    "emptyDescription": "Share your link to start building your direct team."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Your signup details, address, KYC, and bank information.",
+    "accountTitle": "Account details",
+    "accountSubtitle": "Details captured when you joined U.S.O.S.",
+    "personalTitle": "Personal information",
+    "locationTitle": "Location",
+    "locationSubtitle": "Search an address or use your current GPS location.",
+    "kycTitle": "KYC verification",
+    "bankTitle": "Bank account",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "referralCode": "Your referral code",
+      "package": "Package",
+      "sponsor": "Sponsor",
+      "joined": "Joined on",
+      "activated": "Activated on",
+      "searchAddress": "Search location",
+      "address": "Full address",
+      "locality": "Area / locality",
+      "state": "State",
+      "pincode": "PIN code",
+      "country": "Country",
+      "aadhaar": "Aadhaar number",
+      "pan": "PAN number",
+      "accountName": "Account holder name",
+      "accountNumber": "Account number",
+      "ifsc": "IFSC code",
+      "bankName": "Bank name"
+    },
+    "noSponsor": "No sponsor (root account)",
+    "useCurrentLocation": "Use current location",
+    "searchPlaceholder": "Type locality, landmark, or PIN…",
+    "searchHint": "Pick a result to fill the exact address.",
+    "searching": "Searching…",
+    "coordsLabel": "Coordinates",
+    "locationCaptured": "Current location captured",
+    "geoUnsupported": "Location is not supported in this browser",
+    "geoDenied": "Location permission denied — allow access and try again",
+    "geoFailed": "Could not get your current location",
+    "addressRequired": "Enter or select an address",
+    "saveLocation": "Save location",
+    "kycStatusLabel": "KYC status",
+    "save": "Save changes",
+    "saved": "Your profile has been updated",
+    "saveFailed": "Could not save changes",
+    "loadError": "Could not load profile"
+  },
+  "rewards": {
+    "title": "Rewards & milestones",
+    "subtitle": "Track your progress and claim your rank rewards.",
+    "achieved": "Achieved",
+    "locked": "In progress",
+    "rewardLabel": "Reward",
+    "progressLabel": "Progress",
+    "claimButton": "Claim reward",
+    "membersUnit": "members",
+    "emptyTitle": "No milestones available",
+    "emptyDescription": "Milestones will appear here as the program updates."
+  }
+}

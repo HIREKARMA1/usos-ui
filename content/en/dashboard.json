@@ -1,0 +1,182 @@
+{
+  "nav": {
+    "overview": "Overview",
+    "shop": "Shop",
+    "orders": "Orders",
+    "points": "Points",
+    "genealogy": "Genealogy",
+    "wallet": "Wallet",
+    "referrals": "Referrals",
+    "profile": "Profile",
+    "rewards": "Rewards"
+  },
+  "topbar": {
+    "welcome": "Welcome back",
+    "searchPlaceholder": "Search…",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+  "overview": {
+    "title": "Overview",
+    "subtitle": "Track your 4 referral slots, 7-day window, and current rank.",
+    "stats": {
+      "totalEarnings": "Total earnings",
+      "walletBalance": "Wallet balance",
+      "directReferrals": "Direct referrals (max 4)",
+      "downline": "Total downline",
+      "activeTeam": "Active team",
+      "rank": "Current rank",
+      "windowLeft": "Days left in window",
+      "qualifiedDirects": "Qualified directs (7-day)"
+    },
+    "recentTitle": "Recent transactions",
+    "quickActionsTitle": "Quick actions",
+    "quickActions": {
+      "invite": "Invite a member",
+      "withdraw": "Withdraw funds",
+      "viewTree": "View genealogy",
+      "completeKyc": "Complete KYC"
+    }
+  },
+  "genealogy": {
+    "title": "Genealogy",
+    "subtitle": "Your 4-wide sponsor tree — each member can have at most 4 direct referrals.",
+    "you": "You",
+    "stats": {
+      "total": "Total downline",
+      "directs": "Direct referrals",
+      "directsShort": "direct",
+      "active": "Active members",
+      "levels": "Depth (levels)"
+    },
+    "hintDrag": "Drag to move the tree",
+    "hintZoom": "Pinch or use +/- to zoom",
+    "legend": "Legend",
+    "node": {
+      "joined": "Joined",
+      "package": "Package",
+      "code": "Code"
+    },
+    "emptyTitle": "Your network is just getting started",
+    "emptyDescription": "Share your referral link — you can invite up to 4 members under you."
+  },
+  "wallet": {
+    "title": "Wallet",
+    "subtitle": "Level cash rewards and withdrawals.",
+    "balanceLabel": "Available balance",
+    "withdrawButton": "Withdraw",
+    "requested": "Withdrawal submitted — awaiting admin approval",
+    "bankRequired": "Add bank details in Profile before withdrawing",
+    "bankHint": "Withdrawals go to your saved bank account.",
+    "bankLink": "Add bank details",
+    "requestsTitle": "Withdrawal requests",
+    "requestsSubtitle": "After admin approval, money is sent to your bank automatically.",
+    "noRequests": "No withdrawal requests yet.",
+    "totalEarned": "Total earned",
+    "totalWithdrawn": "Total withdrawn",
+    "table": {
+      "date": "Date",
+      "type": "Type",
+      "description": "Description",
+      "amount": "Amount",
+      "status": "Status",
+      "bank": "Bank"
+    },
+    "types": {
+      "referral": "Referral bonus",
+      "binary": "Matching (legacy)",
+      "reward": "Level reward",
+      "mission": "Mission level",
+      "withdrawal": "Withdrawal",
+      "payment": "Payment"
+    },
+    "emptyTitle": "No transactions yet",
+    "emptyDescription": "Your earnings and withdrawals will appear here."
+  },
+  "referrals": {
+    "title": "Referrals",
+    "subtitle": "You can refer a maximum of 4 members. Complete all 4 within 7 days of joining to unlock SMART.",
+    "yourCodeLabel": "Your referral code",
+    "yourLinkLabel": "Your referral link",
+    "copyCode": "Copy code",
+    "copyLink": "Copy link",
+    "copied": "Copied to clipboard",
+    "slotsLabel": "Referral slots",
+    "slotsFull": "All 4 slots filled — your direct referral work is done.",
+    "windowLabel": "Qualification window",
+    "directTeamTitle": "Your direct team (max 4)",
+    "table": {
+      "name": "Name",
+      "joined": "Joined",
+      "code": "Code",
+      "package": "Package",
+      "status": "Status"
+    },
+    "emptyTitle": "No referrals yet",
+    "emptyDescription": "Share your link and fill your 4 slots within 7 days to unlock SMART (₹800 + T-Shirt)."
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Your signup details, address, KYC, and bank information.",
+    "accountTitle": "Account details",
+    "accountSubtitle": "Details captured when you joined U.S.O.S.",
+    "personalTitle": "Personal information",
+    "locationTitle": "Location",
+    "locationSubtitle": "Search an address or use your current GPS location.",
+    "kycTitle": "KYC verification",
+    "bankTitle": "Bank account",
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "phone": "Phone",
+      "referralCode": "Your referral code",
+      "package": "Package",
+      "sponsor": "Sponsor",
+      "joined": "Joined on",
+      "activated": "Activated on",
+      "searchAddress": "Search location",
+      "address": "Full address",
+      "locality": "Area / locality",
+      "state": "State",
+      "pincode": "PIN code",
+      "country": "Country",
+      "aadhaar": "Aadhaar number",
+      "pan": "PAN number",
+      "accountName": "Account holder name",
+      "accountNumber": "Account number",
+      "ifsc": "IFSC code",
+      "bankName": "Bank name"
+    },
+    "noSponsor": "No sponsor (root account)",
+    "useCurrentLocation": "Use current location",
+    "searchPlaceholder": "Type locality, landmark, or PIN…",
+    "searchHint": "Pick a result to fill the exact address.",
+    "searching": "Searching…",
+    "coordsLabel": "Coordinates",
+    "locationCaptured": "Current location captured",
+    "geoUnsupported": "Location is not supported in this browser",
+    "geoDenied": "Location permission denied — allow access and try again",
+    "geoFailed": "Could not get your current location",
+    "addressRequired": "Enter or select an address",
+    "saveLocation": "Save location",
+    "kycStatusLabel": "KYC status",
+    "save": "Save changes",
+    "saved": "Your profile has been updated",
+    "saveFailed": "Could not save changes",
+    "loadError": "Could not load profile"
+  },
+  "rewards": {
+    "title": "Rewards & ranks",
+    "subtitle": "Eight levels from SMART to DOUBLE CROWN — cash plus gifts as your 4×4 matrix fills.",
+    "achieved": "Achieved",
+    "locked": "Locked",
+    "rewardLabel": "Reward",
+    "progressLabel": "Network IDs needed",
+    "claimButton": "Claim reward",
+    "membersUnit": "IDs",
+    "planTitle": "Reward ladder",
+    "emptyTitle": "No ranks unlocked yet",
+    "emptyDescription": "Refer 4 members within 7 days to unlock SMART (level 1)."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "hero": {
+    "eyebrow": "Unique Search of Smile",
+    "brand": "U.S.O.S",
+    "brandFull": "Unique Search of Smile",
+    "headline": "Refer 4. Grow 8 levels. Earn with every round.",
+    "subheadline": "Join with ₹2,500, invite up to 4 members within 7 days, and unlock SMART through DOUBLE CROWN rewards — cash plus gifts at every level.",
+    "ctaPrimary": "Join now",
+    "ctaSecondary": "Log in"
+  },
+  "stats": [
+    { "value": "₹2,500", "label": "Entry fee" },
+    { "value": "4", "label": "Max direct referrals" },
+    { "value": "8", "label": "Reward levels" },
+    { "value": "7 days", "label": "To complete your 4" }
+  ],
+  "features": {
+    "eyebrow": "Why U.S.O.S",
+    "title": "A clear 4×4 growth plan",
+    "subtitle": "Transparent ranks, fixed cash rewards, and real products as you complete each round.",
+    "items": [
+      { "title": "Max 4 referrals", "description": "Each member refers only four people. After that, your direct work is done — growth comes from your team." },
+      { "title": "7-day SMART window", "description": "Activate 4 directs within 7 days of joining to unlock SMART: ₹800 + a T-Shirt." },
+      { "title": "8 career rounds", "description": "From SMART to DOUBLE CROWN — iron, fan, grinder, mobile, fridge, bike, and car as your matrix fills." },
+      { "title": "Package A or B", "description": "Pay ₹2,500 once, pick your product kit, and enter the same reward ladder." },
+      { "title": "Live genealogy", "description": "See everyone under you in a sponsor tree that updates as your network grows." },
+      { "title": "Wallet & KYC", "description": "Cash rewards credit your wallet; complete KYC and withdraw to your bank." }
+    ]
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Start earning in three simple steps",
+    "steps": [
+      { "step": "01", "title": "Register & pay ₹2,500", "description": "Create your ID with package A or B and complete PayU checkout." },
+      { "step": "02", "title": "Refer 4 within 7 days", "description": "Share your link, fill your four slots, and unlock SMART level rewards." },
+      { "step": "03", "title": "Grow through 8 levels", "description": "As each generation completes their 4, you climb MASTER → STAR → … → DOUBLE CROWN." }
+    ]
+  },
+  "packages": {
+    "eyebrow": "Packages",
+    "title": "Choose the kit that fits you",
+    "subtitle": "Both packages cost ₹2,500 and unlock the same 8-level reward system."
+  },
+  "cta": {
+    "title": "Ready to start your U.S.O.S journey?",
+    "subtitle": "Create your account in minutes and invite your first four members.",
+    "button": "Create your account"
+  }
+}

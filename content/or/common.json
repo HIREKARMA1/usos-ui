@@ -1,0 +1,87 @@
+{
+  "brand": {
+    "short": "U.S.O.S",
+    "full": "Unique Search of Smile",
+    "tagline": "Grow together. Earn together.",
+    "poweredBy": "Powered by HireKarma"
+  },
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "howItWorks": "How it works",
+    "packages": "Packages",
+    "login": "Log in",
+    "register": "Join now",
+    "dashboard": "Dashboard"
+  },
+  "actions": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "edit": "Edit",
+    "delete": "Delete",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "search": "Search",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "viewAll": "View all",
+    "confirm": "Confirm",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "getStarted": "Get started"
+  },
+  "states": {
+    "loading": "Loading, please wait…",
+    "emptyTitle": "Nothing here yet",
+    "emptyDescription": "Data will appear here once it becomes available.",
+    "errorTitle": "Something went wrong",
+    "errorDescription": "We could not load this information. Please try again."
+  },
+  "pagination": {
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "results": "results",
+    "page": "Page",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "table": {
+    "srNo": "#",
+    "noData": "No records found"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "hi": "Hindi",
+    "or": "Odia"
+  },
+  "password": {
+    "show": "ପାସୱାର୍ଡ ଦେଖାନ୍ତୁ",
+    "hide": "ପାସୱାର୍ଡ ଲୁଚାନ୍ତୁ"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "completed": "Completed",
+    "failed": "Failed",
+    "approved": "Approved",
+    "rejected": "Rejected"
+  },
+  "footer": {
+    "tagline": "Unique Search of Smile — a transparent network rewards platform.",
+    "quickLinks": "Quick links",
+    "legal": "Legal",
+    "contact": "Contact",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "support": "Support",
+    "about": "About us",
+    "rights": "All rights reserved.",
+    "address": "Bhubaneswar, Odisha, India"
+  }
+}

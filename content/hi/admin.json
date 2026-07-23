@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "analytics": "विश्लेषण",
+    "users": "उपयोगकर्ता",
+    "products": "उत्पाद",
+    "packages": "पैकेज",
+    "rewards": "रिवॉर्ड",
+    "withdrawals": "निकासी",
+    "genealogy": "वंशावली"
+  },
+  "topbar": {
+    "title": "एडमिन कंसोल",
+    "logout": "लॉग आउट"
+  },
+  "analytics": {
+    "title": "राजस्व विश्लेषण",
+    "subtitle": "एक नज़र में प्लेटफ़ॉर्म प्रदर्शन।",
+    "stats": {
+      "totalRevenue": "कुल राजस्व",
+      "totalUsers": "कुल उपयोगकर्ता",
+      "activeUsers": "सक्रिय उपयोगकर्ता",
+      "totalPayouts": "कुल भुगतान",
+      "pendingRewards": "लंबित रिवॉर्ड",
+      "monthlyGrowth": "मासिक वृद्धि"
+    },
+    "revenueTitle": "राजस्व रुझान",
+    "revenueSubtitle": "पिछले 6 महीने",
+    "recentTitle": "हाल के साइनअप"
+  },
+  "users": {
+    "title": "उपयोगकर्ता प्रबंधन",
+    "subtitle": "सदस्यों, पैकेजों और खाता स्थिति का प्रबंधन करें।",
+    "searchPlaceholder": "नाम या ईमेल से खोजें…",
+    "table": {
+      "name": "नाम",
+      "contact": "संपर्क",
+      "package": "पैकेज",
+      "earnings": "कमाई",
+      "joined": "शामिल हुए",
+      "status": "स्थिति",
+      "actions": "कार्य"
+    },
+    "activate": "सक्रिय करें",
+    "deactivate": "निष्क्रिय करें",
+    "statusUpdated": "उपयोगकर्ता स्थिति अपडेट हुई",
+    "emptyTitle": "कोई उपयोगकर्ता नहीं मिला",
+    "emptyDescription": "अपनी खोज समायोजित करने का प्रयास करें।"
+  },
+  "packages": {
+    "title": "पैकेज इन्वेंटरी",
+    "subtitle": "पैकेज मूल्य निर्धारण और उपलब्धता संपादित करें।",
+    "table": {
+      "name": "पैकेज",
+      "price": "कीमत",
+      "stock": "स्टॉक",
+      "status": "स्थिति",
+      "actions": "कार्य"
+    },
+    "editTitle": "पैकेज संपादित करें",
+    "priceLabel": "कीमत (₹)",
+    "stockLabel": "उपलब्ध स्टॉक",
+    "nameLabel": "पैकेज नाम",
+    "save": "पैकेज सहेजें",
+    "saved": "पैकेज अपडेट हुआ"
+  },
+  "rewards": {
+    "title": "रिवॉर्ड सत्यापन",
+    "subtitle": "लंबित रिवॉर्ड दावों की समीक्षा करें और स्वीकृत करें।",
+    "table": {
+      "user": "उपयोगकर्ता",
+      "milestone": "माइलस्टोन",
+      "requested": "अनुरोधित",
+      "status": "स्थिति",
+      "actions": "कार्य"
+    },
+    "approve": "स्वीकृत करें",
+    "reject": "अस्वीकार करें",
+    "approved": "रिवॉर्ड स्वीकृत",
+    "rejected": "रिवॉर्ड अस्वीकृत",
+    "emptyTitle": "कतार खाली है",
+    "emptyDescription": "अभी कोई लंबित रिवॉर्ड दावा नहीं है।"
+  },
+  "withdrawals": {
+    "title": "निकासी कतार",
+    "subtitle": "स्वीकृति के बाद राशि सदस्य के बैंक खाते में स्वतः भेजी जाएगी।",
+    "providerLabel": "पेआउट प्रोवाइडर",
+    "table": {
+      "user": "सदस्य",
+      "amount": "राशि",
+      "bank": "बैंक",
+      "requested": "अनुरोधित",
+      "status": "स्थिति",
+      "actions": "कार्य"
+    },
+    "approve": "स्वीकृत करें और भुगतान",
+    "retry": "फिर से प्रयास",
+    "reject": "अस्वीकार करें",
+    "approved": "भुगतान भेज दिया गया",
+    "rejected": "निकासी अस्वीकृत — वॉलेट बहाल",
+    "approveFailed": "भुगतान विफल",
+    "emptyTitle": "कोई लंबित निकासी नहीं",
+    "emptyDescription": "जब सदस्य निकासी का अनुरोध करेंगे, वे यहाँ दिखेंगे।"
+  },
+  "genealogy": {
+    "title": "वैश्विक वंशावली",
+    "subtitle": "किसी भी सदस्य को खोजें और उनका नेटवर्क देखें।",
+    "searchPlaceholder": "सदस्य नाम या रेफ़रल कोड से खोजें…",
+    "searchButton": "खोजें",
+    "resultLabel": "नेटवर्क दिखा रहे हैं",
+    "emptyTitle": "किसी सदस्य को खोजें",
+    "emptyDescription": "उनका डाउनलाइन ट्री देखने के लिए नाम या रेफ़रल कोड दर्ज करें।"
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "nav": {
+    "analytics": "Analytics",
+    "users": "Users",
+    "products": "Products",
+    "packages": "Packages",
+    "rewards": "Rewards",
+    "withdrawals": "Withdrawals",
+    "genealogy": "Genealogy"
+  },
+  "topbar": {
+    "title": "Admin console",
+    "logout": "Log out"
+  },
+  "analytics": {
+    "title": "Revenue analytics",
+    "subtitle": "Platform performance at a glance.",
+    "stats": {
+      "totalRevenue": "Total revenue",
+      "totalUsers": "Total users",
+      "activeUsers": "Active users",
+      "totalPayouts": "Total payouts",
+      "pendingRewards": "Pending rewards",
+      "monthlyGrowth": "Monthly growth"
+    },
+    "revenueTitle": "Revenue trend",
+    "revenueSubtitle": "Last 6 months",
+    "recentTitle": "Recent signups"
+  },
+  "users": {
+    "title": "User management",
+    "subtitle": "Manage members, packages, and account status.",
+    "searchPlaceholder": "Search by name or email…",
+    "table": {
+      "name": "Name",
+      "contact": "Contact",
+      "package": "Package",
+      "earnings": "Earnings",
+      "joined": "Joined",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "statusUpdated": "User status updated",
+    "emptyTitle": "No users found",
+    "emptyDescription": "Try adjusting your search."
+  },
+  "packages": {
+    "title": "Package inventory",
+    "subtitle": "Edit package pricing and availability.",
+    "table": {
+      "name": "Package",
+      "price": "Price",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "editTitle": "Edit package",
+    "priceLabel": "Price (₹)",
+    "stockLabel": "Available stock",
+    "nameLabel": "Package name",
+    "save": "Save package",
+    "saved": "Package updated"
+  },
+  "rewards": {
+    "title": "Reward verification",
+    "subtitle": "Review and approve pending reward claims.",
+    "table": {
+      "user": "User",
+      "milestone": "Milestone",
+      "requested": "Requested",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "approve": "Approve",
+    "reject": "Reject",
+    "approved": "Reward approved",
+    "rejected": "Reward rejected",
+    "emptyTitle": "Queue is clear",
+    "emptyDescription": "No pending reward claims right now."
+  },
+  "withdrawals": {
+    "title": "Withdrawal queue",
+    "subtitle": "Approve to send money to the member’s bank account automatically.",
+    "providerLabel": "Payout provider",
+    "table": {
+      "user": "Member",
+      "amount": "Amount",
+      "bank": "Bank",
+      "requested": "Requested",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "approve": "Approve & pay",
+    "retry": "Retry payout",
+    "reject": "Reject",
+    "approved": "Payout sent",
+    "rejected": "Withdrawal rejected — wallet restored",
+    "approveFailed": "Payout failed",
+    "emptyTitle": "No pending withdrawals",
+    "emptyDescription": "When members request a withdrawal, they appear here for approval."
+  },
+  "genealogy": {
+    "title": "Global genealogy",
+    "subtitle": "Search any member and inspect their network.",
+    "searchPlaceholder": "Search by member name or referral code…",
+    "searchButton": "Search",
+    "resultLabel": "Showing network for",
+    "emptyTitle": "Search for a member",
+    "emptyDescription": "Enter a name or referral code to view their downline tree."
+  }
+}

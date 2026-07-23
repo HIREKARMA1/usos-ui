@@ -1,0 +1,51 @@
+{
+  "title": "Membership packages",
+  "subtitle": "Select Package A or Package B during signup. Entry fee is ₹2,500.",
+  "perMember": "one-time entry",
+  "recommended": "Popular",
+  "selectLabel": "Select package",
+  "featuresLabel": "Products included",
+  "items": [
+    {
+      "id": "A",
+      "name": "Package A",
+      "price": 2500,
+      "description": "Cotton saree with essentials including T-Shirt.",
+      "badge": "",
+      "features": [
+        "Cotton Saree",
+        "T-Shirt",
+        "Agarbatti",
+        "Pickle",
+        "Bluetooth",
+        "Turmeric Powder",
+        "Chilli Powder",
+        "Jeera",
+        "Detergent Powder",
+        "Atta"
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Package B",
+      "price": 2500,
+      "description": "Cotton saree with protein powder and extended essentials.",
+      "badge": "Extended",
+      "features": [
+        "Cotton Saree",
+        "Protein Powder",
+        "Agarbatti",
+        "Pickle",
+        "Bluetooth",
+        "Turmeric Powder",
+        "Chilli Powder",
+        "Jeera",
+        "Detergent Powder",
+        "Atta",
+        "Soap",
+        "Sugar"
+      ]
+    }
+  ],
+  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+}

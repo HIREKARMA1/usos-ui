@@ -1,0 +1,172 @@
+{
+  "nav": {
+    "overview": "अवलोकन",
+    "genealogy": "वंशावली",
+    "wallet": "वॉलेट",
+    "referrals": "रेफ़रल",
+    "profile": "प्रोफ़ाइल",
+    "rewards": "रिवॉर्ड"
+  },
+  "topbar": {
+    "welcome": "फिर से स्वागत है",
+    "searchPlaceholder": "खोजें…",
+    "notifications": "सूचनाएँ",
+    "profile": "प्रोफ़ाइल",
+    "logout": "लॉग आउट"
+  },
+  "overview": {
+    "title": "अवलोकन",
+    "subtitle": "आज आपका नेटवर्क कैसा प्रदर्शन कर रहा है, यहाँ देखें।",
+    "stats": {
+      "totalEarnings": "कुल कमाई",
+      "walletBalance": "वॉलेट शेष",
+      "directReferrals": "प्रत्यक्ष रेफ़रल",
+      "downline": "कुल डाउनलाइन",
+      "activeTeam": "सक्रिय टीम",
+      "rank": "वर्तमान रैंक"
+    },
+    "recentTitle": "हाल के लेन-देन",
+    "quickActionsTitle": "त्वरित कार्य",
+    "quickActions": {
+      "invite": "सदस्य आमंत्रित करें",
+      "withdraw": "धनराशि निकालें",
+      "viewTree": "वंशावली देखें",
+      "completeKyc": "KYC पूरा करें"
+    }
+  },
+  "genealogy": {
+    "title": "वंशावली",
+    "subtitle": "आपका रेफ़रल नेटवर्क — जिन्हें आपने जोड़ा, वे सीधे आपके नीचे दिखेंगे।",
+    "you": "आप",
+    "stats": {
+      "total": "कुल डाउनलाइन",
+      "directs": "प्रत्यक्ष रेफ़रल",
+      "directsShort": "डायरेक्ट",
+      "active": "सक्रिय सदस्य",
+      "levels": "गहराई (स्तर)"
+    },
+    "hintDrag": "ट्री खींचकर घुमाएँ",
+    "hintZoom": "ज़ूम के लिए +/- दबाएँ",
+    "legend": "संकेत",
+    "node": {
+      "joined": "शामिल हुए",
+      "package": "पैकेज",
+      "code": "कोड"
+    },
+    "emptyTitle": "आपका नेटवर्क अभी शुरू ही हुआ है",
+    "emptyDescription": "अपना रेफ़रल लिंक साझा करें — हर नया सदस्य सीधे आपके नीचे आएगा।"
+  },
+  "wallet": {
+    "title": "वॉलेट",
+    "subtitle": "आपके खाते में हर क्रेडिट और डेबिट।",
+    "balanceLabel": "उपलब्ध शेष",
+    "withdrawButton": "निकालें",
+    "requested": "निकासी अनुरोध भेजा गया — एडमिन स्वीकृति प्रतीक्षित",
+    "bankRequired": "निकासी से पहले प्रोफ़ाइल में बैंक विवरण जोड़ें",
+    "bankHint": "निकासी आपके सेव्ड बैंक खाते में जाएगी।",
+    "bankLink": "बैंक विवरण जोड़ें",
+    "requestsTitle": "निकासी अनुरोध",
+    "requestsSubtitle": "एडमिन स्वीकृति के बाद राशि आपके बैंक में स्वतः भेजी जाएगी।",
+    "noRequests": "अभी कोई निकासी अनुरोध नहीं।",
+    "totalEarned": "कुल अर्जित",
+    "totalWithdrawn": "कुल निकाला गया",
+    "table": {
+      "date": "तारीख़",
+      "type": "प्रकार",
+      "description": "विवरण",
+      "amount": "राशि",
+      "status": "स्थिति",
+      "bank": "बैंक"
+    },
+    "types": {
+      "referral": "रेफ़रल बोनस",
+      "binary": "बाइनरी आय",
+      "reward": "रिवॉर्ड",
+      "withdrawal": "निकासी",
+      "payment": "भुगतान"
+    },
+    "emptyTitle": "अभी कोई लेन-देन नहीं",
+    "emptyDescription": "आपकी कमाई और निकासी यहाँ दिखाई देगी।"
+  },
+  "referrals": {
+    "title": "रेफ़रल",
+    "subtitle": "अपना लिंक साझा करें और अपने द्वारा जोड़े गए सभी लोगों को ट्रैक करें।",
+    "yourCodeLabel": "आपका रेफ़रल कोड",
+    "yourLinkLabel": "आपका रेफ़रल लिंक",
+    "copyCode": "कोड कॉपी करें",
+    "copyLink": "लिंक कॉपी करें",
+    "copied": "क्लिपबोर्ड पर कॉपी हो गया",
+    "directTeamTitle": "आपकी प्रत्यक्ष टीम",
+    "table": {
+      "name": "नाम",
+      "joined": "शामिल हुए",
+      "code": "कोड",
+      "package": "पैकेज",
+      "status": "स्थिति"
+    },
+    "emptyTitle": "अभी कोई रेफ़रल नहीं",
+    "emptyDescription": "अपनी प्रत्यक्ष टीम बनाना शुरू करने के लिए अपना लिंक साझा करें।"
+  },
+  "profile": {
+    "title": "प्रोफ़ाइल",
+    "subtitle": "आपकी साइनअप जानकारी, पता, KYC और बैंक विवरण।",
+    "accountTitle": "खाता विवरण",
+    "accountSubtitle": "जॉइन करते समय दर्ज की गई जानकारी।",
+    "personalTitle": "व्यक्तिगत जानकारी",
+    "locationTitle": "लोकेशन",
+    "locationSubtitle": "पता खोजें या अपनी वर्तमान GPS लोकेशन उपयोग करें।",
+    "kycTitle": "KYC सत्यापन",
+    "bankTitle": "बैंक खाता",
+    "fields": {
+      "name": "पूरा नाम",
+      "email": "ईमेल",
+      "phone": "फ़ोन",
+      "referralCode": "आपका रेफ़रल कोड",
+      "package": "पैकेज",
+      "sponsor": "स्पॉन्सर",
+      "joined": "जॉइन तिथि",
+      "activated": "सक्रिय तिथि",
+      "searchAddress": "लोकेशन खोजें",
+      "address": "पूरा पता",
+      "locality": "इलाका / लोकेलिटी",
+      "state": "राज्य",
+      "pincode": "पिन कोड",
+      "country": "देश",
+      "aadhaar": "आधार नंबर",
+      "pan": "पैन नंबर",
+      "accountName": "खाताधारक का नाम",
+      "accountNumber": "खाता संख्या",
+      "ifsc": "IFSC कोड",
+      "bankName": "बैंक का नाम"
+    },
+    "noSponsor": "कोई स्पॉन्सर नहीं (रूट खाता)",
+    "useCurrentLocation": "वर्तमान लोकेशन उपयोग करें",
+    "searchPlaceholder": "इलाका, लैंडमार्क या पिन टाइप करें…",
+    "searchHint": "सटीक पता भरने के लिए परिणाम चुनें।",
+    "searching": "खोज रहे हैं…",
+    "coordsLabel": "निर्देशांक",
+    "locationCaptured": "वर्तमान लोकेशन कैप्चर हो गई",
+    "geoUnsupported": "इस ब्राउज़र में लोकेशन समर्थित नहीं है",
+    "geoDenied": "लोकेशन अनुमति अस्वीकृत — अनुमति दें और फिर कोशिश करें",
+    "geoFailed": "वर्तमान लोकेशन नहीं मिल सकी",
+    "addressRequired": "पता दर्ज करें या चुनें",
+    "saveLocation": "लोकेशन सहेजें",
+    "kycStatusLabel": "KYC स्थिति",
+    "save": "बदलाव सहेजें",
+    "saved": "आपकी प्रोफ़ाइल अपडेट हो गई है",
+    "saveFailed": "बदलाव सहेजे नहीं जा सके",
+    "loadError": "प्रोफ़ाइल लोड नहीं हो सकी"
+  },
+  "rewards": {
+    "title": "रिवॉर्ड और माइलस्टोन",
+    "subtitle": "अपनी प्रगति ट्रैक करें और अपने रैंक रिवॉर्ड का दावा करें।",
+    "achieved": "प्राप्त",
+    "locked": "प्रगति में",
+    "rewardLabel": "रिवॉर्ड",
+    "progressLabel": "प्रगति",
+    "claimButton": "रिवॉर्ड का दावा करें",
+    "membersUnit": "सदस्य",
+    "emptyTitle": "कोई माइलस्टोन उपलब्ध नहीं",
+    "emptyDescription": "प्रोग्राम अपडेट होने पर माइलस्टोन यहाँ दिखाई देंगे।"
+  }
+}

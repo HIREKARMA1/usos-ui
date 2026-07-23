@@ -1,0 +1,49 @@
+{
+  "hero": {
+    "eyebrow": "Unique Search of Smile",
+    "brand": "U.S.O.S",
+    "brandFull": "Unique Search of Smile",
+    "headline": "Build your network. Multiply your income.",
+    "subheadline": "Join a transparent binary rewards platform where every referral you make and every team you grow pays you back — tracked in real time, paid out fairly.",
+    "ctaPrimary": "Join now",
+    "ctaSecondary": "Log in"
+  },
+  "stats": [
+    { "value": "3,400+", "label": "Active members" },
+    { "value": "₹31L+", "label": "Paid in rewards" },
+    { "value": "7", "label": "Income levels" },
+    { "value": "24/7", "label": "Wallet access" }
+  ],
+  "features": {
+    "eyebrow": "Why U.S.O.S",
+    "title": "Everything you need to grow with confidence",
+    "subtitle": "A modern MLM platform built on transparency, fair payouts, and real-time tracking.",
+    "items": [
+      { "title": "Binary genealogy", "description": "Visualise your left and right teams with an interactive downline tree updated in real time." },
+      { "title": "Instant wallet", "description": "Track every referral bonus, matching income, and reward in one clear ledger." },
+      { "title": "Fair rewards", "description": "Milestone rewards and rank bonuses that pay out the moment you qualify." },
+      { "title": "Secure payments", "description": "PayU-powered checkout with encrypted transactions and verified onboarding." },
+      { "title": "KYC & payouts", "description": "Complete KYC once and withdraw your earnings straight to your bank account." },
+      { "title": "Multi-language", "description": "Use the platform in English, Hindi, or Odia — switch anytime." }
+    ]
+  },
+  "howItWorks": {
+    "eyebrow": "How it works",
+    "title": "Start earning in three simple steps",
+    "steps": [
+      { "step": "01", "title": "Register & choose a package", "description": "Sign up with your sponsor's referral code and pick the package that fits your goals." },
+      { "step": "02", "title": "Build your binary team", "description": "Invite members to your left and right legs and watch your network grow." },
+      { "step": "03", "title": "Earn & withdraw", "description": "Collect referral, matching, and milestone rewards, then withdraw to your bank." }
+    ]
+  },
+  "packages": {
+    "eyebrow": "Packages",
+    "title": "Choose the plan that fits you",
+    "subtitle": "Every package unlocks the full binary earning system. Upgrade anytime."
+  },
+  "cta": {
+    "title": "Ready to start your U.S.O.S journey?",
+    "subtitle": "Create your account in minutes and start building your network today.",
+    "button": "Create your account"
+  }
+}
