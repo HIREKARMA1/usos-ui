@@ -7,6 +7,8 @@ import { LocaleContext } from '@/hooks/useLocale';
 import { getDefaultLocale, persistLocale, readStoredLocale, type Locale } from '@/lib/i18n';
 import { themeToCssVariables } from '@/theme';
 import { env } from '@/lib/constants';
+import { AuthGateProvider } from '@/hooks/useAuthGate';
+import { AuthSheet } from '@/components/auth/AuthSheet';
 
 export function AppProviders({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(getDefaultLocale());
@@ -25,10 +27,13 @@ export function AppProviders({ children }: { children: ReactNode }) {
 
   const inner = (
     <LocaleContext.Provider value={{ locale, setLocale }}>
-      <div style={cssVars as React.CSSProperties} className="min-h-screen">
-        {children}
-        <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
-      </div>
+      <AuthGateProvider>
+        <div style={cssVars as React.CSSProperties} className="min-h-screen">
+          {children}
+          <AuthSheet />
+          <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
+        </div>
+      </AuthGateProvider>
     </LocaleContext.Provider>
   );
 

@@ -4,11 +4,11 @@
     "shop": "Shop",
     "orders": "Orders",
     "points": "Points",
-    "genealogy": "Genealogy",
+    "genealogy": "My tree",
     "wallet": "Wallet",
-    "referrals": "Referrals",
+    "referrals": "My 4 seats",
     "profile": "Profile",
-    "rewards": "Rewards"
+    "rewards": "Reward ladder"
   },
   "topbar": {
     "welcome": "Welcome back",
@@ -18,61 +18,95 @@
     "logout": "Log out"
   },
   "overview": {
-    "title": "Overview",
-    "subtitle": "Track your 4 referral slots, 7-day window, and current rank.",
+    "title": "Your command centre",
+    "subtitle": "Watch your four seats, seven-day window, rank, and wallet in one place.",
     "stats": {
-      "totalEarnings": "Total earnings",
+      "totalEarnings": "Lifetime earnings",
       "walletBalance": "Wallet balance",
-      "directReferrals": "Direct referrals (max 4)",
+      "directReferrals": "Seats filled (of 4)",
       "downline": "Total downline",
       "activeTeam": "Active team",
       "rank": "Current rank",
-      "windowLeft": "Days left in window",
-      "qualifiedDirects": "Qualified directs (7-day)"
+      "windowLeft": "Days left to SMART",
+      "qualifiedDirects": "Qualified directs"
     },
-    "recentTitle": "Recent transactions",
-    "quickActionsTitle": "Quick actions",
+    "recentTitle": "Latest wallet activity",
+    "quickActionsTitle": "Do this next",
     "quickActions": {
-      "invite": "Invite a member",
-      "withdraw": "Withdraw funds",
-      "viewTree": "View genealogy",
-      "completeKyc": "Complete KYC"
+      "invite": "Invite someone",
+      "withdraw": "Withdraw cash",
+      "viewTree": "Open my tree",
+      "completeKyc": "Finish KYC"
+    },
+    "coach": {
+      "eyebrow": "7-day SMART coach",
+      "racingTitle": "Fill your four seats before the clock runs out",
+      "smartTitle": "SMART unlocked — keep climbing the ladder",
+      "closedTitle": "Window closed — focus on your next level",
+      "pendingTitle": "Activate your kit to start the SMART sprint",
+      "seatsLabel": "Seats filled",
+      "qualifiedLabel": "Qualified in window",
+      "daysLabel": "Days left",
+      "inviteCta": "Share invite link",
+      "shareHint": "WhatsApp your link. Only activated seats in 7 days count.",
+      "nextUnlock": "Next unlock",
+      "cashGift": "{cash} + {gift}"
+    },
+    "kit": {
+      "eyebrow": "Your kit",
+      "title": "What’s in your box",
+      "empty": "Your kit contents appear here after activation.",
+      "itemCount": "{n} products in your basket"
+    },
+    "rules": {
+      "eyebrow": "Published rules",
+      "title": "No hidden rank changes",
+      "seats": "Exactly {n} direct seats — then the matrix grows under you.",
+      "window": "{n} days from activation to unlock SMART.",
+      "split": "Shop points redeem {you}% to you, {sponsor}% to your sponsor.",
+      "levelsHint": "Ladder snapshot"
+    },
+    "split": {
+      "title": "Sponsor share on every redeem",
+      "you": "You",
+      "sponsor": "Sponsor",
+      "hint": "When you redeem shop points, half lands in your wallet and half thanks the person who brought you in."
     }
   },
   "genealogy": {
-    "title": "Genealogy",
-    "subtitle": "Your 4-wide sponsor tree — each member can have at most 4 direct referrals.",
+    "title": "Your live team tree",
+    "subtitle": "A 4-wide sponsor tree — every member can fill at most four seats under them.",
     "you": "You",
     "stats": {
       "total": "Total downline",
-      "directs": "Direct referrals",
+      "directs": "Your directs",
       "directsShort": "direct",
       "active": "Active members",
-      "levels": "Depth (levels)"
+      "levels": "Depth"
     },
-    "hintDrag": "Drag to move the tree",
+    "hintDrag": "Drag to explore the tree",
     "hintZoom": "Pinch or use +/- to zoom",
     "legend": "Legend",
     "node": {
       "joined": "Joined",
-      "package": "Package",
+      "package": "Kit",
       "code": "Code"
     },
-    "emptyTitle": "Your network is just getting started",
-    "emptyDescription": "Share your referral link — you can invite up to 4 members under you."
+    "emptyTitle": "Your tree is ready to grow",
+    "emptyDescription": "Share your invite link and fill up to four seats to unlock SMART."
   },
   "wallet": {
-    "title": "Wallet",
-    "subtitle": "Level cash rewards and withdrawals.",
-    "balanceLabel": "Available balance",
+    "title": "Your wallet",
+    "subtitle": "Level rewards credit here. Withdraw to your bank after KYC.",
+    "balanceLabel": "Available now",
     "withdrawButton": "Withdraw",
-    "requested": "Withdrawal submitted — awaiting admin approval",
-    "bankRequired": "Add bank details in Profile before withdrawing",
-    "bankHint": "Withdrawals go to your saved bank account.",
+    "requested": "Withdrawal sent — waiting for admin approval",
+    "bankRequired": "Add bank details in Profile before you can withdraw",
+    "bankHint": "Approved withdrawals go straight to your saved bank account.",
     "bankLink": "Add bank details",
     "requestsTitle": "Withdrawal requests",
-    "requestsSubtitle": "After admin approval, money is sent to your bank automatically.",
-    "noRequests": "No withdrawal requests yet.",
+    "requestsSubtitle": "Once approved, payout is triggered automatically to your bank.",
+    "noRequests": "No withdrawals requested yet.",
     "totalEarned": "Total earned",
     "totalWithdrawn": "Total withdrawn",
     "table": {
@@ -91,47 +125,47 @@
       "withdrawal": "Withdrawal",
       "payment": "Payment"
     },
-    "emptyTitle": "No transactions yet",
-    "emptyDescription": "Your earnings and withdrawals will appear here."
+    "emptyTitle": "No wallet activity yet",
+    "emptyDescription": "Earnings and withdrawals will show here as soon as you start climbing."
   },
   "referrals": {
-    "title": "Referrals",
-    "subtitle": "You can refer a maximum of 4 members. Complete all 4 within 7 days of joining to unlock SMART.",
+    "title": "Your four seats",
+    "subtitle": "Fill all four within seven days of joining to unlock SMART (₹800 + T-Shirt).",
     "yourCodeLabel": "Your referral code",
-    "yourLinkLabel": "Your referral link",
+    "yourLinkLabel": "Your invite link",
     "copyCode": "Copy code",
     "copyLink": "Copy link",
-    "copied": "Copied to clipboard",
-    "slotsLabel": "Referral slots",
-    "slotsFull": "All 4 slots filled — your direct referral work is done.",
-    "windowLabel": "Qualification window",
-    "directTeamTitle": "Your direct team (max 4)",
+    "copied": "Copied — ready to share",
+    "slotsLabel": "Seat status",
+    "slotsFull": "All four seats filled — your direct invite work is complete.",
+    "windowLabel": "SMART qualification window",
+    "directTeamTitle": "People in your four seats",
     "table": {
       "name": "Name",
       "joined": "Joined",
       "code": "Code",
-      "package": "Package",
+      "package": "Kit",
       "status": "Status"
     },
-    "emptyTitle": "No referrals yet",
-    "emptyDescription": "Share your link and fill your 4 slots within 7 days to unlock SMART (₹800 + T-Shirt)."
+    "emptyTitle": "Seats are still open",
+    "emptyDescription": "Share your link now. Four successful joins within seven days unlock SMART."
   },
   "profile": {
-    "title": "Profile",
-    "subtitle": "Your signup details, address, KYC, and bank information.",
-    "accountTitle": "Account details",
-    "accountSubtitle": "Details captured when you joined U.S.O.S.",
-    "personalTitle": "Personal information",
-    "locationTitle": "Location",
-    "locationSubtitle": "Search an address or use your current GPS location.",
+    "title": "Your profile",
+    "subtitle": "Account, address, KYC, and bank — keep these current for smooth payouts.",
+    "accountTitle": "Account snapshot",
+    "accountSubtitle": "Captured when you joined U.S.O.S.",
+    "personalTitle": "Personal details",
+    "locationTitle": "Where you are",
+    "locationSubtitle": "Search an address or capture your current GPS location.",
     "kycTitle": "KYC verification",
-    "bankTitle": "Bank account",
+    "bankTitle": "Bank for withdrawals",
     "fields": {
       "name": "Full name",
       "email": "Email",
       "phone": "Phone",
       "referralCode": "Your referral code",
-      "package": "Package",
+      "package": "Kit",
       "sponsor": "Sponsor",
       "joined": "Joined on",
       "activated": "Activated on",
@@ -151,32 +185,32 @@
     "noSponsor": "No sponsor (root account)",
     "useCurrentLocation": "Use current location",
     "searchPlaceholder": "Type locality, landmark, or PIN…",
-    "searchHint": "Pick a result to fill the exact address.",
+    "searchHint": "Pick a result to autofill the exact address.",
     "searching": "Searching…",
     "coordsLabel": "Coordinates",
-    "locationCaptured": "Current location captured",
-    "geoUnsupported": "Location is not supported in this browser",
+    "locationCaptured": "Current location saved",
+    "geoUnsupported": "This browser doesn’t support location",
     "geoDenied": "Location permission denied — allow access and try again",
-    "geoFailed": "Could not get your current location",
+    "geoFailed": "Couldn’t read your current location",
     "addressRequired": "Enter or select an address",
     "saveLocation": "Save location",
     "kycStatusLabel": "KYC status",
     "save": "Save changes",
-    "saved": "Your profile has been updated",
-    "saveFailed": "Could not save changes",
-    "loadError": "Could not load profile"
+    "saved": "Profile updated",
+    "saveFailed": "Couldn’t save changes",
+    "loadError": "Couldn’t load profile"
   },
   "rewards": {
-    "title": "Rewards & ranks",
+    "title": "Reward ladder",
     "subtitle": "Eight levels from SMART to DOUBLE CROWN — cash plus gifts as your 4×4 matrix fills.",
-    "achieved": "Achieved",
+    "achieved": "Unlocked",
     "locked": "Locked",
-    "rewardLabel": "Reward",
+    "rewardLabel": "You receive",
     "progressLabel": "Network IDs needed",
     "claimButton": "Claim reward",
     "membersUnit": "IDs",
-    "planTitle": "Reward ladder",
-    "emptyTitle": "No ranks unlocked yet",
-    "emptyDescription": "Refer 4 members within 7 days to unlock SMART (level 1)."
+    "planTitle": "Full ladder",
+    "emptyTitle": "SMART is still ahead",
+    "emptyDescription": "Fill four seats within seven days to unlock level 1 — SMART."
   }
 }

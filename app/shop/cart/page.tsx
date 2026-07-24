@@ -31,8 +31,8 @@ export default function CartPage() {
           typeof detail === 'string'
             ? detail
             : e?.response?.status === 403
-              ? 'Only active members can use the cart. Complete entry payment first.'
-              : 'Could not load cart';
+              ? 'Activate your membership (₹2,500) before shopping.'
+              : 'Couldn’t load your cart. Please try again.';
         setError(msg);
         setCart({ items: [], total_paise: 0, total_points: 0 });
       })

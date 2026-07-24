@@ -35,11 +35,11 @@ export default function UserOrdersPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-2xl font-extrabold text-ink">My orders</h1>
-          <p className="mt-1 text-sm text-ink-muted">Product repurchase history.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-ink">My shop orders</h1>
+          <p className="mt-1 text-sm text-ink-muted">Every repurchase — and the points you earned from it.</p>
         </div>
         <Link href="/shop">
-          <Button variant="outline">Shop again</Button>
+          <Button variant="outline">Continue shopping</Button>
         </Link>
       </div>
 
@@ -47,8 +47,8 @@ export default function UserOrdersPage() {
         <Card>
           <EmptyState
             icon={Package}
-            title="No orders yet"
-            description="Visit the shop to repurchase products and earn points."
+            title="No shop orders yet"
+            description="Head to the shop to repurchase products and start stacking points."
           />
         </Card>
       ) : (

@@ -9,10 +9,11 @@ export interface PasswordInputProps extends Omit<InputHTMLAttributes<HTMLInputEl
   label?: string;
   error?: string;
   hint?: string;
+  labelClassName?: string;
 }
 
 export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
-  ({ className, label, error, hint, id, ...props }, ref) => {
+  ({ className, label, error, hint, id, labelClassName, ...props }, ref) => {
     const [visible, setVisible] = useState(false);
     const common = useContent('common');
     const showLabel = common.password?.show || 'Show password';
@@ -20,7 +21,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
 
     return (
       <label className="block space-y-1.5" htmlFor={id}>
-        {label ? <span className="text-sm font-medium text-ink">{label}</span> : null}
+        {label ? <span className={cn('text-sm font-medium text-ink', labelClassName)}>{label}</span> : null}
         <div className="relative">
           <input
             ref={ref}
@@ -36,7 +37,10 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           <button
             type="button"
             onClick={() => setVisible((v) => !v)}
-            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center text-ink-muted hover:text-ink"
+            className={cn(
+              'absolute inset-y-0 right-0 flex w-11 items-center justify-center text-ink-muted hover:text-ink',
+              className?.includes('text-white') && 'text-white/55 hover:text-white'
+            )}
             aria-label={visible ? hideLabel : showLabel}
             tabIndex={0}
           >

@@ -1,16 +1,16 @@
 {
-  "title": "Membership packages",
-  "subtitle": "Select Package A or Package B during signup. Entry fee is ₹2,500.",
-  "perMember": "one-time entry",
-  "recommended": "Popular",
-  "selectLabel": "Select package",
-  "featuresLabel": "Products included",
+  "title": "स्टार्टर किट",
+  "subtitle": "एक पेमेंट। असली होम बास्केट। आठ-लेवल रिवॉर्ड लैडर तक पूरा एक्सेस।",
+  "perMember": "एक बार जॉइन · किट शामिल",
+  "recommended": "बेस्ट वैल्यू",
+  "selectLabel": "यह किट लें",
+  "featuresLabel": "बास्केट में क्या है",
   "items": [
     {
       "id": "A",
-      "name": "Package A",
+      "name": "होम एसेंशियल",
       "price": 2500,
-      "description": "Cotton saree with essentials including T-Shirt.",
+      "description": "रोज़मर्रा की क्यूरेटेड बास्केट — कॉटन साड़ी, टी-शर्ट, मसाले, आटा और घरेलू ज़रूरतें। एक फीस से चार सीटें खुलती हैं।",
       "badge": "",
       "features": [
         "Cotton Saree",
@@ -27,10 +27,10 @@
     },
     {
       "id": "B",
-      "name": "Package B",
+      "name": "होम कम्प्लीट",
       "price": 2500,
-      "description": "Cotton saree with protein powder and extended essentials.",
-      "badge": "Extended",
+      "description": "एसेंशियल की पूरी चीज़ें, साथ में प्रोटीन पाउडर, साबुन और चीनी — उसी ₹2,500 में ज़्यादा वैल्यू।",
+      "badge": "बॉक्स में और",
       "features": [
         "Cotton Saree",
         "Protein Powder",
@@ -47,5 +47,5 @@
       ]
     }
   ],
-  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+  "note": "PayU पर ₹2,500 एक बार दें। सफल पेमेंट के बाद ही स्टॉक घटता है — फिर आपकी चार सीटें तुरंत खुलती हैं।"
 }

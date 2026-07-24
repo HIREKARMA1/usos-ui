@@ -18,8 +18,29 @@ import { env } from '@/lib/constants';
 import { PayUCheckoutForm } from './PayUCheckoutForm';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import type { PackagePlan, PaymentOrder, TokenResponse } from '@/types';
+import { cn } from '@/lib/cn';
+import type { ReactNode } from 'react';
 
-export function RegisterForm() {
+type Props = {
+  embedded?: boolean;
+  initialPackage?: string;
+  initialRef?: string;
+  onSwitchMode?: () => void;
+  onClose?: () => void;
+};
+
+const darkField =
+  'border-white/15 bg-white/5 text-white placeholder:text-white/35 [&_option]:bg-[#0f1622] [&_option]:text-white';
+const darkLabel = 'text-white/80';
+const darkHint = 'text-white/45';
+
+export function RegisterForm({
+  embedded,
+  initialPackage,
+  initialRef,
+  onSwitchMode,
+  onClose,
+}: Props) {
   const t = useContent('auth').register;
   const pay = useContent('auth').payment;
   const v = useContent('auth').validation;
@@ -28,7 +49,7 @@ export function RegisterForm() {
   const router = useRouter();
   const { loginSuccess } = useAuth();
 
-  const refFromLink = (search.get('ref') || '').trim().toUpperCase();
+  const refFromLink = (initialRef || search.get('ref') || '').trim().toUpperCase();
   const sponsorLocked = Boolean(refFromLink);
   const googleEnabled = Boolean(env.googleClientId.trim());
 
@@ -36,7 +57,7 @@ export function RegisterForm() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [packageCode, setPackageCode] = useState('A');
+  const [packageCode, setPackageCode] = useState(initialPackage || 'A');
   const [sponsor, setSponsor] = useState(refFromLink);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,6 +69,10 @@ export function RegisterForm() {
   }, [refFromLink]);
 
   useEffect(() => {
+    if (initialPackage) setPackageCode(initialPackage);
+  }, [initialPackage]);
+
+  useEffect(() => {
     api.getPackages().then(setApiPackages).catch(() => undefined);
   }, []);
 
@@ -55,11 +80,12 @@ export function RegisterForm() {
     const status = search.get('payment');
     if (status === 'success') {
       toast.success(pay.redirecting);
+      onClose?.();
       router.push('/user');
     } else if (status === 'failed') {
       toast.error(search.get('message') || pay.error);
     }
-  }, [search, pay, router]);
+  }, [search, pay, router, onClose]);
 
   const packageOptions = (apiPackages.length ? apiPackages : packagesContent.items).map((p: any) => ({
     value: p.id || p.code,
@@ -165,26 +191,43 @@ export function RegisterForm() {
     }
   }
 
+  const shellClass = embedded
+    ? 'w-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-white'
+    : 'w-full max-w-lg';
+
+  const wrap = (children: ReactNode) =>
+    embedded ? <div className={shellClass}>{children}</div> : <Card className={shellClass}>{children}</Card>;
+
   if (checkout) {
-    return (
-      <Card className="w-full max-w-md">
-        <p className="section-eyebrow">{pay.eyebrow}</p>
-        <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{pay.title}</h1>
-        <p className="mt-1 text-sm text-ink-muted">{pay.subtitle}</p>
-        <p className="mt-4 text-sm text-ink-muted">{pay.redirecting}</p>
+    return wrap(
+      <>
+        <p className={cn('section-eyebrow', embedded && '!text-sky')}>{pay.eyebrow}</p>
+        <h1 className={cn('mt-2 text-2xl font-bold tracking-tight', embedded ? 'text-white' : 'text-ink')}>
+          {pay.title}
+        </h1>
+        <p className={cn('mt-1 text-sm', embedded ? 'text-white/65' : 'text-ink-muted')}>{pay.subtitle}</p>
+        <p className={cn('mt-4 text-sm', embedded ? 'text-white/65' : 'text-ink-muted')}>{pay.redirecting}</p>
         <PayUCheckoutForm action={checkout.action} fields={checkout.fields} buttonLabel={pay.manualButton} />
-        <p className="mt-4 text-center text-xs text-ink-muted">{pay.securedBy}</p>
-      </Card>
+        <p className={cn('mt-4 text-center text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>
+          {pay.securedBy}
+        </p>
+      </>
     );
   }
 
-  return (
-    <Card className="w-full max-w-lg">
-      <p className="section-eyebrow">{t.eyebrow}</p>
-      <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{t.title}</h1>
-      <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+  return wrap(
+    <>
+      {!embedded ? (
+        <>
+          <p className="section-eyebrow">{t.eyebrow}</p>
+          <h1 className="mt-2 text-2xl font-bold tracking-tight text-ink">{t.title}</h1>
+          <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+        </>
+      ) : (
+        <h2 className="text-lg font-bold tracking-tight text-white">{t.title}</h2>
+      )}
 
-      <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+      <form onSubmit={onSubmit} className="mt-5 grid gap-3.5 sm:grid-cols-2">
         <div className="sm:col-span-2">
           <Input
             id="phone"
@@ -193,6 +236,8 @@ export function RegisterForm() {
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             error={errors.phone}
+            className={embedded ? darkField : undefined}
+            labelClassName={embedded ? darkLabel : undefined}
           />
         </div>
         <div className="sm:col-span-2">
@@ -203,6 +248,8 @@ export function RegisterForm() {
             value={packageCode}
             onChange={(e) => setPackageCode(e.target.value)}
             error={errors.package}
+            className={embedded ? darkField : undefined}
+            labelClassName={embedded ? darkLabel : undefined}
           />
         </div>
         <div className="sm:col-span-2">
@@ -217,6 +264,9 @@ export function RegisterForm() {
             }}
             readOnly={sponsorLocked}
             error={errors.sponsor}
+            className={embedded ? darkField : undefined}
+            labelClassName={embedded ? darkLabel : undefined}
+            hintClassName={embedded ? darkHint : undefined}
           />
         </div>
 
@@ -228,15 +278,20 @@ export function RegisterForm() {
               onError={() => toast.error(t.googleError || t.error)}
               disabled={loading}
             />
-            <p className="text-xs text-ink-muted">{t.googleHint}</p>
-            <div className="flex items-center gap-3 text-xs text-ink-muted">
-              <span className="h-px flex-1 bg-line" />
+            <p className={cn('text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>{t.googleHint}</p>
+            <div className={cn('flex items-center gap-3 text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>
+              <span className={cn('h-px flex-1', embedded ? 'bg-white/15' : 'bg-line')} />
               <span>{t.orEmail || 'or register with email'}</span>
-              <span className="h-px flex-1 bg-line" />
+              <span className={cn('h-px flex-1', embedded ? 'bg-white/15' : 'bg-line')} />
             </div>
           </div>
         ) : (
-          <p className="sm:col-span-2 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-muted">
+          <p
+            className={cn(
+              'sm:col-span-2 rounded-lg px-3 py-2 text-xs',
+              embedded ? 'bg-white/5 text-white/55' : 'bg-surface-muted text-ink-muted'
+            )}
+          >
             {t.configureGoogle || 'Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google Sign-Up.'}
           </p>
         )}
@@ -249,6 +304,8 @@ export function RegisterForm() {
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             error={errors.name}
+            className={embedded ? darkField : undefined}
+            labelClassName={embedded ? darkLabel : undefined}
           />
         </div>
         <Input
@@ -258,6 +315,8 @@ export function RegisterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
+          className={embedded ? darkField : undefined}
+          labelClassName={embedded ? darkLabel : undefined}
         />
         <div className="sm:col-span-2">
           <PasswordInput
@@ -268,21 +327,29 @@ export function RegisterForm() {
             onChange={(e) => setPassword(e.target.value)}
             error={errors.password}
             autoComplete="new-password"
+            className={embedded ? darkField : undefined}
+            labelClassName={embedded ? darkLabel : undefined}
           />
         </div>
         <div className="sm:col-span-2">
-          <Button type="submit" className="w-full" loading={loading}>
+          <Button type="submit" className="w-full" loading={loading} variant="accent">
             {loading ? t.submitting : t.submit}
           </Button>
-          <p className="mt-3 text-xs text-ink-muted">{t.terms}</p>
+          <p className={cn('mt-3 text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>{t.terms}</p>
         </div>
       </form>
-      <p className="mt-6 text-center text-sm text-ink-muted">
+      <p className={cn('mt-5 text-center text-sm', embedded ? 'text-white/55' : 'text-ink-muted')}>
         {t.haveAccount}{' '}
-        <Link href="/login" className="font-semibold text-primary hover:underline">
-          {t.loginLink}
-        </Link>
+        {onSwitchMode ? (
+          <button type="button" onClick={onSwitchMode} className="font-semibold text-sky hover:underline">
+            {t.loginLink}
+          </button>
+        ) : (
+          <Link href="/login" className="font-semibold text-primary hover:underline">
+            {t.loginLink}
+          </Link>
+        )}
       </p>
-    </Card>
+    </>
   );
 }

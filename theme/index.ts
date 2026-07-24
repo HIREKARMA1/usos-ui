@@ -35,6 +35,7 @@ export function themeToCssVariables(t: Theme = theme): Record<string, string> {
     '--color-surface-card': t.colors.surface.card,
     '--color-surface-muted': t.colors.surface.muted,
     '--color-surface-soft': t.colors.surface.soft,
+    '--color-surface-ink': t.colors.surface.ink || '#0f1622',
     '--color-ink': t.colors.text.primary,
     '--color-line': t.colors.border.default,
     '--gradient-hero': t.colors.surface.hero,
@@ -59,7 +60,7 @@ export function themeToCssVariables(t: Theme = theme): Record<string, string> {
     '--shadow-md': t.colors.shadow.md,
     '--shadow-lg': t.colors.shadow.lg,
 
-    '--gradient-brand-stripe': `linear-gradient(90deg, ${brand.blue} 0%, ${brand.sky} 20%, ${brand.yellow} 40%, ${brand.orange} 60%, ${brand.red} 80%, ${brand.green} 100%)`,
+    '--gradient-brand-stripe': `linear-gradient(90deg, transparent 0%, ${brand.blue} 20%, ${brand.sky} 50%, ${brand.blue} 80%, transparent 100%)`,
   };
 
   Object.entries(t.colors.primary).forEach(([k, v]) => {

@@ -3,7 +3,7 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { cn } from '@/lib/cn';
 
-type Variant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger' | 'outline';
+type Variant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger' | 'outline' | 'white';
 type Size = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,18 +13,19 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-primary text-white hover:bg-primary-600 shadow-sm',
-  secondary: 'bg-secondary-500 text-white hover:bg-secondary-600',
-  accent: 'bg-accent-orange text-white hover:opacity-90',
+  primary: 'bg-primary text-white hover:brightness-110 shadow-sm',
+  secondary: 'bg-secondary-500 text-white hover:brightness-110',
+  accent: 'bg-accent-orange text-white hover:brightness-110',
   ghost: 'bg-transparent text-ink hover:bg-surface-muted',
-  danger: 'bg-accent-red text-white hover:opacity-90',
-  outline: 'border border-line bg-white text-ink hover:bg-surface-muted',
+  danger: 'bg-accent-red text-white hover:brightness-110',
+  outline: 'border border-[#d5d9e0] bg-white text-ink hover:border-[#0f1622]/35',
+  white: 'bg-white text-primary hover:bg-white/90 shadow-sm',
 };
 
 const sizes: Record<Size, string> = {
   sm: 'h-9 px-3 text-sm',
   md: 'h-11 px-5 text-sm',
-  lg: 'h-12 px-6 text-base',
+  lg: 'h-12 px-6 text-sm sm:text-base',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -33,7 +34,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ref={ref}
       disabled={disabled || loading}
       className={cn(
-        'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition focus-ring disabled:opacity-50 disabled:pointer-events-none',
+        'inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition disabled:pointer-events-none disabled:opacity-50 focus-ring',
         variants[variant],
         sizes[size],
         className

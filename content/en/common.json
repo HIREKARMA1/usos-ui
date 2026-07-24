@@ -2,18 +2,18 @@
   "brand": {
     "short": "U.S.O.S",
     "full": "Unique Search of Smile",
-    "tagline": "Grow together. Earn together.",
+    "tagline": "Real kits. Clear rewards. Shared upside.",
     "poweredBy": "Powered by HireKarma"
   },
   "nav": {
     "home": "Home",
-    "features": "Features",
+    "features": "Why U.S.O.S",
     "howItWorks": "How it works",
-    "packages": "Packages",
+    "packages": "Kits",
     "shop": "Shop",
     "login": "Log in",
     "register": "Join now",
-    "dashboard": "Dashboard"
+    "dashboard": "My dashboard"
   },
   "actions": {
     "submit": "Submit",
@@ -35,11 +35,11 @@
     "getStarted": "Get started"
   },
   "states": {
-    "loading": "Loading, please wait…",
+    "loading": "Just a moment…",
     "emptyTitle": "Nothing here yet",
-    "emptyDescription": "Data will appear here once it becomes available.",
-    "errorTitle": "Something went wrong",
-    "errorDescription": "We could not load this information. Please try again."
+    "emptyDescription": "Fresh activity will show up here as soon as it happens.",
+    "errorTitle": "That didn’t load",
+    "errorDescription": "Please refresh or try again in a moment."
   },
   "pagination": {
     "showing": "Showing",
@@ -52,7 +52,7 @@
   },
   "table": {
     "srNo": "#",
-    "noData": "No records found"
+    "noData": "No records yet"
   },
   "language": {
     "label": "Language",
@@ -74,7 +74,9 @@
     "rejected": "Rejected"
   },
   "footer": {
-    "tagline": "Unique Search of Smile — a transparent network rewards platform.",
+    "tagline": "Unique Search of Smile — transparent network rewards, powered by HireKarma.",
+    "closer": "Shop. Earn. Climb.",
+    "closerHint": "Your kit, your seats, your points — ready when you are.",
     "quickLinks": "Quick links",
     "legal": "Legal",
     "contact": "Contact",
@@ -83,6 +85,7 @@
     "support": "Support",
     "about": "About us",
     "rights": "All rights reserved.",
-    "address": "Bhubaneswar, Odisha, India"
+    "address": "Bhubaneswar, Odisha, India",
+    "backToTop": "Back to top"
   }
 }

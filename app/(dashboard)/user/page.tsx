@@ -9,23 +9,28 @@ import { Button } from '@/components/ui/Button';
 import { Table, Td, Tr } from '@/components/ui/Table';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
+import { SmartCoach } from '@/components/member/SmartCoach';
+import { KitUnboxing } from '@/components/member/KitUnboxing';
+import { RulesCard } from '@/components/member/RulesCard';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
 import { formatCurrency, formatDate } from '@/lib/format';
-import type { OverviewStats, Transaction } from '@/types';
+import type { OverviewStats, Transaction, TrustRules } from '@/types';
 
 export default function UserOverviewPage() {
   const t = useContent('dashboard').overview;
   const wallet = useContent('dashboard').wallet;
   const [stats, setStats] = useState<OverviewStats | null>(null);
   const [txns, setTxns] = useState<Transaction[]>([]);
+  const [rules, setRules] = useState<TrustRules | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([api.getOverview(), api.getWallet()])
-      .then(([s, w]) => {
+    Promise.all([api.getOverview(), api.getWallet(), api.getTrustRules().catch(() => null)])
+      .then(([s, w, r]) => {
         setStats(s);
         setTxns(w.slice(0, 5));
+        setRules(r);
       })
       .catch(() => undefined)
       .finally(() => setLoading(false));
@@ -41,6 +46,8 @@ export default function UserOverviewPage() {
 
   const max = stats?.maxDirectReferrals || 4;
   const directsLabel = `${stats?.directReferrals || 0}/${max}`;
+  const youPct = Math.round((stats?.pointsUserShareBps || 5000) / 100);
+  const sponsorPct = Math.round((stats?.pointsSponsorShareBps || 5000) / 100);
 
   return (
     <div className="space-y-6">
@@ -48,6 +55,8 @@ export default function UserOverviewPage() {
         <h1 className="font-display text-2xl font-extrabold text-ink sm:text-3xl">{t.title}</h1>
         <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
       </div>
+
+      {stats ? <SmartCoach stats={stats} copy={t.coach} /> : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <StatCard label={t.stats.walletBalance} value={formatCurrency(stats?.walletBalance || 0)} icon={Wallet} tone="blue" />
@@ -62,6 +71,36 @@ export default function UserOverviewPage() {
         />
         <StatCard label={t.stats.downline} value={stats?.totalDownline || 0} icon={Network} tone="blue" />
       </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <KitUnboxing
+          packageName={stats?.packageName}
+          packageCode={stats?.packageCode}
+          items={stats?.packageItems}
+          copy={t.kit}
+        />
+        <RulesCard rules={rules} copy={t.rules} />
+      </div>
+
+      <Card className="overflow-hidden border-sky/20 bg-gradient-to-r from-sky/[0.06] to-transparent">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-lg font-bold tracking-tight text-ink">{t.split.title}</h2>
+            <p className="mt-1 text-sm text-ink-muted">{t.split.hint}</p>
+            {stats?.sponsorLabel ? (
+              <p className="mt-2 text-xs font-medium text-sky">Sponsor: {stats.sponsorLabel}</p>
+            ) : null}
+          </div>
+          <div className="flex min-w-[14rem] overflow-hidden rounded-full border border-line bg-white text-center text-xs font-bold">
+            <div className="flex-1 bg-primary px-3 py-2.5 text-white" style={{ flexGrow: youPct }}>
+              {t.split.you} {youPct}%
+            </div>
+            <div className="flex-1 bg-sky px-3 py-2.5 text-[#0f1622]" style={{ flexGrow: sponsorPct }}>
+              {t.split.sponsor} {sponsorPct}%
+            </div>
+          </div>
+        </div>
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_0.8fr]">
         <Card padding={false}>
