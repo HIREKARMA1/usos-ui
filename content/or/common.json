@@ -2,86 +2,90 @@
   "brand": {
     "short": "U.S.O.S",
     "full": "Unique Search of Smile",
-    "tagline": "Grow together. Earn together.",
+    "tagline": "ପ୍ରକୃତ କିଟ୍। ସ୍ପଷ୍ଟ ରିୱାର୍ଡ। ସାଝା ଲାଭ।",
     "poweredBy": "Powered by HireKarma"
   },
   "nav": {
-    "home": "Home",
-    "features": "Features",
-    "howItWorks": "How it works",
-    "packages": "Packages",
-    "login": "Log in",
-    "register": "Join now",
-    "dashboard": "Dashboard"
+    "home": "ହୋମ୍",
+    "features": "U.S.O.S କାହିଁକି",
+    "howItWorks": "କିପରି କାମ କରେ",
+    "packages": "କିଟ୍",
+    "shop": "ସପ୍",
+    "login": "ଲଗଇନ୍",
+    "register": "ଏବେ ଯୋଗ ଦିଅନ୍ତୁ",
+    "dashboard": "ମୋ ଡ୍ୟାସବୋର୍ଡ"
   },
   "actions": {
-    "submit": "Submit",
-    "cancel": "Cancel",
-    "save": "Save changes",
-    "edit": "Edit",
-    "delete": "Delete",
-    "close": "Close",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "search": "Search",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "viewAll": "View all",
-    "confirm": "Confirm",
-    "retry": "Try again",
-    "loading": "Loading…",
-    "getStarted": "Get started"
+    "submit": "ସବମିଟ୍",
+    "cancel": "ବାତିଲ୍",
+    "save": "ସେଭ୍ କରନ୍ତୁ",
+    "edit": "ଏଡିଟ୍",
+    "delete": "ଡିଲିଟ୍",
+    "close": "ବନ୍ଦ କରନ୍ତୁ",
+    "copy": "କପି",
+    "copied": "କପି ହେଲା!",
+    "search": "ଖୋଜନ୍ତୁ",
+    "back": "ପଛକୁ",
+    "next": "ଆଗକୁ",
+    "previous": "ପୂର୍ବ",
+    "viewAll": "ସବୁ ଦେଖନ୍ତୁ",
+    "confirm": "ନିଶ୍ଚିତ କରନ୍ତୁ",
+    "retry": "ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ",
+    "loading": "ଲୋଡ୍ ହେଉଛି…",
+    "getStarted": "ଆରମ୍ଭ କରନ୍ତୁ"
   },
   "states": {
-    "loading": "Loading, please wait…",
-    "emptyTitle": "Nothing here yet",
-    "emptyDescription": "Data will appear here once it becomes available.",
-    "errorTitle": "Something went wrong",
-    "errorDescription": "We could not load this information. Please try again."
+    "loading": "ଏକ ମୁହୂର୍ତ୍ତ ଅପେକ୍ଷା କରନ୍ତୁ…",
+    "emptyTitle": "ଏଠାରେ ଏଯାଏଁ କିଛି ନାହିଁ",
+    "emptyDescription": "କାର୍ଯ୍ୟକଳାପ ହେବା ମାତ୍ରେ ଏଠାରେ ଦେଖାଯିବ।",
+    "errorTitle": "ଲୋଡ୍ ହେଲା ନାହିଁ",
+    "errorDescription": "ପୃଷ୍ଠା ରିଫ୍ରେସ୍ କରନ୍ତୁ କିମ୍ବା କିଛି ସମୟ ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।"
   },
   "pagination": {
-    "showing": "Showing",
-    "to": "to",
-    "of": "of",
-    "results": "results",
-    "page": "Page",
-    "previous": "Previous",
-    "next": "Next"
+    "showing": "ଦେଖାଯାଉଛି",
+    "to": "ରୁ",
+    "of": "ରୁ",
+    "results": "ଫଳାଫଳ",
+    "page": "ପୃଷ୍ଠା",
+    "previous": "ପୂର୍ବ",
+    "next": "ପରବର୍ତ୍ତୀ"
   },
   "table": {
     "srNo": "#",
-    "noData": "No records found"
+    "noData": "ଏଯାଏଁ କୌଣସି ରେକର୍ଡ ନାହିଁ"
   },
   "language": {
-    "label": "Language",
+    "label": "ଭାଷା",
     "en": "English",
-    "hi": "Hindi",
-    "or": "Odia"
+    "hi": "ହିନ୍ଦୀ",
+    "or": "ଓଡ଼ିଆ"
   },
   "password": {
     "show": "ପାସୱାର୍ଡ ଦେଖାନ୍ତୁ",
     "hide": "ପାସୱାର୍ଡ ଲୁଚାନ୍ତୁ"
   },
   "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "pending": "Pending",
-    "completed": "Completed",
-    "failed": "Failed",
-    "approved": "Approved",
-    "rejected": "Rejected"
+    "active": "ସକ୍ରିୟ",
+    "inactive": "ନିଷ୍କ୍ରିୟ",
+    "pending": "ବିଚାରାଧୀନ",
+    "completed": "ସମ୍ପୂର୍ଣ୍ଣ",
+    "failed": "ବିଫଳ",
+    "approved": "ଅନୁମୋଦିତ",
+    "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ"
   },
   "footer": {
-    "tagline": "Unique Search of Smile — a transparent network rewards platform.",
-    "quickLinks": "Quick links",
-    "legal": "Legal",
-    "contact": "Contact",
-    "privacy": "Privacy policy",
-    "terms": "Terms of service",
-    "support": "Support",
-    "about": "About us",
-    "rights": "All rights reserved.",
-    "address": "Bhubaneswar, Odisha, India"
+    "tagline": "Unique Search of Smile — ସ୍ୱଚ୍ଛ ନେଟୱାର୍କ୍ ରିୱାର୍ଡ, HireKarma ଦ୍ୱାରା ପରିଚାଳିତ।",
+    "closer": "କିଣନ୍ତୁ। ଅର୍ଜନ କରନ୍ତୁ। ଚଢ଼ନ୍ତୁ।",
+    "closerHint": "ଆପଣଙ୍କ କିଟ୍, ସିଟ୍, ପଏଣ୍ଟ୍ — ଯେତେବେଳେ ଆପଣ ପ୍ରସ୍ତୁତ।",
+    "quickLinks": "ଦ୍ରୁତ ଲିଙ୍କ୍",
+    "legal": "ଆଇନଗତ",
+    "contact": "ଯୋଗାଯୋଗ",
+    "privacy": "ଗୋପନୀୟତା ନୀତି",
+    "terms": "ସେବା ସର୍ତ୍ତ",
+    "support": "ସହାୟତା",
+    "about": "ଆମ ବିଷୟରେ",
+    "rights": "ସର୍ବସ୍ୱତ୍ୱ ସଂରକ୍ଷିତ।",
+    "address": "ଭୁବନେଶ୍ୱର, ଓଡ଼ିଶା, ଭାରତ",
+    "backToTop": "ଉପରକୁ ଯାଆନ୍ତୁ"
   }
 }

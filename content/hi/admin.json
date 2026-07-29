@@ -1,113 +1,122 @@
 {
   "nav": {
-    "analytics": "विश्लेषण",
-    "users": "उपयोगकर्ता",
-    "products": "उत्पाद",
-    "packages": "पैकेज",
-    "rewards": "रिवॉर्ड",
-    "withdrawals": "निकासी",
-    "genealogy": "वंशावली"
+    "analytics": "एनालिटिक्स",
+    "users": "मेंबर",
+    "products": "प्रोडक्ट",
+    "packages": "किट",
+    "rewards": "रिवॉर्ड कतार",
+    "withdrawals": "पेआउट",
+    "genealogy": "नेटवर्क खोज"
   },
   "topbar": {
-    "title": "एडमिन कंसोल",
+    "title": "कमांड सेंटर",
     "logout": "लॉग आउट"
   },
   "analytics": {
-    "title": "राजस्व विश्लेषण",
-    "subtitle": "एक नज़र में प्लेटफ़ॉर्म प्रदर्शन।",
+    "title": "नेटवर्क कैसे चल रहा है",
+    "subtitle": "पैसे इन, मेंबर ऑन, और आपके काम की कतार — लाइव स्नैपशॉट।",
+    "live": "लाइव",
+    "healthClear": "सब ठीक",
+    "healthAttention": "ध्यान दें",
+    "activationRate": "एक्टिवेशन रेट",
+    "activationHint": "सक्रिय बनाम कुल मेंबर",
+    "attentionTitle": "आपकी कतार",
+    "attentionSubtitle": "पेआउट और रिवॉर्ड चलते रखने के लिए इन्हें क्लियर करें।",
+    "openQueue": "खोलें",
+    "jumpTitle": "जल्दी जाएँ",
     "stats": {
-      "totalRevenue": "कुल राजस्व",
-      "totalUsers": "कुल उपयोगकर्ता",
-      "activeUsers": "सक्रिय उपयोगकर्ता",
-      "totalPayouts": "कुल भुगतान",
-      "pendingRewards": "लंबित रिवॉर्ड",
-      "monthlyGrowth": "मासिक वृद्धि"
+      "totalRevenue": "पैसे इन",
+      "totalUsers": "मेंबर जुड़े",
+      "activeUsers": "मेंबर सक्रिय",
+      "totalPayouts": "पैसे आउट",
+      "pendingRewards": "रिवॉर्ड प्रतीक्षा में",
+      "monthlyGrowth": "मासिक ग्रोथ"
     },
-    "revenueTitle": "राजस्व रुझान",
+    "revenueTitle": "रेवेन्यू ट्रेंड",
     "revenueSubtitle": "पिछले 6 महीने",
-    "recentTitle": "हाल के साइनअप"
+    "recentTitle": "नए साइनअप"
   },
   "users": {
-    "title": "उपयोगकर्ता प्रबंधन",
-    "subtitle": "सदस्यों, पैकेजों और खाता स्थिति का प्रबंधन करें।",
+    "title": "मेंबर डायरेक्टरी",
+    "subtitle": "मेंबर खोजें, किट देखें, और अकाउंट स्टेटस अपडेट करें।",
     "searchPlaceholder": "नाम या ईमेल से खोजें…",
     "table": {
       "name": "नाम",
       "contact": "संपर्क",
-      "package": "पैकेज",
+      "package": "किट",
       "earnings": "कमाई",
-      "joined": "शामिल हुए",
+      "joined": "जॉइन",
       "status": "स्थिति",
-      "actions": "कार्य"
+      "actions": "एक्शन"
     },
-    "activate": "सक्रिय करें",
-    "deactivate": "निष्क्रिय करें",
-    "statusUpdated": "उपयोगकर्ता स्थिति अपडेट हुई",
-    "emptyTitle": "कोई उपयोगकर्ता नहीं मिला",
-    "emptyDescription": "अपनी खोज समायोजित करने का प्रयास करें।"
+    "activate": "एक्टिवेट",
+    "deactivate": "डीएक्टिवेट",
+    "statusUpdated": "मेंबर स्टेटस अपडेट हुआ",
+    "emptyTitle": "कोई मेंबर नहीं मिला",
+    "emptyDescription": "दूसरा नाम या ईमेल आज़माएँ।"
   },
   "packages": {
-    "title": "पैकेज इन्वेंटरी",
-    "subtitle": "पैकेज मूल्य निर्धारण और उपलब्धता संपादित करें।",
+    "title": "किट इन्वेंटरी",
+    "subtitle": "पैकेज A और B की कीमत, नाम और स्टॉक एडजस्ट करें।",
     "table": {
-      "name": "पैकेज",
+      "name": "किट",
       "price": "कीमत",
       "stock": "स्टॉक",
       "status": "स्थिति",
-      "actions": "कार्य"
+      "actions": "एक्शन"
     },
-    "editTitle": "पैकेज संपादित करें",
+    "editTitle": "किट एडिट करें",
     "priceLabel": "कीमत (₹)",
     "stockLabel": "उपलब्ध स्टॉक",
-    "nameLabel": "पैकेज नाम",
-    "save": "पैकेज सहेजें",
-    "saved": "पैकेज अपडेट हुआ"
+    "nameLabel": "किट का नाम",
+    "save": "किट सेव करें",
+    "saved": "किट अपडेट हुई"
   },
   "rewards": {
-    "title": "रिवॉर्ड सत्यापन",
-    "subtitle": "लंबित रिवॉर्ड दावों की समीक्षा करें और स्वीकृत करें।",
+    "title": "रिवॉर्ड क्लेम",
+    "subtitle": "मेंबर के लंबित माइलस्टोन क्लेम अप्रूव या रिजेक्ट करें।",
     "table": {
-      "user": "उपयोगकर्ता",
+      "user": "मेंबर",
       "milestone": "माइलस्टोन",
-      "requested": "अनुरोधित",
+      "requested": "अनुरोध",
       "status": "स्थिति",
-      "actions": "कार्य"
+      "actions": "एक्शन"
     },
-    "approve": "स्वीकृत करें",
-    "reject": "अस्वीकार करें",
-    "approved": "रिवॉर्ड स्वीकृत",
-    "rejected": "रिवॉर्ड अस्वीकृत",
+    "approve": "अप्रूव",
+    "reject": "रिजेक्ट",
+    "approved": "रिवॉर्ड अप्रूव्ड",
+    "rejected": "रिवॉर्ड रिजेक्टेड",
     "emptyTitle": "कतार खाली है",
-    "emptyDescription": "अभी कोई लंबित रिवॉर्ड दावा नहीं है।"
+    "emptyDescription": "अभी कोई लंबित रिवॉर्ड क्लेम नहीं — अच्छा काम।"
   },
   "withdrawals": {
-    "title": "निकासी कतार",
-    "subtitle": "स्वीकृति के बाद राशि सदस्य के बैंक खाते में स्वतः भेजी जाएगी।",
+    "title": "पेआउट कतार",
+    "subtitle": "अप्रूव करें — मेंबर के बैंक में अपने आप फंड जाएँ।",
     "providerLabel": "पेआउट प्रोवाइडर",
     "table": {
-      "user": "सदस्य",
+      "user": "मेंबर",
       "amount": "राशि",
       "bank": "बैंक",
-      "requested": "अनुरोधित",
+      "requested": "अनुरोध",
       "status": "स्थिति",
-      "actions": "कार्य"
+      "actions": "एक्शन"
     },
-    "approve": "स्वीकृत करें और भुगतान",
-    "retry": "फिर से प्रयास",
-    "reject": "अस्वीकार करें",
-    "approved": "भुगतान भेज दिया गया",
-    "rejected": "निकासी अस्वीकृत — वॉलेट बहाल",
-    "approveFailed": "भुगतान विफल",
-    "emptyTitle": "कोई लंबित निकासी नहीं",
-    "emptyDescription": "जब सदस्य निकासी का अनुरोध करेंगे, वे यहाँ दिखेंगे।"
+    "approve": "अप्रूव और भुगतान",
+    "retry": "पेआउट फिर कोशिश",
+    "reject": "रिजेक्ट",
+    "approved": "पेआउट भेजा गया",
+    "rejected": "रिजेक्ट — वॉलेट बैलेंस बहाल",
+    "approveFailed": "पेआउट विफल",
+    "emptyTitle": "कोई लंबित पेआउट नहीं",
+    "emptyDescription": "मेंबर के विड्रॉअल अनुरोध यहाँ अप्रूवल के लिए आएँगे।"
   },
   "genealogy": {
-    "title": "वैश्विक वंशावली",
-    "subtitle": "किसी भी सदस्य को खोजें और उनका नेटवर्क देखें।",
-    "searchPlaceholder": "सदस्य नाम या रेफ़रल कोड से खोजें…",
+    "title": "नेटवर्क खोज",
+    "subtitle": "किसी भी मेंबर को खोजें और उनकी डाउनलाइन देखें।",
+    "searchPlaceholder": "नाम या रेफ़रल कोड से खोजें…",
     "searchButton": "खोजें",
     "resultLabel": "नेटवर्क दिखा रहे हैं",
-    "emptyTitle": "किसी सदस्य को खोजें",
-    "emptyDescription": "उनका डाउनलाइन ट्री देखने के लिए नाम या रेफ़रल कोड दर्ज करें।"
+    "emptyTitle": "शुरू करने के लिए मेंबर खोजें",
+    "emptyDescription": "नाम या रेफ़रल कोड डालकर उनका टीम ट्री खोलें।"
   }
 }

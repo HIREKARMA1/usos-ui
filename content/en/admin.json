@@ -1,40 +1,49 @@
 {
   "nav": {
     "analytics": "Analytics",
-    "users": "Users",
+    "users": "Members",
     "products": "Products",
-    "packages": "Packages",
-    "rewards": "Rewards",
-    "withdrawals": "Withdrawals",
-    "genealogy": "Genealogy"
+    "packages": "Kits",
+    "rewards": "Rewards queue",
+    "withdrawals": "Payouts",
+    "genealogy": "Network search"
   },
   "topbar": {
-    "title": "Admin console",
+    "title": "Command center",
     "logout": "Log out"
   },
   "analytics": {
-    "title": "Revenue analytics",
-    "subtitle": "Platform performance at a glance.",
+    "title": "How the network is breathing",
+    "subtitle": "Live snapshot of money in, members on, and work waiting for you.",
+    "live": "Live",
+    "healthClear": "All clear",
+    "healthAttention": "Needs attention",
+    "activationRate": "Activation rate",
+    "activationHint": "Active vs total members",
+    "attentionTitle": "Your queue",
+    "attentionSubtitle": "Clear these to keep payouts and rewards moving.",
+    "openQueue": "Open",
+    "jumpTitle": "Jump in",
     "stats": {
-      "totalRevenue": "Total revenue",
-      "totalUsers": "Total users",
-      "activeUsers": "Active users",
-      "totalPayouts": "Total payouts",
-      "pendingRewards": "Pending rewards",
+      "totalRevenue": "Money in",
+      "totalUsers": "Members joined",
+      "activeUsers": "Members active",
+      "totalPayouts": "Money out",
+      "pendingRewards": "Rewards waiting",
       "monthlyGrowth": "Monthly growth"
     },
     "revenueTitle": "Revenue trend",
     "revenueSubtitle": "Last 6 months",
-    "recentTitle": "Recent signups"
+    "recentTitle": "Newest signups"
   },
   "users": {
-    "title": "User management",
-    "subtitle": "Manage members, packages, and account status.",
+    "title": "Member directory",
+    "subtitle": "Find members, review kits, and update account status.",
     "searchPlaceholder": "Search by name or email…",
     "table": {
       "name": "Name",
       "contact": "Contact",
-      "package": "Package",
+      "package": "Kit",
       "earnings": "Earnings",
       "joined": "Joined",
       "status": "Status",
@@ -42,32 +51,32 @@
     },
     "activate": "Activate",
     "deactivate": "Deactivate",
-    "statusUpdated": "User status updated",
-    "emptyTitle": "No users found",
-    "emptyDescription": "Try adjusting your search."
+    "statusUpdated": "Member status updated",
+    "emptyTitle": "No members matched",
+    "emptyDescription": "Try a different name or email."
   },
   "packages": {
-    "title": "Package inventory",
-    "subtitle": "Edit package pricing and availability.",
+    "title": "Kit inventory",
+    "subtitle": "Adjust pricing, names, and stock for Package A and B.",
     "table": {
-      "name": "Package",
+      "name": "Kit",
       "price": "Price",
       "stock": "Stock",
       "status": "Status",
       "actions": "Actions"
     },
-    "editTitle": "Edit package",
+    "editTitle": "Edit kit",
     "priceLabel": "Price (₹)",
     "stockLabel": "Available stock",
-    "nameLabel": "Package name",
-    "save": "Save package",
-    "saved": "Package updated"
+    "nameLabel": "Kit name",
+    "save": "Save kit",
+    "saved": "Kit updated"
   },
   "rewards": {
-    "title": "Reward verification",
-    "subtitle": "Review and approve pending reward claims.",
+    "title": "Reward claims",
+    "subtitle": "Approve or reject pending milestone claims from members.",
     "table": {
-      "user": "User",
+      "user": "Member",
       "milestone": "Milestone",
       "requested": "Requested",
       "status": "Status",
@@ -78,11 +87,11 @@
     "approved": "Reward approved",
     "rejected": "Reward rejected",
     "emptyTitle": "Queue is clear",
-    "emptyDescription": "No pending reward claims right now."
+    "emptyDescription": "No pending reward claims right now — nice work."
   },
   "withdrawals": {
-    "title": "Withdrawal queue",
-    "subtitle": "Approve to send money to the member’s bank account automatically.",
+    "title": "Payout queue",
+    "subtitle": "Approve to release funds to the member’s bank automatically.",
     "providerLabel": "Payout provider",
     "table": {
       "user": "Member",
@@ -96,18 +105,18 @@
     "retry": "Retry payout",
     "reject": "Reject",
     "approved": "Payout sent",
-    "rejected": "Withdrawal rejected — wallet restored",
+    "rejected": "Rejected — wallet balance restored",
     "approveFailed": "Payout failed",
-    "emptyTitle": "No pending withdrawals",
-    "emptyDescription": "When members request a withdrawal, they appear here for approval."
+    "emptyTitle": "No pending payouts",
+    "emptyDescription": "Member withdrawal requests will land here for approval."
   },
   "genealogy": {
-    "title": "Global genealogy",
-    "subtitle": "Search any member and inspect their network.",
-    "searchPlaceholder": "Search by member name or referral code…",
+    "title": "Network search",
+    "subtitle": "Look up any member and inspect their downline tree.",
+    "searchPlaceholder": "Search by name or referral code…",
     "searchButton": "Search",
     "resultLabel": "Showing network for",
-    "emptyTitle": "Search for a member",
-    "emptyDescription": "Enter a name or referral code to view their downline tree."
+    "emptyTitle": "Find a member to begin",
+    "emptyDescription": "Enter a name or referral code to open their team tree."
   }
 }

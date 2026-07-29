@@ -1,16 +1,16 @@
 {
-  "title": "Membership packages",
-  "subtitle": "Select Package A or Package B during signup. Entry fee is ₹2,500.",
-  "perMember": "one-time entry",
-  "recommended": "Popular",
-  "selectLabel": "Select package",
-  "featuresLabel": "Products included",
+  "title": "Starter kits",
+  "subtitle": "One payment. A real home basket. Full access to the eight-level reward ladder.",
+  "perMember": "one-time join · kit included",
+  "recommended": "Best value",
+  "selectLabel": "Get this kit",
+  "featuresLabel": "What’s in the basket",
   "items": [
     {
       "id": "A",
-      "name": "Package A",
+      "name": "Home Essential",
       "price": 2500,
-      "description": "Cotton saree with essentials including T-Shirt.",
+      "description": "A curated daily basket — cotton saree, T-shirt, spices, atta, and household staples. One fee unlocks your four seats.",
       "badge": "",
       "features": [
         "Cotton Saree",
@@ -27,10 +27,10 @@
     },
     {
       "id": "B",
-      "name": "Package B",
+      "name": "Home Complete",
       "price": 2500,
-      "description": "Cotton saree with protein powder and extended essentials.",
-      "badge": "Extended",
+      "description": "Everything in Essential, plus protein powder, soap, and sugar — more for the same ₹2,500 join.",
+      "badge": "More in the box",
       "features": [
         "Cotton Saree",
         "Protein Powder",
@@ -47,5 +47,5 @@
       ]
     }
   ],
-  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+  "note": "Pay ₹2,500 once on PayU. Stock reduces only after payment succeeds — then your four seats open immediately."
 }

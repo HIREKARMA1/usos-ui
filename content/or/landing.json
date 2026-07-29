@@ -1,49 +1,116 @@
 {
   "hero": {
-    "eyebrow": "Unique Search of Smile",
+    "eyebrow": "HireKarma ର ପ୍ରଡକ୍ଟ",
     "brand": "U.S.O.S",
     "brandFull": "Unique Search of Smile",
-    "headline": "Build your network. Multiply your income.",
-    "subheadline": "Join a transparent binary rewards platform where every referral you make and every team you grow pays you back — tracked in real time, paid out fairly.",
-    "ctaPrimary": "Join now",
-    "ctaSecondary": "Log in"
+    "headline": "ପ୍ରକୃତ ଘର କିଟ୍। ଚାରି ସିଟ୍। ରିୱାର୍ଡ ଯାହା ବଢ଼େ।",
+    "headlineHighlight": "ରିୱାର୍ଡ ଯାହା ବଢ଼େ",
+    "subheadline": "ଥରେ ₹2,500 ଦିଅନ୍ତୁ, ବ୍ୟବହାର ଯୋଗ୍ୟ ପ୍ରଡକ୍ଟ ପାଆନ୍ତୁ, ସାତ ଦିନରେ ଚାରି ସିଟ୍ ଭରନ୍ତୁ, ଏବଂ SMART ରୁ DOUBLE CROWN ପର୍ଯ୍ୟନ୍ତ ନଗଦ ଓ ଉପହାର ଅର୍ଜନ କରନ୍ତୁ।",
+    "ctaPrimary": "ମୋ କିଟ୍ କ୍ଲେମ୍ କରନ୍ତୁ",
+    "ctaSecondary": "ମୁଁ ପୂର୍ବରୁ ଯୋଗ ଦେଇଛି",
+    "partnersNote": "ସୁରକ୍ଷିତ PayU · ସ୍ପଷ୍ଟ ର୍ୟାଙ୍କ୍ · ୱାଲେଟ୍-ରେଡି ପେଆଉଟ୍"
   },
   "stats": [
-    { "value": "3,400+", "label": "Active members" },
-    { "value": "₹31L+", "label": "Paid in rewards" },
-    { "value": "7", "label": "Income levels" },
-    { "value": "24/7", "label": "Wallet access" }
+    { "value": "₹2,500", "label": "ଥରେ ଯୋଗଦାନ ଫି" },
+    { "value": "4 ସିଟ୍", "label": "ଆପଣଙ୍କ ଡାଇରେକ୍ଟ ଟିମ୍" },
+    { "value": "8 ସ୍ତର", "label": "ରିୱାର୍ଡ ଲ୍ୟାଡର୍" },
+    { "value": "7 ଦିନ", "label": "SMART ଅନଲକ୍ ପାଇଁ" }
   ],
   "features": {
-    "eyebrow": "Why U.S.O.S",
-    "title": "Everything you need to grow with confidence",
-    "subtitle": "A modern MLM platform built on transparency, fair payouts, and real-time tracking.",
+    "eyebrow": "ସ୍ପଷ୍ଟ ନିୟମ",
+    "title": "ସରଳ ନିୟମ। ବଡ଼ ସୁଯୋଗ।",
+    "titleHighlight": "ବଡ଼ ସୁଯୋଗ",
+    "subtitle": "ସିଟ୍, ର୍ୟାଙ୍କ୍ ଓ ପେଆଉଟ୍ ଆଗରୁ ସ୍ପଷ୍ଟ — ପରବର୍ତ୍ତୀ ଅନଲକ୍ କ’ଣ, ସବୁବେଳେ ଜଣା ରହେ।",
     "items": [
-      { "title": "Binary genealogy", "description": "Visualise your left and right teams with an interactive downline tree updated in real time." },
-      { "title": "Instant wallet", "description": "Track every referral bonus, matching income, and reward in one clear ledger." },
-      { "title": "Fair rewards", "description": "Milestone rewards and rank bonuses that pay out the moment you qualify." },
-      { "title": "Secure payments", "description": "PayU-powered checkout with encrypted transactions and verified onboarding." },
-      { "title": "KYC & payouts", "description": "Complete KYC once and withdraw your earnings straight to your bank account." },
-      { "title": "Multi-language", "description": "Use the platform in English, Hindi, or Odia — switch anytime." }
+      {
+        "title": "କେବଳ ଚାରି ଡାଇରେକ୍ଟ",
+        "description": "ଆପଣ ଠିକ୍ ଚାରି ଜଣଙ୍କୁ ସ୍ପନସର୍ କରନ୍ତି। ସିଟ୍ ଭରିଗଲେ ବ୍ୟକ୍ତିଗତ ଇନଭାଇଟ୍ ଶେଷ — ଆଗକୁ ମ୍ୟାଟ୍ରିକ୍ସ ଚାଲେ।"
+      },
+      {
+        "title": "ସାତ ଦିନର SMART ସ୍ପ୍ରିଣ୍ଟ",
+        "description": "ଯୋଗଦାନର ସାତ ଦିନ ଭିତରେ ଚାରି ସିଟ୍ ଭରନ୍ତୁ ଏବଂ SMART ଅନଲକ୍ କରନ୍ତୁ: ₹800 ନଗଦ + ଟି-ସାର୍ଟ।"
+      },
+      {
+        "title": "ଆଠ କ୍ୟାରିୟର ସ୍ତର",
+        "description": "SMART → MASTER → STAR → SUPER STAR → CROWN → DOUBLE CROWN — ପ୍ରତ୍ୟେକ ପିଢ଼ି ଭରିବା ସହ ନଗଦ ଓ ପ୍ରକୃତ ପ୍ରଡକ୍ଟ।"
+      },
+      {
+        "title": "ଦୁଇଟି ଷ୍ଟାର୍ଟର କିଟ୍",
+        "description": "ପ୍ୟାକେଜ୍ A କିମ୍ବା B ବାଛନ୍ତୁ — ଉଭୟ ₹2,500। ସମାନ ଲ୍ୟାଡର୍; ଘର ପାଇଁ ସଠିକ୍ କିଟ୍ ବାଛନ୍ତୁ।"
+      },
+      {
+        "title": "ଲାଇଭ୍ ଟିମ୍ ଟ୍ରି",
+        "description": "ନେଟୱାର୍କ୍ ରିଅଲ୍ ଟାଇମ୍‌ରେ ଦେଖନ୍ତୁ — କିଏ କେଉଁଠି, କିଏ ଆକ୍ଟିଭ୍, ଏବଂ ପରବର୍ତ୍ତୀ ସ୍ତର କେତେ ନିକଟ।"
+      },
+      {
+        "title": "ୱାଲେଟ୍ ପେଆଉଟ୍",
+        "description": "ରିୱାର୍ଡ ୱାଲେଟ୍‌ରେ ଆସେ। KYC ସମାପ୍ତ କରନ୍ତୁ, ବ୍ୟାଙ୍କ ଯୋଡ଼ନ୍ତୁ, ଆବଶ୍ୟକ ସମୟରେ ଉଠାନ୍ତୁ।"
+      }
     ]
   },
   "howItWorks": {
-    "eyebrow": "How it works",
-    "title": "Start earning in three simple steps",
+    "eyebrow": "ଆପଣଙ୍କ ପଥ",
+    "title": "ସାଇନଅପ୍‌ରୁ SMART — ତିନୋଟି ସହଜ ପଦକ୍ଷେପ",
+    "titleHighlight": "ତିନୋଟି ସହଜ ପଦକ୍ଷେପ",
     "steps": [
-      { "step": "01", "title": "Register & choose a package", "description": "Sign up with your sponsor's referral code and pick the package that fits your goals." },
-      { "step": "02", "title": "Build your binary team", "description": "Invite members to your left and right legs and watch your network grow." },
-      { "step": "03", "title": "Earn & withdraw", "description": "Collect referral, matching, and milestone rewards, then withdraw to your bank." }
+      {
+        "step": "01",
+        "title": "₹2,500 ରେ ଯୋଗ ଦିଅନ୍ତୁ",
+        "description": "ID ତିଆରି କରନ୍ତୁ, ପ୍ୟାକେଜ୍ A କିମ୍ବା B ବାଛନ୍ତୁ, ଏବଂ ମିନିଟ୍‌ରେ ସୁରକ୍ଷିତ PayU ପେମେଣ୍ଟ ସମାପ୍ତ କରନ୍ତୁ।"
+      },
+      {
+        "step": "02",
+        "title": "ଚାରି ସିଟ୍ ଭରନ୍ତୁ",
+        "description": "ନିଜ ଲିଙ୍କ୍ ଶେୟାର୍ କରନ୍ତୁ। ସାତ ଦିନ ଭିତରେ ଚାରି ସଦସ୍ୟ ଯୋଡ଼ି SMART ଅନଲକ୍ କରନ୍ତୁ।"
+      },
+      {
+        "step": "03",
+        "title": "ଆଠ ସ୍ତର ଚଢ଼ନ୍ତୁ",
+        "description": "ପ୍ରତ୍ୟେକ ପିଢ଼ି ସେମାନଙ୍କ ଚାରି ସିଟ୍ ପୂରଣ କଲେ ଆପଣ ଲ୍ୟାଡର୍‌ରେ ଉପରକୁ ଯାଆନ୍ତି — ପ୍ରତି ମାଇଲଷ୍ଟୋନ୍‌ରେ ନଗଦ ଓ ଉପହାର।"
+      }
     ]
   },
   "packages": {
-    "eyebrow": "Packages",
-    "title": "Choose the plan that fits you",
-    "subtitle": "Every package unlocks the full binary earning system. Upgrade anytime."
+    "eyebrow": "ଆପଣଙ୍କ କିଟ୍ ବାଛନ୍ତୁ",
+    "title": "ପ୍ରଥମ ଦିନରୁ ପ୍ରକୃତ ପ୍ରଡକ୍ଟ। ରିୱାର୍ଡ ଯାହା ବଢ଼ିଚାଲେ।",
+    "titleHighlight": "ରିୱାର୍ଡ ଯାହା ବଢ଼ିଚାଲେ",
+    "subtitle": "ଉଭୟ କିଟ୍ ₹2,500 ଏବଂ ସମାନ ର୍ୟାଙ୍କ୍ ଖୋଲେ। ପାର୍ଥକ୍ୟ କେବଳ ବକ୍ସରେ କ’ଣ ଅଛି।"
+  },
+  "shop": {
+    "eyebrow": "କିଣନ୍ତୁ, ଅର୍ଜନ କରନ୍ତୁ",
+    "title": "ଦୈନନ୍ଦିନ ଆବଶ୍ୟକୀୟ ଯାହା ପଏଣ୍ଟ୍‌ରେ ଫେରେ।",
+    "titleHighlight": "ପଏଣ୍ଟ୍‌ରେ ଫେରେ",
+    "subtitle": "ମସଲା, ରାସନ ଓ ଘର ଆବଶ୍ୟକୀୟ ଯେକୌଣସି ସମୟରେ ରିଷ୍ଟକ୍ କରନ୍ତୁ। ପ୍ରତି ଅର୍ଡରରେ ରିଡିମ୍ ଯୋଗ୍ୟ ପଏଣ୍ଟ୍ — ଅଧା ଆପଣଙ୍କ ୱାଲେଟ୍‌କୁ, ଅଧା ଆପଣଙ୍କ ସ୍ପନସର୍‌କୁ।",
+    "cart": "ମୋ କାର୍ଟ",
+    "myPoints": "ମୋ ରିୱାର୍ଡ",
+    "add": "ବ୍ୟାଗ୍‌ରେ ରଖନ୍ତୁ",
+    "outOfStock": "ବିକ୍ରି ହୋଇସାରିଛି",
+    "earnPts": "+{n} ପଏଣ୍ଟ୍ ଫେରସ୍ତ",
+    "viewProduct": "ବିବରଣୀ",
+    "emptyTitle": "ନୂଆ ଷ୍ଟକ୍ ଆସୁଛି",
+    "emptyBody": "ସଦସ୍ୟ ପସନ୍ଦର ପ୍ରଡକ୍ଟ ପ୍ରସ୍ତୁତ ହେଉଛି। ଷ୍ଟାର୍ଟର କିଟ୍ ସହ ଆକ୍ଟିଭ୍ ହୁଅନ୍ତୁ — ତା’ପରେ ପ୍ରତି ରିଫିଲ୍‌ରେ ଅର୍ଜନ କରନ୍ତୁ।",
+    "loginToCart": "ଏହି ଅର୍ଡରରେ ପଏଣ୍ଟ୍ ଅର୍ଜନ କରିବାକୁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ",
+    "added": "ବ୍ୟାଗ୍‌ରେ ଅଛି — ଚେକାଉଟ୍‌ରେ ପଏଣ୍ଟ୍ ଯୋଡ଼ିବ",
+    "addFailed": "ଆଇଟମ୍ ଯୋଗ ହୋଇପାରିଲା ନାହିଁ। ଦୟାକରି ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
+    "perkPoints": "ପ୍ରତି କ୍ରୟରେ ପଏଣ୍ଟ୍",
+    "perkShare": "ଆପଣ ଓ ସ୍ପନସର୍ 50 / 50",
+    "perkMembers": "ସକ୍ରିୟ ସଦସ୍ୟଙ୍କ ପାଇଁ"
   },
   "cta": {
-    "title": "Ready to start your U.S.O.S journey?",
-    "subtitle": "Create your account in minutes and start building your network today.",
-    "button": "Create your account"
+    "title": "ଚାରି ସିଟ୍। ଗୋଟିଏ ନିଷ୍ପତ୍ତି।",
+    "titleHighlight": "ଗୋଟିଏ ନିଷ୍ପତ୍ତି",
+    "subtitle": "ଆପଣଙ୍କ କିଟ୍ କ୍ଲେମ୍ କରନ୍ତୁ, ସିଟ୍ ଖୋଲନ୍ତୁ, ଏବଂ ଆଜି ସାତ ଦିନର SMART ସ୍ପ୍ରିଣ୍ଟ ଆରମ୍ଭ କରନ୍ତୁ।",
+    "button": "ମୋ କିଟ୍ କ୍ଲେମ୍ କରନ୍ତୁ"
+  },
+  "proof": {
+    "eyebrow": "ପ୍ରତିଜ୍ଞା ନୁହେଁ — ପ୍ରମାଣ",
+    "title": "ପ୍ରକୃତ ପେଆଉଟ୍। ପ୍ରକୃତ ରିୱାର୍ଡ। ଗୋପନୀୟତା ସୁରକ୍ଷିତ।",
+    "titleHighlight": "ପ୍ରକୃତ ରିୱାର୍ଡ",
+    "subtitle": "ସଦସ୍ୟଙ୍କୁ ପେମେଣ୍ଟ ମିଳିଲେ କିମ୍ବା ସ୍ତର ଅନଲକ୍ ହେଲେ ଏଠାରେ ଦେଖାଯାଏ — ସିଷ୍ଟମ୍ କାମ କରୁଛି ଦେଖନ୍ତୁ।",
+    "payouts": "ପ୍ରଦତ୍ତ",
+    "rewards": "ରିୱାର୍ଡ କ୍ଲିଅର୍",
+    "empty": "ସଦସ୍ୟ ଉଠାଇବା ଓ ସ୍ତର ଅନଲକ୍ କଲେ ଗୁମନାମ ପ୍ରମାଣ ଏଠାରେ ଆସିବ।",
+    "payoutLabel": "ପେଆଉଟ୍",
+    "rewardLabel": "ରିୱାର୍ଡ"
   }
 }

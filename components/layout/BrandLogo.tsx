@@ -21,18 +21,21 @@ export function BrandLogo({
     <Link href={href} className={cn('inline-flex items-center gap-2.5', className)}>
       <Image
         src={light ? '/images/HKlogowhite.png' : '/images/HKlogoblack.png'}
-        alt={common.brand.full}
-        width={36}
-        height={36}
-        className="h-9 w-9 object-contain"
+        alt="HireKarma"
+        width={160}
+        height={42}
+        className={cn(
+          'h-8 w-auto max-w-[7.25rem] shrink-0 object-contain object-left sm:h-9 sm:max-w-[8.5rem]',
+          light && 'drop-shadow-[0_0_10px_rgba(0,162,229,0.35)]'
+        )}
         priority
       />
       <span className="leading-tight">
-        <span className={cn('block font-display text-lg font-extrabold tracking-tight', light ? 'text-white' : 'text-primary')}>
+        <span className={cn('block text-lg font-bold tracking-tight', light ? 'text-white' : 'text-primary')}>
           {common.brand.short}
         </span>
         {showFull ? (
-          <span className={cn('block text-[10px] font-medium', light ? 'text-white/80' : 'text-ink-muted')}>
+          <span className={cn('block text-[10px] font-medium', light ? 'text-white/65' : 'text-ink-muted')}>
             {common.brand.full}
           </span>
         ) : null}

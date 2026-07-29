@@ -33,19 +33,19 @@ export default function PointsPage() {
     e.preventDefault();
     const n = Number(points);
     if (!n || n < 1) {
-      toast.error('Enter points to redeem');
+      toast.error('Enter how many points you want to redeem');
       return;
     }
     setRedeeming(true);
     try {
       const res = await api.redeemPoints(n);
       toast.success(
-        `Redeemed ${n} pts → you ₹${(res.user_credited_paise / 100).toFixed(0)}, sponsor ₹${(res.sponsor_credited_paise / 100).toFixed(0)}`
+        `Done — ₹${(res.user_credited_paise / 100).toFixed(0)} to you, ₹${(res.sponsor_credited_paise / 100).toFixed(0)} to your sponsor`
       );
       setPoints('');
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.detail || 'Redeem failed');
+      toast.error(err?.response?.data?.detail || 'Redemption didn’t go through. Try again.');
     } finally {
       setRedeeming(false);
     }
@@ -65,26 +65,43 @@ export default function PointsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-display text-2xl font-extrabold text-ink">Points</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-ink">Points wallet</h1>
         <p className="mt-1 text-sm text-ink-muted">
-          Earn points by buying products. Redeem to wallet — 50% to you, 50% to your referrer. Then withdraw
-          wallet balance to your bank.
+          Shop to earn points. Redeem anytime — half credits your wallet, half credits your sponsor. Then
+          withdraw cash to your bank.
         </p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
-          <p className="text-xs font-semibold uppercase text-ink-muted">Available points</p>
-          <p className="mt-2 font-display text-4xl font-extrabold text-primary">{bal}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-muted">Available points</p>
+          <p className="mt-2 text-4xl font-bold tracking-tight text-primary">{bal}</p>
           <p className="mt-2 text-sm text-ink-muted">
             ≈ {formatCurrency((bal * valuePaise) / 100)} at ₹{(valuePaise / 100).toFixed(0)}/point
           </p>
         </Card>
-        <Card>
-          <h2 className="font-display text-lg font-bold">Redeem points</h2>
+        <Card className="border-sky/20 bg-gradient-to-br from-sky/[0.07] to-transparent">
+          <h2 className="text-lg font-bold tracking-tight">50 / 50 sponsor split</h2>
+          <p className="mt-1 text-sm text-ink-muted">
+            Every redeem splits value with the person who opened your door.
+          </p>
+          <div className="mt-4 flex overflow-hidden rounded-full border border-line bg-white text-center text-xs font-bold">
+            <div
+              className="bg-primary px-3 py-2.5 text-white"
+              style={{ flex: data?.user_share_bps || 5000 }}
+            >
+              You {Math.round((data?.user_share_bps || 5000) / 100)}%
+            </div>
+            <div
+              className="bg-sky px-3 py-2.5 text-[#0f1622]"
+              style={{ flex: data?.sponsor_share_bps || 5000 }}
+            >
+              Sponsor {Math.round((data?.sponsor_share_bps || 5000) / 100)}%
+            </div>
+          </div>
           <form className="mt-4 flex flex-wrap items-end gap-3" onSubmit={onRedeem}>
             <label className="text-sm">
-              <span className="font-medium">Points</span>
+              <span className="font-medium">Points to redeem</span>
               <input
                 type="number"
                 min={1}
@@ -99,7 +116,7 @@ export default function PointsPage() {
             </Button>
           </form>
           <p className="mt-3 text-xs text-ink-muted">
-            Example: redeem 100 pts (₹100) → ₹50 your wallet + ₹50 sponsor wallet.
+            Example: 100 pts (₹100) → ₹50 to you + ₹50 to your sponsor.
           </p>
         </Card>
       </div>
@@ -123,8 +140,8 @@ export default function PointsPage() {
         ) : (
           <EmptyState
             icon={Coins}
-            title="No points yet"
-            description="Buy products from the shop to start earning points."
+            title="No points yet — your shop streak starts here"
+            description="Browse the shop, place an order, and watch points land in this balance."
           />
         )}
       </Card>
