@@ -12,12 +12,13 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
   options: SelectOption[];
+  labelClassName?: string;
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, label, error, options, id, ...props }, ref) => (
+  ({ className, label, error, options, id, labelClassName, ...props }, ref) => (
     <label className="block space-y-1.5" htmlFor={id}>
-      {label ? <span className="text-sm font-medium text-ink">{label}</span> : null}
+      {label ? <span className={cn('text-sm font-medium text-ink', labelClassName)}>{label}</span> : null}
       <select
         ref={ref}
         id={id}

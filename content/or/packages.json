@@ -1,16 +1,16 @@
 {
-  "title": "Membership packages",
-  "subtitle": "Select Package A or Package B during signup. Entry fee is ₹2,500.",
-  "perMember": "one-time entry",
-  "recommended": "Popular",
-  "selectLabel": "Select package",
-  "featuresLabel": "Products included",
+  "title": "ଷ୍ଟାର୍ଟର କିଟ୍",
+  "subtitle": "ଗୋଟିଏ ପେମେଣ୍ଟ। ପ୍ରକୃତ ଘର ବାସ୍କେଟ୍। ଆଠ-ସ୍ତର ରିୱାର୍ଡ ଲ୍ୟାଡର୍‌ର ପୂରା ଆକ୍ସେସ୍।",
+  "perMember": "ଥରେ ଯୋଗଦାନ · କିଟ୍ ସାମିଲ",
+  "recommended": "ସର୍ବୋତ୍ତମ ମୂଲ୍ୟ",
+  "selectLabel": "ଏହି କିଟ୍ ନିଅନ୍ତୁ",
+  "featuresLabel": "ବାସ୍କେଟ୍‌ରେ କ’ଣ ଅଛି",
   "items": [
     {
       "id": "A",
-      "name": "Package A",
+      "name": "ହୋମ୍ ଏସେନ୍ସିଆଲ୍",
       "price": 2500,
-      "description": "Cotton saree with essentials including T-Shirt.",
+      "description": "ଦୈନନ୍ଦିନ କ୍ୟୁରେଟେଡ୍ ବାସ୍କେଟ୍ — କଟନ୍ ଶାଢ଼ୀ, ଟି-ସାର୍ଟ, ମସଲା, ଆଟା ଓ ଘରୋଇ ଆବଶ୍ୟକୀୟ। ଗୋଟିଏ ଫିରେ ଚାରି ସିଟ୍ ଖୋଲେ।",
       "badge": "",
       "features": [
         "Cotton Saree",
@@ -27,10 +27,10 @@
     },
     {
       "id": "B",
-      "name": "Package B",
+      "name": "ହୋମ୍ କମ୍ପ୍ଲିଟ୍",
       "price": 2500,
-      "description": "Cotton saree with protein powder and extended essentials.",
-      "badge": "Extended",
+      "description": "ଏସେନ୍ସିଆଲ୍‌ର ସବୁକିଛି, ସହିତ ପ୍ରୋଟିନ୍ ପାଉଡର୍, ସାବୁନ ଓ ଚିନି — ସମାନ ₹2,500 ରେ ଅଧିକ ମୂଲ୍ୟ।",
+      "badge": "ବକ୍ସରେ ଅଧିକ",
       "features": [
         "Cotton Saree",
         "Protein Powder",
@@ -47,5 +47,5 @@
       ]
     }
   ],
-  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+  "note": "PayU ରେ ₹2,500 ଥରେ ଦିଅନ୍ତୁ। ସଫଳ ପେମେଣ୍ଟ ପରେ ହିଁ ଷ୍ଟକ୍ କମେ — ତା’ପରେ ଆପଣଙ୍କ ଚାରି ସିଟ୍ ତୁରନ୍ତ ଖୋଲେ।"
 }

@@ -45,6 +45,58 @@ export interface OverviewStats {
   totalDownline: number;
   activeDownline: number;
   rank: string;
+  activatedAt?: string | null;
+  windowEndsAt?: string | null;
+  seatsRemaining?: number;
+  coachStatus?: 'not_activated' | 'racing' | 'smart_unlocked' | 'window_closed' | string;
+  nextLevel?: number | null;
+  nextRank?: string | null;
+  nextCash?: number | null;
+  nextMaterialReward?: string | null;
+  packageCode?: string | null;
+  packageName?: string | null;
+  packageItems?: Array<{ name: string; quantity: number }>;
+  sponsorLabel?: string | null;
+  pointsUserShareBps?: number;
+  pointsSponsorShareBps?: number;
+}
+
+export interface ProofEvent {
+  id: string;
+  kind: 'payout' | 'reward' | string;
+  title: string;
+  amountPaise: number;
+  materialReward?: string | null;
+  memberLabel: string;
+  occurredAt: string;
+}
+
+export interface ProofWall {
+  totalPayoutsPaise: number;
+  totalRewardCashPaise: number;
+  payoutCount: number;
+  rewardCount: number;
+  events: ProofEvent[];
+}
+
+export interface TrustRules {
+  rules: {
+    max_direct_referrals?: number;
+    qualification_window_days?: number;
+    description?: string;
+  };
+  levels: Array<{
+    level: number;
+    nodes: number;
+    title?: string;
+    cash_paise: number;
+    material_reward?: string | null;
+  }>;
+  points: {
+    point_value_paise: number;
+    user_share_bps: number;
+    sponsor_share_bps: number;
+  };
 }
 
 export interface TreeMember {

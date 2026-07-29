@@ -16,15 +16,24 @@ import { PayUCheckoutForm } from './PayUCheckoutForm';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import Link from 'next/link';
 import type { PaymentOrder, TokenResponse } from '@/types';
+import { cn } from '@/lib/cn';
+import type { ReactNode } from 'react';
 
-export function LoginForm() {
+type Props = {
+  embedded?: boolean;
+  nextPath?: string;
+  onSwitchMode?: () => void;
+  onClose?: () => void;
+};
+
+export function LoginForm({ embedded, nextPath: nextProp, onSwitchMode, onClose }: Props) {
   const t = useContent('auth').login;
   const pay = useContent('auth').payment;
   const v = useContent('auth').validation;
   const { loginSuccess } = useAuth();
   const router = useRouter();
   const search = useSearchParams();
-  const nextPath = search.get('next') || '';
+  const nextPath = nextProp || search.get('next') || '';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,6 +57,7 @@ export function LoginForm() {
       return;
     }
     toast.success(t.success);
+    onClose?.();
     router.push(afterLoginDestination(res.role));
   }
 
@@ -94,41 +104,63 @@ export function LoginForm() {
     }
   }
 
+  const shellClass = embedded
+    ? 'w-full rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-white'
+    : 'w-full max-w-md';
+
+  const wrap = (children: ReactNode) =>
+    embedded ? <div className={shellClass}>{children}</div> : <Card className={shellClass}>{children}</Card>;
+
   if (checkout) {
-    return (
-      <Card className="w-full max-w-md">
-        <p className="section-eyebrow">{pay.eyebrow}</p>
-        <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{pay.title}</h1>
-        <p className="mt-1 text-sm text-ink-muted">{pay.subtitle}</p>
-        <p className="mt-4 text-sm text-ink-muted">{pay.redirecting}</p>
+    return wrap(
+      <>
+        <p className={cn('section-eyebrow', embedded && '!text-sky')}>{pay.eyebrow}</p>
+        <h1 className={cn('mt-2 text-2xl font-bold tracking-tight', embedded ? 'text-white' : 'text-ink')}>
+          {pay.title}
+        </h1>
+        <p className={cn('mt-1 text-sm', embedded ? 'text-white/65' : 'text-ink-muted')}>{pay.subtitle}</p>
+        <p className={cn('mt-4 text-sm', embedded ? 'text-white/65' : 'text-ink-muted')}>{pay.redirecting}</p>
         <PayUCheckoutForm action={checkout.action} fields={checkout.fields} buttonLabel={pay.manualButton} />
-        <p className="mt-4 text-center text-xs text-ink-muted">{pay.securedBy}</p>
-      </Card>
+        <p className={cn('mt-4 text-center text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>
+          {pay.securedBy}
+        </p>
+      </>
     );
   }
 
-  return (
-    <Card className="w-full max-w-md">
-      <p className="section-eyebrow">{t.eyebrow}</p>
-      <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{t.title}</h1>
-      <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+  return wrap(
+    <>
+      {!embedded ? (
+        <>
+          <p className="section-eyebrow">{t.eyebrow}</p>
+          <h1 className="mt-2 text-2xl font-bold tracking-tight text-ink">{t.title}</h1>
+          <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+        </>
+      ) : (
+        <h2 className="text-lg font-bold tracking-tight text-white">{t.title}</h2>
+      )}
 
       {googleEnabled ? (
-        <div className="mt-6 space-y-3">
+        <div className="mt-5 space-y-3">
           <GoogleSignInButton
             label={t.continueGoogle || 'Continue with Google'}
             onSuccess={onGoogle}
             onError={() => toast.error(t.googleError || t.error)}
             disabled={loading}
           />
-          <div className="flex items-center gap-3 text-xs text-ink-muted">
-            <span className="h-px flex-1 bg-line" />
+          <div className={cn('flex items-center gap-3 text-xs', embedded ? 'text-white/45' : 'text-ink-muted')}>
+            <span className={cn('h-px flex-1', embedded ? 'bg-white/15' : 'bg-line')} />
             <span>{t.orEmail || 'or continue with email'}</span>
-            <span className="h-px flex-1 bg-line" />
+            <span className={cn('h-px flex-1', embedded ? 'bg-white/15' : 'bg-line')} />
           </div>
         </div>
       ) : (
-        <p className="mt-4 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-muted">
+        <p
+          className={cn(
+            'mt-4 rounded-lg px-3 py-2 text-xs',
+            embedded ? 'bg-white/5 text-white/55' : 'bg-surface-muted text-ink-muted'
+          )}
+        >
           {t.configureGoogle || 'Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google Sign-In.'}
         </p>
       )}
@@ -142,6 +174,8 @@ export function LoginForm() {
           onChange={(e) => setEmail(e.target.value)}
           error={errors.email}
           autoComplete="username"
+          className={embedded ? 'border-white/15 bg-white/5 text-white placeholder:text-white/35' : undefined}
+          labelClassName={embedded ? 'text-white/80' : undefined}
         />
         <PasswordInput
           id="password"
@@ -151,17 +185,25 @@ export function LoginForm() {
           onChange={(e) => setPassword(e.target.value)}
           error={errors.password}
           autoComplete="current-password"
+          className={embedded ? 'border-white/15 bg-white/5 text-white placeholder:text-white/35' : undefined}
+          labelClassName={embedded ? 'text-white/80' : undefined}
         />
         <Button type="submit" className="w-full" loading={loading}>
           {loading ? t.submitting : t.submit}
         </Button>
       </form>
-      <p className="mt-6 text-center text-sm text-ink-muted">
+      <p className={cn('mt-5 text-center text-sm', embedded ? 'text-white/55' : 'text-ink-muted')}>
         {t.noAccount}{' '}
-        <Link href="/register" className="font-semibold text-primary hover:underline">
-          {t.registerLink}
-        </Link>
+        {onSwitchMode ? (
+          <button type="button" onClick={onSwitchMode} className="font-semibold text-sky hover:underline">
+            {t.registerLink}
+          </button>
+        ) : (
+          <Link href="/register" className="font-semibold text-primary hover:underline">
+            {t.registerLink}
+          </Link>
+        )}
       </p>
-    </Card>
+    </>
   );
 }

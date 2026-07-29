@@ -1,113 +1,122 @@
 {
   "nav": {
-    "analytics": "Analytics",
-    "users": "Users",
-    "products": "Products",
-    "packages": "Packages",
-    "rewards": "Rewards",
-    "withdrawals": "Withdrawals",
-    "genealogy": "Genealogy"
+    "analytics": "ଆନାଲିଟିକ୍ସ",
+    "users": "ସଦସ୍ୟ",
+    "products": "ପ୍ରଡକ୍ଟ",
+    "packages": "କିଟ୍",
+    "rewards": "ରିୱାର୍ଡ ଧାଡ଼ି",
+    "withdrawals": "ପେଆଉଟ୍",
+    "genealogy": "ନେଟୱାର୍କ୍ ଖୋଜ"
   },
   "topbar": {
-    "title": "Admin console",
-    "logout": "Log out"
+    "title": "କମାଣ୍ଡ ସେଣ୍ଟର",
+    "logout": "ଲଗଆଉଟ୍"
   },
   "analytics": {
-    "title": "Revenue analytics",
-    "subtitle": "Platform performance at a glance.",
+    "title": "ନେଟୱାର୍କ୍ କିପରି ଚାଲୁଛି",
+    "subtitle": "ଟଙ୍କା ଇନ୍, ସଦସ୍ୟ ଅନ୍, ଏବଂ ଆପଣଙ୍କ କାମ ଧାଡ଼ି — ଲାଇଭ୍ ସ୍ନାପସଟ୍।",
+    "live": "ଲାଇଭ୍",
+    "healthClear": "ସବୁ ଠିକ୍",
+    "healthAttention": "ଧ୍ୟାନ ଦିଅନ୍ତୁ",
+    "activationRate": "ଆକ୍ଟିଭେସନ୍ ରେଟ୍",
+    "activationHint": "ସକ୍ରିୟ ବନାମ ମୋଟ ସଦସ୍ୟ",
+    "attentionTitle": "ଆପଣଙ୍କ ଧାଡ଼ି",
+    "attentionSubtitle": "ପେଆଉଟ୍ ଓ ରିୱାର୍ଡ ଚାଲୁ ରଖିବାକୁ ଏଗୁଡ଼ିକୁ କ୍ଲିଅର୍ କରନ୍ତୁ।",
+    "openQueue": "ଖୋଲନ୍ତୁ",
+    "jumpTitle": "ଶୀଘ୍ର ଯାଆନ୍ତୁ",
     "stats": {
-      "totalRevenue": "Total revenue",
-      "totalUsers": "Total users",
-      "activeUsers": "Active users",
-      "totalPayouts": "Total payouts",
-      "pendingRewards": "Pending rewards",
-      "monthlyGrowth": "Monthly growth"
+      "totalRevenue": "ଟଙ୍କା ଇନ୍",
+      "totalUsers": "ସଦସ୍ୟ ଯୋଗ ଦେଇଛନ୍ତି",
+      "activeUsers": "ସଦସ୍ୟ ସକ୍ରିୟ",
+      "totalPayouts": "ଟଙ୍କା ଆଉଟ୍",
+      "pendingRewards": "ରିୱାର୍ଡ ଅପେକ୍ଷାରେ",
+      "monthlyGrowth": "ମାସିକ ଗ୍ରୋଥ୍"
     },
-    "revenueTitle": "Revenue trend",
-    "revenueSubtitle": "Last 6 months",
-    "recentTitle": "Recent signups"
+    "revenueTitle": "ରେଭେନ୍ୟୁ ଟ୍ରେଣ୍ଡ",
+    "revenueSubtitle": "ଗତ 6 ମାସ",
+    "recentTitle": "ନୂତନ ସାଇନଅପ୍"
   },
   "users": {
-    "title": "User management",
-    "subtitle": "Manage members, packages, and account status.",
-    "searchPlaceholder": "Search by name or email…",
+    "title": "ସଦସ୍ୟ ଡାଇରେକ୍ଟୋରୀ",
+    "subtitle": "ସଦସ୍ୟ ଖୋଜନ୍ତୁ, କିଟ୍ ଦେଖନ୍ତୁ, ଏବଂ ଆକାଉଣ୍ଟ ସ୍ଥିତି ଅପଡେଟ୍ କରନ୍ତୁ।",
+    "searchPlaceholder": "ନାମ କିମ୍ବା ଇମେଲ୍ ରେ ଖୋଜନ୍ତୁ…",
     "table": {
-      "name": "Name",
-      "contact": "Contact",
-      "package": "Package",
-      "earnings": "Earnings",
-      "joined": "Joined",
-      "status": "Status",
-      "actions": "Actions"
+      "name": "ନାମ",
+      "contact": "ଯୋଗାଯୋଗ",
+      "package": "କିଟ୍",
+      "earnings": "ଆୟ",
+      "joined": "ଯୋଗଦାନ",
+      "status": "ସ୍ଥିତି",
+      "actions": "କାର୍ଯ୍ୟ"
     },
-    "activate": "Activate",
-    "deactivate": "Deactivate",
-    "statusUpdated": "User status updated",
-    "emptyTitle": "No users found",
-    "emptyDescription": "Try adjusting your search."
+    "activate": "ସକ୍ରିୟ କରନ୍ତୁ",
+    "deactivate": "ନିଷ୍କ୍ରିୟ କରନ୍ତୁ",
+    "statusUpdated": "ସଦସ୍ୟ ସ୍ଥିତି ଅପଡେଟ୍ ହେଲା",
+    "emptyTitle": "କୌଣସି ସଦସ୍ୟ ମିଳିଲା ନାହିଁ",
+    "emptyDescription": "ଅନ୍ୟ ନାମ କିମ୍ବା ଇମେଲ୍ ଚେଷ୍ଟା କରନ୍ତୁ।"
   },
   "packages": {
-    "title": "Package inventory",
-    "subtitle": "Edit package pricing and availability.",
+    "title": "କିଟ୍ ଇନଭେଣ୍ଟୋରୀ",
+    "subtitle": "ପ୍ୟାକେଜ୍ A ଓ B ର ମୂଲ୍ୟ, ନାମ ଓ ଷ୍ଟକ୍ ସଂଶୋଧନ କରନ୍ତୁ।",
     "table": {
-      "name": "Package",
-      "price": "Price",
-      "stock": "Stock",
-      "status": "Status",
-      "actions": "Actions"
+      "name": "କିଟ୍",
+      "price": "ମୂଲ୍ୟ",
+      "stock": "ଷ୍ଟକ୍",
+      "status": "ସ୍ଥିତି",
+      "actions": "କାର୍ଯ୍ୟ"
     },
-    "editTitle": "Edit package",
-    "priceLabel": "Price (₹)",
-    "stockLabel": "Available stock",
-    "nameLabel": "Package name",
-    "save": "Save package",
-    "saved": "Package updated"
+    "editTitle": "କିଟ୍ ଏଡିଟ୍ କରନ୍ତୁ",
+    "priceLabel": "ମୂଲ୍ୟ (₹)",
+    "stockLabel": "ଉପଲବ୍ଧ ଷ୍ଟକ୍",
+    "nameLabel": "କିଟ୍ ନାମ",
+    "save": "କିଟ୍ ସେଭ୍ କରନ୍ତୁ",
+    "saved": "କିଟ୍ ଅପଡେଟ୍ ହେଲା"
   },
   "rewards": {
-    "title": "Reward verification",
-    "subtitle": "Review and approve pending reward claims.",
+    "title": "ରିୱାର୍ଡ କ୍ଲେମ୍",
+    "subtitle": "ସଦସ୍ୟଙ୍କ ବିଚାରାଧୀନ ମାଇଲଷ୍ଟୋନ୍ କ୍ଲେମ୍ ଅନୁମୋଦନ କିମ୍ବା ପ୍ରତ୍ୟାଖ୍ୟାନ କରନ୍ତୁ।",
     "table": {
-      "user": "User",
-      "milestone": "Milestone",
-      "requested": "Requested",
-      "status": "Status",
-      "actions": "Actions"
+      "user": "ସଦସ୍ୟ",
+      "milestone": "ମାଇଲଷ୍ଟୋନ୍",
+      "requested": "ଅନୁରୋଧ",
+      "status": "ସ୍ଥିତି",
+      "actions": "କାର୍ଯ୍ୟ"
     },
-    "approve": "Approve",
-    "reject": "Reject",
-    "approved": "Reward approved",
-    "rejected": "Reward rejected",
-    "emptyTitle": "Queue is clear",
-    "emptyDescription": "No pending reward claims right now."
+    "approve": "ଅନୁମୋଦନ",
+    "reject": "ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "approved": "ରିୱାର୍ଡ ଅନୁମୋଦିତ",
+    "rejected": "ରିୱାର୍ଡ ପ୍ରତ୍ୟାଖ୍ୟାତ",
+    "emptyTitle": "ଧାଡ଼ି ଖାଲି",
+    "emptyDescription": "ଏବେ କୌଣସି ବିଚାରାଧୀନ ରିୱାର୍ଡ କ୍ଲେମ୍ ନାହିଁ — ଭଲ କାମ।"
   },
   "withdrawals": {
-    "title": "Withdrawal queue",
-    "subtitle": "Approve to send money to the member’s bank account automatically.",
-    "providerLabel": "Payout provider",
+    "title": "ପେଆଉଟ୍ ଧାଡ଼ି",
+    "subtitle": "ଅନୁମୋଦନ କରନ୍ତୁ — ସଦସ୍ୟଙ୍କ ବ୍ୟାଙ୍କକୁ ସ୍ୱୟଂଚାଳିତ ଭାବେ ପାଣ୍ଠି ଯାଏ।",
+    "providerLabel": "ପେଆଉଟ୍ ପ୍ରୋଭାଇଡର୍",
     "table": {
-      "user": "Member",
-      "amount": "Amount",
-      "bank": "Bank",
-      "requested": "Requested",
-      "status": "Status",
-      "actions": "Actions"
+      "user": "ସଦସ୍ୟ",
+      "amount": "ରାଶି",
+      "bank": "ବ୍ୟାଙ୍କ",
+      "requested": "ଅନୁରୋଧ",
+      "status": "ସ୍ଥିତି",
+      "actions": "କାର୍ଯ୍ୟ"
     },
-    "approve": "Approve & pay",
-    "retry": "Retry payout",
-    "reject": "Reject",
-    "approved": "Payout sent",
-    "rejected": "Withdrawal rejected — wallet restored",
-    "approveFailed": "Payout failed",
-    "emptyTitle": "No pending withdrawals",
-    "emptyDescription": "When members request a withdrawal, they appear here for approval."
+    "approve": "ଅନୁମୋଦନ ଓ ପେମେଣ୍ଟ",
+    "retry": "ପେଆଉଟ୍ ପୁଣି ଚେଷ୍ଟା",
+    "reject": "ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "approved": "ପେଆଉଟ୍ ପଠାଯାଇଛି",
+    "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ — ୱାଲେଟ୍ ବାଲାନ୍ସ ପୁନଃସ୍ଥାପିତ",
+    "approveFailed": "ପେଆଉଟ୍ ବିଫଳ",
+    "emptyTitle": "କୌଣସି ବିଚାରାଧୀନ ପେଆଉଟ୍ ନାହିଁ",
+    "emptyDescription": "ସଦସ୍ୟଙ୍କ ଉଠାଣ ଅନୁରୋଧ ଏଠାରେ ଅନୁମୋଦନ ପାଇଁ ଆସିବ।"
   },
   "genealogy": {
-    "title": "Global genealogy",
-    "subtitle": "Search any member and inspect their network.",
-    "searchPlaceholder": "Search by member name or referral code…",
-    "searchButton": "Search",
-    "resultLabel": "Showing network for",
-    "emptyTitle": "Search for a member",
-    "emptyDescription": "Enter a name or referral code to view their downline tree."
+    "title": "ନେଟୱାର୍କ୍ ଖୋଜ",
+    "subtitle": "ଯେକୌଣସି ସଦସ୍ୟଙ୍କୁ ଖୋଜନ୍ତୁ ଏବଂ ସେମାନଙ୍କ ଡାଉନଲାଇନ୍ ଦେଖନ୍ତୁ।",
+    "searchPlaceholder": "ନାମ କିମ୍ବା ରେଫରାଲ୍ କୋଡ୍ ରେ ଖୋଜନ୍ତୁ…",
+    "searchButton": "ଖୋଜନ୍ତୁ",
+    "resultLabel": "ନେଟୱାର୍କ୍ ଦେଖାଯାଉଛି",
+    "emptyTitle": "ଆରମ୍ଭ କରିବା ପାଇଁ ସଦସ୍ୟ ଖୋଜନ୍ତୁ",
+    "emptyDescription": "ନାମ କିମ୍ବା ରେଫରାଲ୍ କୋଡ୍ ଲେଖି ସେମାନଙ୍କ ଟିମ୍ ଟ୍ରି ଖୋଲନ୍ତୁ।"
   }
 }

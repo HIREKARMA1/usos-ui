@@ -6,11 +6,13 @@ import type {
   OverviewStats,
   PackagePlan,
   PaymentOrder,
+  ProofWall,
   Referral,
   RewardClaim,
   TokenResponse,
   Transaction,
   TreeMember,
+  TrustRules,
   UserRole,
 } from '@/types';
 
@@ -145,7 +147,44 @@ class ApiClient {
       totalDownline: d.total_downline || 0,
       activeDownline: d.active_downline || 0,
       rank,
+      activatedAt: d.activated_at || null,
+      windowEndsAt: d.window_ends_at || null,
+      seatsRemaining: d.seats_remaining ?? Math.max(max - used, 0),
+      coachStatus: d.coach_status || 'not_activated',
+      nextLevel: d.next_level ?? null,
+      nextRank: d.next_rank ?? null,
+      nextCash: d.next_cash_paise != null ? d.next_cash_paise / 100 : null,
+      nextMaterialReward: d.next_material_reward ?? null,
+      packageCode: d.package_code ?? null,
+      packageName: d.package_name ?? null,
+      packageItems: Array.isArray(d.package_items) ? d.package_items : [],
+      sponsorLabel: d.sponsor_label ?? null,
+      pointsUserShareBps: d.points_user_share_bps ?? 5000,
+      pointsSponsorShareBps: d.points_sponsor_share_bps ?? 5000,
     };
+  }
+
+  async getProofWall(limit = 18): Promise<ProofWall> {
+    const d = await this.get<any>(`/api/v1/trust/proof-wall?limit=${limit}`);
+    return {
+      totalPayoutsPaise: d.total_payouts_paise || 0,
+      totalRewardCashPaise: d.total_reward_cash_paise || 0,
+      payoutCount: d.payout_count || 0,
+      rewardCount: d.reward_count || 0,
+      events: (d.events || []).map((e: any) => ({
+        id: e.id,
+        kind: e.kind,
+        title: e.title,
+        amountPaise: e.amount_paise || 0,
+        materialReward: e.material_reward,
+        memberLabel: e.member_label,
+        occurredAt: e.occurred_at,
+      })),
+    };
+  }
+
+  async getTrustRules(): Promise<TrustRules> {
+    return this.get('/api/v1/trust/rules');
   }
 
   async getRewardPlan(): Promise<{
@@ -317,6 +356,39 @@ class ApiClient {
       headers: { 'Content-Type': false as unknown as string },
     });
     return res.data;
+  }
+
+  async uploadReviewMedia(file: File) {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await this.client.post<{ url: string; media_type: 'image' | 'video' }>(
+      '/api/v1/uploads/reviews',
+      body,
+      {
+        headers: { 'Content-Type': false as unknown as string },
+      }
+    );
+    return res.data;
+  }
+
+  async getProductReviews(productId: string) {
+    return this.get<{
+      avg_rating: number;
+      review_count: number;
+      items: any[];
+    }>(`/api/v1/shop/products/${productId}/reviews`);
+  }
+
+  async submitProductReview(
+    productId: string,
+    payload: {
+      rating: number;
+      title?: string | null;
+      comment?: string | null;
+      media?: { media_type: string; url: string }[];
+    }
+  ) {
+    return this.post(`/api/v1/shop/products/${productId}/reviews`, payload);
   }
 
   async getCart() {
