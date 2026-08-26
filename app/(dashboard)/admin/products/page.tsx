@@ -11,7 +11,18 @@ import { Spinner } from '@/components/ui/Spinner';
 import { api } from '@/lib/api';
 import { formatCurrency } from '@/lib/format';
 
-const emptyForm = {
+type ProductForm = {
+  sku: string;
+  name: string;
+  description: string;
+  price_inr: string;
+  image_url: string;
+  stock_count: string;
+  points_per_unit: string;
+  is_active: boolean;
+};
+
+const emptyForm: ProductForm = {
   sku: '',
   name: '',
   description: '',
@@ -22,14 +33,115 @@ const emptyForm = {
   is_active: true,
 };
 
+function ProductFields({
+  form,
+  setForm,
+  fileRef,
+  uploading,
+  saving,
+  onImageSelected,
+}: {
+  form: ProductForm;
+  setForm: (next: ProductForm | ((prev: ProductForm) => ProductForm)) => void;
+  fileRef: React.RefObject<HTMLInputElement | null>;
+  uploading: boolean;
+  saving: boolean;
+  onImageSelected: (file: File | null) => void;
+}) {
+  return (
+    <>
+      {(
+        [
+          ['sku', 'SKU'],
+          ['name', 'Name'],
+          ['price_inr', 'Price (₹)'],
+          ['points_per_unit', 'Points per unit'],
+          ['stock_count', 'Stock'],
+        ] as const
+      ).map(([key, label]) => (
+        <label key={key} className="text-sm">
+          <span className="font-medium">{label}</span>
+          <input
+            required
+            className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+            value={form[key]}
+            onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+          />
+        </label>
+      ))}
+
+      <div className="text-sm sm:col-span-2">
+        <span className="font-medium">Product image</span>
+        <div className="mt-1 flex flex-wrap items-start gap-4">
+          <div className="h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted">
+            {form.image_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={form.image_url} alt="Product preview" className="h-full w-full object-cover" />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-ink-muted">
+                <Upload className="h-6 w-6" />
+              </div>
+            )}
+          </div>
+          <div className="space-y-2">
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="block w-full max-w-xs text-sm text-ink-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-600"
+              onChange={(e) => onImageSelected(e.target.files?.[0] || null)}
+              disabled={uploading || saving}
+            />
+            <p className="text-xs text-ink-muted">JPEG, PNG, WEBP or GIF · max 5 MB · stored on S3</p>
+            {uploading ? <p className="text-xs font-medium text-primary">Uploading to S3…</p> : null}
+            {form.image_url ? (
+              <button
+                type="button"
+                className="inline-flex items-center gap-1 text-xs font-medium text-ink-muted hover:text-accent-red"
+                onClick={() => {
+                  setForm((f) => ({ ...f, image_url: '' }));
+                  if (fileRef.current) fileRef.current.value = '';
+                }}
+              >
+                <X className="h-3.5 w-3.5" />
+                Remove image
+              </button>
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <label className="text-sm sm:col-span-2">
+        <span className="font-medium">Description</span>
+        <textarea
+          className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+          rows={3}
+          value={form.description}
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
+        />
+      </label>
+      <label className="flex items-center gap-2 text-sm">
+        <input
+          type="checkbox"
+          checked={form.is_active}
+          onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
+        />
+        Active (visible in shop)
+      </label>
+    </>
+  );
+}
+
 export default function AdminProductsPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [form, setForm] = useState(emptyForm);
+  const [createForm, setCreateForm] = useState(emptyForm);
+  const [editForm, setEditForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const createFileRef = useRef<HTMLInputElement>(null);
+  const editFileRef = useRef<HTMLInputElement>(null);
 
   function load() {
     api
@@ -43,15 +155,29 @@ export default function AdminProductsPage() {
     load();
   }, []);
 
-  function resetForm() {
+  useEffect(() => {
+    if (!editingId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeEdit();
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [editingId]);
+
+  function closeEdit() {
     setEditingId(null);
-    setForm(emptyForm);
-    if (fileRef.current) fileRef.current.value = '';
+    setEditForm(emptyForm);
+    if (editFileRef.current) editFileRef.current.value = '';
   }
 
   function startEdit(p: any) {
     setEditingId(p.id);
-    setForm({
+    setEditForm({
       sku: p.sku,
       name: p.name,
       description: p.description || '',
@@ -61,10 +187,14 @@ export default function AdminProductsPage() {
       points_per_unit: String(p.points_per_unit ?? 0),
       is_active: Boolean(p.is_active),
     });
-    if (fileRef.current) fileRef.current.value = '';
+    if (editFileRef.current) editFileRef.current.value = '';
   }
 
-  async function onImageSelected(file: File | null) {
+  async function onImageSelected(
+    file: File | null,
+    setForm: (next: ProductForm | ((prev: ProductForm) => ProductForm)) => void,
+    fileRef: React.RefObject<HTMLInputElement | null>
+  ) {
     if (!file) return;
     if (!file.type.startsWith('image/')) {
       toast.error('Please choose an image file');
@@ -87,14 +217,8 @@ export default function AdminProductsPage() {
     }
   }
 
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    if (!form.image_url) {
-      toast.error('Upload a product image');
-      return;
-    }
-    setSaving(true);
-    const payload = {
+  function toPayload(form: ProductForm) {
+    return {
       sku: form.sku,
       name: form.name,
       description: form.description,
@@ -104,15 +228,40 @@ export default function AdminProductsPage() {
       points_per_unit: Number(form.points_per_unit),
       is_active: form.is_active,
     };
+  }
+
+  async function onCreate(e: FormEvent) {
+    e.preventDefault();
+    if (!createForm.image_url) {
+      toast.error('Upload a product image');
+      return;
+    }
+    setSaving(true);
     try {
-      if (editingId) {
-        await api.updateProduct(editingId, payload);
-        toast.success('Product updated');
-      } else {
-        await api.createProduct(payload);
-        toast.success('Product created');
-      }
-      resetForm();
+      await api.createProduct(toPayload(createForm));
+      toast.success('Product created');
+      setCreateForm(emptyForm);
+      if (createFileRef.current) createFileRef.current.value = '';
+      load();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.detail || 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function onUpdate(e: FormEvent) {
+    e.preventDefault();
+    if (!editingId) return;
+    if (!editForm.image_url) {
+      toast.error('Upload a product image');
+      return;
+    }
+    setSaving(true);
+    try {
+      await api.updateProduct(editingId, toPayload(editForm));
+      toast.success('Product updated');
+      closeEdit();
       load();
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || 'Save failed');
@@ -141,95 +290,20 @@ export default function AdminProductsPage() {
       </div>
 
       <Card>
-        <h2 className="font-display text-lg font-bold">{editingId ? 'Edit product' : 'Add product'}</h2>
-        <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onSubmit}>
-          {(
-            [
-              ['sku', 'SKU'],
-              ['name', 'Name'],
-              ['price_inr', 'Price (₹)'],
-              ['points_per_unit', 'Points per unit'],
-              ['stock_count', 'Stock'],
-            ] as const
-          ).map(([key, label]) => (
-            <label key={key} className="text-sm">
-              <span className="font-medium">{label}</span>
-              <input
-                required
-                className="mt-1 w-full rounded-lg border border-line px-3 py-2"
-                value={(form as any)[key]}
-                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-              />
-            </label>
-          ))}
-
-          <div className="text-sm sm:col-span-2">
-            <span className="font-medium">Product image</span>
-            <div className="mt-1 flex flex-wrap items-start gap-4">
-              <div className="h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted">
-                {form.image_url ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={form.image_url} alt="Product preview" className="h-full w-full object-cover" />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-ink-muted">
-                    <Upload className="h-6 w-6" />
-                  </div>
-                )}
-              </div>
-              <div className="space-y-2">
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  className="block w-full max-w-xs text-sm text-ink-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-600"
-                  onChange={(e) => onImageSelected(e.target.files?.[0] || null)}
-                  disabled={uploading || saving}
-                />
-                <p className="text-xs text-ink-muted">JPEG, PNG, WEBP or GIF · max 5 MB · stored on S3</p>
-                {uploading ? <p className="text-xs font-medium text-primary">Uploading to S3…</p> : null}
-                {form.image_url ? (
-                  <button
-                    type="button"
-                    className="inline-flex items-center gap-1 text-xs font-medium text-ink-muted hover:text-accent-red"
-                    onClick={() => {
-                      setForm((f) => ({ ...f, image_url: '' }));
-                      if (fileRef.current) fileRef.current.value = '';
-                    }}
-                  >
-                    <X className="h-3.5 w-3.5" />
-                    Remove image
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          </div>
-
-          <label className="text-sm sm:col-span-2">
-            <span className="font-medium">Description</span>
-            <textarea
-              className="mt-1 w-full rounded-lg border border-line px-3 py-2"
-              rows={3}
-              value={form.description}
-              onChange={(e) => setForm({ ...form, description: e.target.value })}
-            />
-          </label>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={form.is_active}
-              onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
-            />
-            Active (visible in shop)
-          </label>
+        <h2 className="font-display text-lg font-bold">Add product</h2>
+        <form className="mt-4 grid gap-3 sm:grid-cols-2" onSubmit={onCreate}>
+          <ProductFields
+            form={createForm}
+            setForm={setCreateForm}
+            fileRef={createFileRef}
+            uploading={uploading}
+            saving={saving}
+            onImageSelected={(file) => onImageSelected(file, setCreateForm, createFileRef)}
+          />
           <div className="flex gap-2 sm:col-span-2">
             <Button type="submit" loading={saving || uploading}>
-              {editingId ? 'Update' : 'Create'}
+              Create
             </Button>
-            {editingId ? (
-              <Button type="button" variant="outline" onClick={resetForm}>
-                Cancel
-              </Button>
-            ) : null}
           </div>
         </form>
       </Card>
@@ -280,6 +354,57 @@ export default function AdminProductsPage() {
           </Table>
         )}
       </Card>
+
+      {editingId ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden p-4">
+          <button
+            type="button"
+            className="absolute inset-0 bg-ink/40"
+            aria-label="Close edit form"
+            onClick={closeEdit}
+          />
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="edit-product-title"
+            className="relative z-10 flex w-full max-w-2xl max-h-[calc(100dvh-2rem)] flex-col overflow-hidden rounded-xl border border-line bg-white shadow-elevated"
+          >
+            <div className="flex shrink-0 items-start justify-between gap-3 border-b border-line px-5 py-4 sm:px-6">
+              <h2 id="edit-product-title" className="font-display text-lg font-bold">
+                Edit product
+              </h2>
+              <button
+                type="button"
+                className="rounded-lg p-1.5 text-ink-muted hover:bg-surface-muted hover:text-ink"
+                aria-label="Close"
+                onClick={closeEdit}
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <form className="flex min-h-0 flex-1 flex-col" onSubmit={onUpdate}>
+              <div className="grid min-h-0 flex-1 gap-3 overflow-y-auto px-5 py-4 sm:grid-cols-2 sm:px-6">
+                <ProductFields
+                  form={editForm}
+                  setForm={setEditForm}
+                  fileRef={editFileRef}
+                  uploading={uploading}
+                  saving={saving}
+                  onImageSelected={(file) => onImageSelected(file, setEditForm, editFileRef)}
+                />
+              </div>
+              <div className="flex shrink-0 gap-2 border-t border-line px-5 py-4 sm:px-6">
+                <Button type="submit" loading={saving || uploading}>
+                  Update
+                </Button>
+                <Button type="button" variant="outline" onClick={closeEdit}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
