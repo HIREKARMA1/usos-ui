@@ -62,6 +62,7 @@ export default function ProfilePage() {
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [pan, setPan] = useState('');
   const [aadhaar, setAadhaar] = useState('');
   const [bankName, setBankName] = useState('');
@@ -86,7 +87,8 @@ export default function ProfilePage() {
   const applyProfile = useCallback((p: Profile) => {
     setProfile(p);
     setName(p.full_name || '');
-    setPhone(p.phone || '');
+    setPhone((p.phone || '').replace(/\D/g, '').slice(0, 10));
+    setPhoneError('');
     setPan(p.pan_number || '');
     setAadhaar(p.aadhaar_number || '');
     setBankName(p.bank_name || '');
@@ -185,8 +187,24 @@ export default function ProfilePage() {
     }
   }
 
+  function handlePhoneChange(value: string) {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length > 10) {
+      setPhone(digits.slice(0, 10));
+      setPhoneError(t.phoneTooLong || 'Phone number cannot exceed 10 digits');
+      return;
+    }
+    setPhone(digits);
+    setPhoneError('');
+  }
+
   async function savePersonal(e: FormEvent) {
     e.preventDefault();
+    if (!/^\d{10}$/.test(phone)) {
+      setPhoneError(t.phoneInvalid || 'Enter a valid 10-digit phone number');
+      return;
+    }
+    setPhoneError('');
     setSaving(true);
     try {
       const p = await api.patch('/api/v1/users/me', { full_name: name, phone });
@@ -333,7 +351,17 @@ export default function ProfilePage() {
         <form onSubmit={savePersonal} className="mt-4 grid gap-4 sm:grid-cols-2">
           <Input id="name" label={t.fields.name} value={name} onChange={(e) => setName(e.target.value)} required />
           <Input id="email" label={t.fields.email} value={profile?.email || user?.email || ''} disabled />
-          <Input id="phone" label={t.fields.phone} value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          <Input
+            id="phone"
+            label={t.fields.phone}
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => handlePhoneChange(e.target.value)}
+            error={phoneError}
+            required
+          />
           <div className="sm:col-span-2">
             <Button type="submit" loading={saving}>
               {t.save}
