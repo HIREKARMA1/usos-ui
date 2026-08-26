@@ -309,6 +309,10 @@ class ApiClient {
     return this.delete(`/api/v1/shop/admin/products/${id}`);
   }
 
+  async permanentlyDeleteProduct(id: string) {
+    return this.delete(`/api/v1/shop/admin/products/${id}/permanent`);
+  }
+
   async uploadProductImage(file: File) {
     const body = new FormData();
     body.append('file', file);
