@@ -25,12 +25,16 @@ export default function LandingPage() {
       <section className="hero-gradient relative overflow-hidden">
         <div className="page-container grid items-center gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <p className="section-eyebrow">{landing.hero.eyebrow}</p>
-            <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight text-primary sm:text-6xl lg:text-7xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-200">
+              {landing.hero.eyebrow}
+            </p>
+            <h1 className="mt-3 font-display text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
               {landing.hero.brand}
             </h1>
-            <p className="mt-2 text-lg font-semibold text-ink sm:text-xl">{landing.hero.brandFull}</p>
-            <p className="mt-5 max-w-xl text-base text-ink-secondary sm:text-lg">{landing.hero.subheadline}</p>
+            <p className="mt-2 text-lg font-semibold text-white/90 sm:text-xl">{landing.hero.brandFull}</p>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">
+              {landing.hero.subheadline}
+            </p>
             <div className="mt-8 flex flex-wrap gap-3">
               {isAuthenticated && user ? (
                 <Link href={dash}>
