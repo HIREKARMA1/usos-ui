@@ -63,7 +63,13 @@ export default function UserOrdersPage() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <Badge tone={o.status === 'paid' ? 'success' : 'warning'}>{o.status}</Badge>
+                  <Badge
+                    tone={
+                      o.status === 'paid' || o.status === 'fulfilled' ? 'success' : 'warning'
+                    }
+                  >
+                    {o.status}
+                  </Badge>
                   <Link href={`/shop/orders/${o.id}`} className="text-sm font-semibold text-primary">
                     View
                   </Link>
