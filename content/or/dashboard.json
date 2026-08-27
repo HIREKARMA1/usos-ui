@@ -159,7 +159,9 @@
     "save": "Save changes",
     "saved": "Your profile has been updated",
     "saveFailed": "Could not save changes",
-    "loadError": "Could not load profile"
+    "loadError": "Could not load profile",
+    "phoneInvalid": "Enter a valid 10-digit phone number",
+    "phoneTooLong": "Phone number cannot exceed 10 digits"
   },
   "rewards": {
     "title": "Rewards & milestones",
