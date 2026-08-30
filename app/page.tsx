@@ -19,11 +19,11 @@ export default function LandingPage() {
   const dash = user ? roleHome(user.role) : '/user';
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-surface-page">
       <PublicHeader />
 
       <section className="hero-gradient relative overflow-hidden">
-        <div className="page-container grid items-center gap-10 py-16 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
+        <div className="page-container grid items-center gap-6 py-8 lg:grid-cols-[1.1fr_0.9fr] lg:py-10">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sky-200">
               {landing.hero.eyebrow}
@@ -65,7 +65,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="relative hidden min-h-[320px] rounded-2xl bg-gradient-to-br from-primary via-secondary-500 to-accent-orange p-8 text-white shadow-elevated lg:block"
+            className="relative hidden min-h-[320px] rounded-2xl bg-gradient-to-br from-primary via-secondary-500 to-accent-orange p-8 text-white shadow-none lg:block"
           >
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-white/80">{common.brand.tagline}</p>
             <p className="mt-6 font-display text-4xl font-extrabold leading-tight">{landing.hero.headline}</p>
@@ -81,7 +81,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="features" className="page-container py-16 sm:py-20">
+      <section id="features" className="page-container py-8 sm:py-10">
         <p className="section-eyebrow">{landing.features.eyebrow}</p>
         <h2 className="section-title mt-2">{landing.features.title}</h2>
         <p className="mt-3 max-w-2xl text-ink-muted">{landing.features.subtitle}</p>
@@ -95,7 +95,7 @@ export default function LandingPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.05 }}
-                className="rounded-xl border border-line bg-white p-5 shadow-sm"
+                className="rounded-xl border border-line bg-surface-card p-5 shadow-none"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Icon className="h-5 w-5" />
@@ -108,13 +108,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="how" className="bg-surface-soft py-16 sm:py-20">
+      <section id="how" className="bg-surface-soft py-8 sm:py-10">
         <div className="page-container">
           <p className="section-eyebrow">{landing.howItWorks.eyebrow}</p>
           <h2 className="section-title mt-2">{landing.howItWorks.title}</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {landing.howItWorks.steps.map((step: { step: string; title: string; description: string }) => (
-              <div key={step.step} className="rounded-xl bg-white p-6 shadow-card">
+              <div key={step.step} className="rounded-xl bg-surface-card p-6 shadow-none">
                 <p className="font-display text-3xl font-extrabold text-primary/20">{step.step}</p>
                 <h3 className="mt-2 font-display text-xl font-bold text-ink">{step.title}</h3>
                 <p className="mt-2 text-sm text-ink-muted">{step.description}</p>
@@ -124,13 +124,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="packages" className="page-container py-16 sm:py-20">
+      <section id="packages" className="page-container py-8 sm:py-10">
         <p className="section-eyebrow">{landing.packages.eyebrow}</p>
         <h2 className="section-title mt-2">{landing.packages.title}</h2>
         <p className="mt-3 max-w-2xl text-ink-muted">{landing.packages.subtitle}</p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
           {packages.items.map((pkg: any) => (
-            <div key={pkg.id} className="rounded-xl border border-line bg-white p-6 shadow-card">
+            <div key={pkg.id} className="rounded-xl border border-line bg-surface-card p-6 shadow-none">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="font-display text-2xl font-bold text-ink">{pkg.name}</h3>
@@ -153,7 +153,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="shop" className="bg-surface-soft py-16 sm:py-20">
+      <section id="shop" className="bg-surface-soft py-8 sm:py-10">
         <div className="page-container">
           <p className="section-eyebrow">Repurchase</p>
           <h2 className="section-title mt-2">Shop products. Earn points.</h2>
@@ -170,7 +170,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-primary py-16 text-white">
+      <section className="bg-primary py-8 text-white">
         <div className="page-container text-center">
           <h2 className="font-display text-3xl font-extrabold sm:text-4xl">{landing.cta.title}</h2>
           <p className="mx-auto mt-3 max-w-xl text-white/80">{landing.cta.subtitle}</p>

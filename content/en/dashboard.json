@@ -20,15 +20,45 @@
   "overview": {
     "title": "Overview",
     "subtitle": "Track your 4 referral slots, 7-day window, and current rank.",
+    "greetingSubtitle": "Keep building your pathway and unlock amazing rewards.",
+    "greeting": {
+      "morning": "Good Morning",
+      "afternoon": "Good Afternoon",
+      "evening": "Good Evening",
+      "guest": "Member"
+    },
     "stats": {
-      "totalEarnings": "Total earnings",
-      "walletBalance": "Wallet balance",
+      "totalEarnings": "Total Earnings",
+      "walletBalance": "Wallet Balance",
       "directReferrals": "Direct referrals (max 4)",
+      "directEarning": "Direct Earning",
       "downline": "Total downline",
       "activeTeam": "Active team",
-      "rank": "Current rank",
+      "rank": "Current Rank",
       "windowLeft": "Days left in window",
-      "qualifiedDirects": "Qualified directs (7-day)"
+      "qualifiedDirects": "Qualified Directs"
+    },
+    "mission": {
+      "coachLabel": "SmartCoach",
+      "suffix": "Mission",
+      "qualifiedDirects": "Qualified Directs",
+      "nodesRequired": "Nodes Required",
+      "remaining": "{count} more qualified member to unlock {rank}",
+      "unlocked": "Mission requirement met",
+      "cashReward": "Cash Reward",
+      "daysRemaining": "{days} Days Remaining",
+      "emptyTitle": "Mission plan unavailable"
+    },
+    "networkSlots": {
+      "title": "My Network Slots",
+      "active": "Active",
+      "open": "Open Slot",
+      "invite": "Invite Now"
+    },
+    "nextMission": {
+      "label": "Next Mission",
+      "nodesRequired": "Nodes Required",
+      "viewPlan": "View Mission Plan"
     },
     "recentTitle": "Recent transactions",
     "quickActionsTitle": "Quick actions",
@@ -73,8 +103,18 @@
     "requestsTitle": "Withdrawal requests",
     "requestsSubtitle": "After admin approval, money is sent to your bank automatically.",
     "noRequests": "No withdrawal requests yet.",
-    "totalEarned": "Total earned",
-    "totalWithdrawn": "Total withdrawn",
+    "totalEarned": "Total Earnings",
+    "totalWithdrawn": "Total Withdrawn",
+    "pendingWithdrawals": "Pending Withdrawals",
+    "recentTransactions": "Recent Transactions",
+    "viewAll": "View All",
+    "credit": "Credit",
+    "debit": "Debit",
+    "tabs": {
+      "overview": "Overview",
+      "transactions": "Transactions",
+      "withdrawals": "Withdrawals"
+    },
     "table": {
       "date": "Date",
       "type": "Type",
@@ -97,8 +137,14 @@
   "referrals": {
     "title": "Referrals",
     "subtitle": "You can refer a maximum of 4 members. Complete all 4 within 7 days of joining to unlock SMART.",
+    "myReferralsTitle": "My Referrals",
+    "slotsUsed": "{used} / {max} Slots Used",
     "yourCodeLabel": "Your referral code",
-    "yourLinkLabel": "Your referral link",
+    "yourLinkLabel": "Your Referral Link",
+    "copy": "Copy",
+    "share": "Share",
+    "shareTitle": "Join with my referral",
+    "shareText": "Sign up using my referral link",
     "copyCode": "Copy code",
     "copyLink": "Copy link",
     "copied": "Copied to clipboard",
@@ -106,12 +152,18 @@
     "slotsFull": "All 4 slots filled — your direct referral work is done.",
     "windowLabel": "Qualification window",
     "directTeamTitle": "Your direct team (max 4)",
+    "listTitle": "Referrals List",
     "table": {
       "name": "Name",
       "joined": "Joined",
       "code": "Code",
       "package": "Package",
       "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending Payment",
+      "inactive": "Inactive"
     },
     "emptyTitle": "No referrals yet",
     "emptyDescription": "Share your link and fill your 4 slots within 7 days to unlock SMART (₹800 + T-Shirt)."
@@ -169,15 +221,18 @@
     "phoneTooLong": "Phone number cannot exceed 10 digits"
   },
   "rewards": {
-    "title": "Rewards & ranks",
+    "title": "Rewards / Mission Plan",
     "subtitle": "Eight levels from SMART to DOUBLE CROWN — cash plus gifts as your 4×4 matrix fills.",
     "achieved": "Achieved",
+    "completed": "Completed",
+    "current": "Current",
     "locked": "Locked",
     "rewardLabel": "Reward",
     "progressLabel": "Network IDs needed",
     "claimButton": "Claim reward",
     "membersUnit": "IDs",
-    "planTitle": "Reward ladder",
+    "pointsUnit": "ID",
+    "planTitle": "Mission Levels",
     "emptyTitle": "No ranks unlocked yet",
     "emptyDescription": "Refer 4 members within 7 days to unlock SMART (level 1)."
   }

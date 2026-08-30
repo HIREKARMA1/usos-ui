@@ -13,19 +13,33 @@
     "logout": "लॉग आउट"
   },
   "analytics": {
-    "title": "राजस्व विश्लेषण",
+    "title": "अवलोकन",
     "subtitle": "एक नज़र में प्लेटफ़ॉर्म प्रदर्शन।",
     "stats": {
+      "grossRevenue": "कुल राजस्व",
+      "clearedPayouts": "निपटाए गए भुगतान",
+      "pendingPayouts": "लंबित भुगतान",
+      "totalMembers": "कुल सदस्य",
+      "activeMembers": "सक्रिय सदस्य",
+      "pendingRewards": "लंबित रिवॉर्ड",
       "totalRevenue": "कुल राजस्व",
       "totalUsers": "कुल उपयोगकर्ता",
       "activeUsers": "सक्रिय उपयोगकर्ता",
       "totalPayouts": "कुल भुगतान",
-      "pendingRewards": "लंबित रिवॉर्ड",
       "monthlyGrowth": "मासिक वृद्धि"
     },
+    "memberGrowthTitle": "सदस्य वृद्धि",
+    "revenueOverviewTitle": "राजस्व अवलोकन",
     "revenueTitle": "राजस्व रुझान",
     "revenueSubtitle": "पिछले 6 महीने",
-    "recentTitle": "हाल के साइनअप"
+    "recentTitle": "हाल के साइनअप",
+    "quickActionsTitle": "त्वरित कार्रवाई",
+    "quickActions": {
+      "addProduct": "उत्पाद जोड़ें",
+      "searchMember": "सदस्य खोजें",
+      "reviewRewards": "रिवॉर्ड समीक्षा",
+      "processPayout": "भुगतान प्रक्रिया"
+    }
   },
   "users": {
     "title": "उपयोगकर्ता प्रबंधन",
@@ -64,21 +78,41 @@
     "saved": "पैकेज अपडेट हुआ"
   },
   "rewards": {
-    "title": "रिवॉर्ड सत्यापन",
+    "title": "03. रिवॉर्ड कतार",
     "subtitle": "लंबित रिवॉर्ड दावों की समीक्षा करें और स्वीकृत करें।",
+    "tabs": {
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "fulfilled": "पूर्ण",
+      "rejected": "अस्वीकृत"
+    },
     "table": {
-      "user": "उपयोगकर्ता",
-      "milestone": "माइलस्टोन",
-      "requested": "अनुरोधित",
+      "member": "सदस्य",
+      "milestone": "मिशन",
+      "reward": "रिवॉर्ड",
+      "achievedOn": "प्राप्ति तिथि",
       "status": "स्थिति",
       "actions": "कार्य"
     },
+    "statusLabels": {
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "fulfilled": "पूर्ण",
+      "rejected": "अस्वीकृत"
+    },
+    "review": "समीक्षा",
+    "reviewTitle": "रिवॉर्ड दावा समीक्षा",
+    "markFulfilled": "पूर्ण चिह्नित करें",
+    "fulfilledLabel": "पूर्ण",
+    "viewAll": "सभी देखें",
+    "showLess": "कम दिखाएं",
     "approve": "स्वीकृत करें",
     "reject": "अस्वीकार करें",
     "approved": "रिवॉर्ड स्वीकृत",
     "rejected": "रिवॉर्ड अस्वीकृत",
+    "fulfilled": "रिवॉर्ड पूर्ण चिह्नित",
     "emptyTitle": "कतार खाली है",
-    "emptyDescription": "अभी कोई लंबित रिवॉर्ड दावा नहीं है।"
+    "emptyDescription": "इस श्रेणी में अभी कोई रिवॉर्ड दावा नहीं है।"
   },
   "withdrawals": {
     "title": "निकासी कतार",

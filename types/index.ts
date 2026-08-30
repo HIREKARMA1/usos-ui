@@ -106,15 +106,22 @@ export interface AdminUserRow {
   packageId: PackageId;
   status: AccountStatus;
   joinedAt: string;
+  totalEarningsPaise: number;
   earnings: number;
 }
+
+export type RewardClaimStatus = 'pending' | 'approved' | 'fulfilled' | 'rejected';
 
 export interface RewardClaim {
   id: string;
   userName: string;
+  referralCode?: string;
   milestone: string;
+  level?: number;
+  cashPaise: number;
+  materialReward?: string | null;
   requestedAt: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: RewardClaimStatus;
 }
 
 export interface AdminStats {
@@ -122,6 +129,7 @@ export interface AdminStats {
   totalUsers: number;
   activeUsers: number;
   totalPayouts: number;
+  pendingPayouts: number;
   pendingRewards: number;
   monthlyGrowth: number;
 }

@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useContent } from '@/hooks/useContent';
+import { useTheme } from '@/hooks/useTheme';
 import { cn } from '@/lib/cn';
 
 export function BrandLogo({
@@ -17,22 +17,26 @@ export function BrandLogo({
   showFull?: boolean;
 }) {
   const common = useContent('common');
+  const { mode } = useTheme();
+
   return (
-    <Link href={href} className={cn('inline-flex items-center gap-2.5', className)}>
-      <Image
-        src={light ? '/images/HKlogowhite.png' : '/images/HKlogoblack.png'}
-        alt={common.brand.full}
-        width={36}
-        height={36}
-        className="h-9 w-9 object-contain"
-        priority
-      />
+    <Link href={href} className={cn('inline-flex items-center', className)}>
       <span className="leading-tight">
-        <span className={cn('block font-display text-lg font-extrabold tracking-tight', light ? 'text-white' : 'text-primary')}>
+        <span
+          className={cn(
+            'block font-display text-lg font-extrabold tracking-tight',
+            light ? 'text-white' : mode === 'dark' ? 'text-ink' : 'text-primary'
+          )}
+        >
           {common.brand.short}
         </span>
         {showFull ? (
-          <span className={cn('block text-[10px] font-medium', light ? 'text-white/80' : 'text-ink-muted')}>
+          <span
+            className={cn(
+              'block text-[10px] font-medium',
+              light ? 'text-white/80' : 'text-ink-muted'
+            )}
+          >
             {common.brand.full}
           </span>
         ) : null}

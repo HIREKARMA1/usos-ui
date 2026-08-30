@@ -10,7 +10,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const common = useContent('common');
 
   return (
-    <div className={cn('inline-flex items-center gap-1 rounded-lg border border-line bg-white p-1', className)}>
+    <div className={cn('inline-flex items-center gap-1 rounded-lg border border-line bg-surface-card p-1', className)}>
       <span className="sr-only">{common.language.label}</span>
       {LOCALE_OPTIONS.map((opt) => (
         <button

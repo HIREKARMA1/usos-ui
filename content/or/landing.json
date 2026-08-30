@@ -1,49 +1,49 @@
 {
   "hero": {
-    "eyebrow": "Unique Search of Smile",
+    "eyebrow": "ୟୁନିକ୍ ସର୍ଚ ଅଫ୍ ସ୍ମାଇଲ",
     "brand": "U.S.O.S",
-    "brandFull": "Unique Search of Smile",
-    "headline": "Build your network. Multiply your income.",
-    "subheadline": "Join a transparent binary rewards platform where every referral you make and every team you grow pays you back — tracked in real time, paid out fairly.",
-    "ctaPrimary": "Join now",
-    "ctaSecondary": "Log in"
+    "brandFull": "ୟୁନିକ୍ ସର୍ଚ ଅଫ୍ ସ୍ମାଇଲ",
+    "headline": "4 ଜଣଙ୍କୁ ରେଫର୍ କରନ୍ତୁ। 8 ସ୍ତର ବୃଦ୍ଧି। ପ୍ରତି ରାଉଣ୍ଡରେ ଆୟ।",
+    "subheadline": "₹2,500 ରେ ଯୋଗ ଦିଅନ୍ତୁ, 7 ଦିନରେ 4 ଜଣ ସଦସ୍ୟଙ୍କୁ ନିମନ୍ତ୍ରଣ କରନ୍ତୁ, ଏବଂ SMART ରୁ DOUBLE CROWN ପର୍ଯ୍ୟନ୍ତ ପୁରସ୍କାର ଅନଲକ୍ କରନ୍ତୁ — ପ୍ରତି ସ୍ତରରେ ନଗଦ ଓ ଉପହାର।",
+    "ctaPrimary": "ଏବେ ଯୋଗ ଦିଅନ୍ତୁ",
+    "ctaSecondary": "ଲଗ ଇନ୍"
   },
   "stats": [
-    { "value": "3,400+", "label": "Active members" },
-    { "value": "₹31L+", "label": "Paid in rewards" },
-    { "value": "7", "label": "Income levels" },
-    { "value": "24/7", "label": "Wallet access" }
+    { "value": "₹2,500", "label": "ପ୍ରବେଶ ଶୁଳ୍କ" },
+    { "value": "4", "label": "ସର୍ବାଧିକ ସିଧା ରେଫରାଲ" },
+    { "value": "8", "label": "ରିୱାର୍ଡ ସ୍ତର" },
+    { "value": "7 ଦିନ", "label": "4 ଜଣ ପୂର୍ଣ୍ଣ କରିବା ପାଇଁ" }
   ],
   "features": {
-    "eyebrow": "Why U.S.O.S",
-    "title": "Everything you need to grow with confidence",
-    "subtitle": "A modern MLM platform built on transparency, fair payouts, and real-time tracking.",
+    "eyebrow": "U.S.O.S କାହିଁକି",
+    "title": "ଏକ ସ୍ପଷ୍ଟ 4×4 ବୃଦ୍ଧି ଯୋଜନା",
+    "subtitle": "ସ୍ୱଚ୍ଛ ର୍ୟାଙ୍କ, ନିର୍ଦ୍ଧାରିତ ନଗଦ ପୁରସ୍କାର, ଏବଂ ପ୍ରତି ରାଉଣ୍ଡ ସମ୍ପୂର୍ଣ୍ଣ ହେବା ସହ ପ୍ରକୃତ ଉତ୍ପାଦ।",
     "items": [
-      { "title": "Binary genealogy", "description": "Visualise your left and right teams with an interactive downline tree updated in real time." },
-      { "title": "Instant wallet", "description": "Track every referral bonus, matching income, and reward in one clear ledger." },
-      { "title": "Fair rewards", "description": "Milestone rewards and rank bonuses that pay out the moment you qualify." },
-      { "title": "Secure payments", "description": "PayU-powered checkout with encrypted transactions and verified onboarding." },
-      { "title": "KYC & payouts", "description": "Complete KYC once and withdraw your earnings straight to your bank account." },
-      { "title": "Multi-language", "description": "Use the platform in English, Hindi, or Odia — switch anytime." }
+      { "title": "ସର୍ବାଧିକ 4 ରେଫରାଲ", "description": "ପ୍ରତି ସଦସ୍ୟ କେବଳ ଚାରି ଜଣଙ୍କୁ ରେଫର୍ କରିପାରିବେ। ତା’ପରେ ଆପଣଙ୍କ ସିଧା କାମ ସମାପ୍ତ — ବୃଦ୍ଧି ଆପଣଙ୍କ ଟିମ୍‌ରୁ ଆସେ।" },
+      { "title": "7-ଦିନ SMART ୱିଣ୍ଡୋ", "description": "ଯୋଗ ଦେବାର 7 ଦିନ ମଧ୍ୟରେ 4 ସିଧା ସଦସ୍ୟ ସକ୍ରିୟ କରନ୍ତୁ SMART ଅନଲକ୍ କରିବା ପାଇଁ: ₹800 + ଏକ T-Shirt।" },
+      { "title": "8 କ୍ୟାରିୟର ରାଉଣ୍ଡ", "description": "SMART ରୁ DOUBLE CROWN ପର୍ଯ୍ୟନ୍ତ — ଆପଣଙ୍କ ମ୍ୟାଟ୍ରିକ୍ସ ଭରିବା ସହ ଲୋହା, ପାଖଳ, ଗ୍ରାଇଣ୍ଡର, ମୋବାଇଲ, ଫ୍ରିଜ, ବାଇକ ଓ କାର।" },
+      { "title": "ପ୍ୟାକେଜ A କିମ୍ବା B", "description": "₹2,500 ଥରେ ଦେଇ, ଆପଣଙ୍କ ଉତ୍ପାଦ କିଟ୍ ବାଛନ୍ତୁ, ଏବଂ ସମାନ ରିୱାର୍ଡ ଲାଡର୍‌ରେ ପ୍ରବେଶ କରନ୍ତୁ।" },
+      { "title": "ଲାଇଭ ଜିନିଆଲଜି", "description": "ଆପଣଙ୍କ ନେଟୱାର୍କ ବୃଦ୍ଧି ହେବା ସହ ଅପଡେଟ୍ ହେଉଥିବା ସ୍ପନସର ଟ୍ରିରେ ଆପଣଙ୍କ ନିମ୍ନ ସଦସ୍ୟମାନଙ୍କୁ ଦେଖନ୍ତୁ।" },
+      { "title": "ୱାଲେଟ୍ ଓ KYC", "description": "ନଗଦ ପୁରସ୍କାର ଆପଣଙ୍କ ୱାଲେଟ୍‌ରେ ଯୋଗ ହୁଏ; KYC ସମ୍ପୂର୍ଣ୍ଣ କରି ବ୍ୟାଙ୍କରେ ଉଠାନ୍ତୁ।" }
     ]
   },
   "howItWorks": {
-    "eyebrow": "How it works",
-    "title": "Start earning in three simple steps",
+    "eyebrow": "ଏହା କିପରି କାମ କରେ",
+    "title": "ତିନି ସହଜ ପଦକ୍ଷେପରେ ଆୟ ଆରମ୍ଭ କରନ୍ତୁ",
     "steps": [
-      { "step": "01", "title": "Register & choose a package", "description": "Sign up with your sponsor's referral code and pick the package that fits your goals." },
-      { "step": "02", "title": "Build your binary team", "description": "Invite members to your left and right legs and watch your network grow." },
-      { "step": "03", "title": "Earn & withdraw", "description": "Collect referral, matching, and milestone rewards, then withdraw to your bank." }
+      { "step": "01", "title": "ପଞ୍ଜିକରଣ ଓ ₹2,500 ଦେବା", "description": "ପ୍ୟାକେଜ A କିମ୍ବା B ସହ ଆପଣଙ୍କ ID ବନାନ୍ତୁ ଏବଂ PayU ଚେକଆଉଟ୍ ସମ୍ପୂର୍ଣ୍ଣ କରନ୍ତୁ।" },
+      { "step": "02", "title": "7 ଦିନରେ 4 ଜଣଙ୍କୁ ରେଫର୍ କରନ୍ତୁ", "description": "ଆପଣଙ୍କ ଲିଙ୍କ୍ ସେୟାର୍ କରନ୍ତୁ, 4 ସ୍ଲଟ୍ ପୂରଣ କରନ୍ତୁ, ଏବଂ SMART ସ୍ତର ପୁରସ୍କାର ଅନଲକ୍ କରନ୍ତୁ।" },
+      { "step": "03", "title": "8 ସ୍ତର ମଧ୍ୟରେ ବୃଦ୍ଧି", "description": "ପ୍ରତି ପିଢ଼ି ସେମାନଙ୍କ 4 ପୂର୍ଣ୍ଣ କଲେ, ଆପଣ MASTER → STAR → … → DOUBLE CROWN ପର୍ଯ୍ୟନ୍ତ ଉଠିବେ।" }
     ]
   },
   "packages": {
-    "eyebrow": "Packages",
-    "title": "Choose the plan that fits you",
-    "subtitle": "Every package unlocks the full binary earning system. Upgrade anytime."
+    "eyebrow": "ପ୍ୟାକେଜ",
+    "title": "ଆପଣଙ୍କ ପାଇଁ ଉପଯୁକ୍ତ କିଟ୍ ବାଛନ୍ତୁ",
+    "subtitle": "ଉଭୟ ପ୍ୟାକେଜ ₹2,500 ଏବଂ ସମାନ 8-ସ୍ତର ରିୱାର୍ଡ ବ୍ୟବସ୍ଥା ଅନଲକ୍ କରେ।"
   },
   "cta": {
-    "title": "Ready to start your U.S.O.S journey?",
-    "subtitle": "Create your account in minutes and start building your network today.",
-    "button": "Create your account"
+    "title": "ଆପଣଙ୍କ U.S.O.S ଯାତ୍ରା ଆରମ୍ଭ କରିବାକୁ ପ୍ରସ୍ତୁତ?",
+    "subtitle": "କିଛି ମିନିଟ୍‌ରେ ଆପଣଙ୍କ ଖାତା ବନାନ୍ତୁ ଏବଂ ପ୍ରଥମ 4 ସଦସ୍ୟଙ୍କୁ ନିମନ୍ତ୍ରଣ କରନ୍ତୁ।",
+    "button": "ଆପଣଙ୍କ ଖାତା ବନାନ୍ତୁ"
   }
 }
