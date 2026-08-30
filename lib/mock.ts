@@ -19,8 +19,14 @@ export const mockOverview: OverviewStats = {
   totalEarnings: 184500,
   walletBalance: 42300,
   directReferrals: 12,
-  leftTeam: 148,
-  rightTeam: 121,
+  maxDirectReferrals: 4,
+  referralSlotsFull: false,
+  qualifiedDirects: 3,
+  daysLeftInWindow: 2,
+  isSmart: true,
+  currentLevel: 2,
+  totalDownline: 269,
+  activeDownline: 241,
   rank: 'Gold',
 };
 
@@ -35,11 +41,11 @@ export const mockTransactions: Transaction[] = [
 ];
 
 export const mockReferrals: Referral[] = [
-  { id: 'r1', name: 'Anita Sharma', joinedAt: '2026-07-15', side: 'left', packageId: 'B', status: 'active' },
-  { id: 'r2', name: 'Rahul Verma', joinedAt: '2026-07-12', side: 'right', packageId: 'A', status: 'active' },
-  { id: 'r3', name: 'Priya Nayak', joinedAt: '2026-07-08', side: 'left', packageId: 'B', status: 'active' },
-  { id: 'r4', name: 'Sourav Das', joinedAt: '2026-07-03', side: 'right', packageId: 'A', status: 'pending' },
-  { id: 'r5', name: 'Meera Patel', joinedAt: '2026-06-28', side: 'left', packageId: 'A', status: 'inactive' },
+  { id: 'r1', name: 'Anita Sharma', joinedAt: '2026-07-15', packageId: 'B', status: 'active' },
+  { id: 'r2', name: 'Rahul Verma', joinedAt: '2026-07-12', packageId: 'A', status: 'active' },
+  { id: 'r3', name: 'Priya Nayak', joinedAt: '2026-07-08', packageId: 'B', status: 'active' },
+  { id: 'r4', name: 'Sourav Das', joinedAt: '2026-07-03', packageId: 'A', status: 'pending' },
+  { id: 'r5', name: 'Meera Patel', joinedAt: '2026-06-28', packageId: 'A', status: 'inactive' },
 ];
 
 function member(
@@ -101,24 +107,61 @@ export const mockAdminStats: AdminStats = {
   totalUsers: 3421,
   activeUsers: 2987,
   totalPayouts: 3120000,
+  pendingPayouts: 245800,
   pendingRewards: 18,
   monthlyGrowth: 12.4,
 };
 
 export const mockAdminUsers: AdminUserRow[] = [
-  { id: 'u1', name: 'Anita Sharma', email: 'anita@example.com', phone: '9876543210', packageId: 'B', status: 'active', joinedAt: '2026-07-15', earnings: 42300 },
-  { id: 'u2', name: 'Rahul Verma', email: 'rahul@example.com', phone: '9876543211', packageId: 'A', status: 'active', joinedAt: '2026-07-12', earnings: 18700 },
-  { id: 'u3', name: 'Priya Nayak', email: 'priya@example.com', phone: '9876543212', packageId: 'B', status: 'active', joinedAt: '2026-07-08', earnings: 65100 },
-  { id: 'u4', name: 'Sourav Das', email: 'sourav@example.com', phone: '9876543213', packageId: 'A', status: 'pending', joinedAt: '2026-07-03', earnings: 0 },
-  { id: 'u5', name: 'Meera Patel', email: 'meera@example.com', phone: '9876543214', packageId: 'A', status: 'inactive', joinedAt: '2026-06-28', earnings: 9200 },
-  { id: 'u6', name: 'Karan Singh', email: 'karan@example.com', phone: '9876543215', packageId: 'A', status: 'active', joinedAt: '2026-06-20', earnings: 24500 },
+  { id: 'u1', name: 'Anita Sharma', email: 'anita@example.com', phone: '9876543210', packageId: 'B', status: 'active', joinedAt: '2026-07-15', totalEarningsPaise: 4230000, earnings: 42300 },
+  { id: 'u2', name: 'Rahul Verma', email: 'rahul@example.com', phone: '9876543211', packageId: 'A', status: 'active', joinedAt: '2026-07-12', totalEarningsPaise: 1870000, earnings: 18700 },
+  { id: 'u3', name: 'Priya Nayak', email: 'priya@example.com', phone: '9876543212', packageId: 'B', status: 'active', joinedAt: '2026-07-08', totalEarningsPaise: 6510000, earnings: 65100 },
+  { id: 'u4', name: 'Sourav Das', email: 'sourav@example.com', phone: '9876543213', packageId: 'A', status: 'pending', joinedAt: '2026-07-03', totalEarningsPaise: 0, earnings: 0 },
+  { id: 'u5', name: 'Meera Patel', email: 'meera@example.com', phone: '9876543214', packageId: 'A', status: 'inactive', joinedAt: '2026-06-28', totalEarningsPaise: 920000, earnings: 9200 },
+  { id: 'u6', name: 'Karan Singh', email: 'karan@example.com', phone: '9876543215', packageId: 'A', status: 'active', joinedAt: '2026-06-20', totalEarningsPaise: 2450000, earnings: 24500 },
 ];
 
 export const mockRewardClaims: RewardClaim[] = [
-  { id: 'c1', userName: 'Priya Nayak', milestone: 'Gold', requestedAt: '2026-07-18', status: 'pending' },
-  { id: 'c2', userName: 'Karan Singh', milestone: 'Silver', requestedAt: '2026-07-17', status: 'pending' },
-  { id: 'c3', userName: 'Anita Sharma', milestone: 'Platinum', requestedAt: '2026-07-16', status: 'pending' },
-  { id: 'c4', userName: 'Rahul Verma', milestone: 'Silver', requestedAt: '2026-07-14', status: 'approved' },
+  {
+    id: 'c1',
+    userName: 'Priya Nayak',
+    milestone: 'mission_l1',
+    level: 1,
+    cashPaise: 80000,
+    materialReward: 'T-Shirt',
+    requestedAt: '2026-07-18',
+    status: 'pending',
+  },
+  {
+    id: 'c2',
+    userName: 'Karan Singh',
+    milestone: 'mission_l2',
+    level: 2,
+    cashPaise: 320000,
+    materialReward: 'Iron Box',
+    requestedAt: '2026-07-17',
+    status: 'pending',
+  },
+  {
+    id: 'c3',
+    userName: 'Anita Sharma',
+    milestone: 'mission_l3',
+    level: 3,
+    cashPaise: 800000,
+    materialReward: 'Ceiling Fan',
+    requestedAt: '2026-07-16',
+    status: 'pending',
+  },
+  {
+    id: 'c4',
+    userName: 'Rahul Verma',
+    milestone: 'mission_l1',
+    level: 1,
+    cashPaise: 80000,
+    materialReward: 'T-Shirt',
+    requestedAt: '2026-07-14',
+    status: 'approved',
+  },
 ];
 
 export const mockRevenueSeries: { month: string; value: number }[] = [
@@ -128,4 +171,13 @@ export const mockRevenueSeries: { month: string; value: number }[] = [
   { month: 'May', value: 820000 },
   { month: 'Jun', value: 910000 },
   { month: 'Jul', value: 1040000 },
+];
+
+export const mockMemberGrowthSeries: { label: string; members: number }[] = [
+  { label: '25 Jul', members: 4120 },
+  { label: '1 Aug', members: 4280 },
+  { label: '8 Aug', members: 4410 },
+  { label: '15 Aug', members: 4520 },
+  { label: '22 Aug', members: 4630 },
+  { label: '29 Aug', members: 4756 },
 ];

@@ -1,16 +1,16 @@
 {
-  "title": "Membership packages",
-  "subtitle": "Select Package A or Package B during signup. Entry fee is ₹2,500.",
-  "perMember": "one-time entry",
-  "recommended": "Popular",
-  "selectLabel": "Select package",
-  "featuresLabel": "Products included",
+  "title": "ସଦସ୍ୟତା ପ୍ୟାକେଜ",
+  "subtitle": "ସାଇନ୍-ଅପ୍ ସମୟରେ ପ୍ୟାକେଜ A କିମ୍ବା B ବାଛନ୍ତୁ। ପ୍ରବେଶ ଶୁଳ୍କ ₹2,500।",
+  "perMember": "ଥରେ ପ୍ରବେଶ",
+  "recommended": "ଲୋକପ୍ରିୟ",
+  "selectLabel": "ପ୍ୟାକେଜ ବାଛନ୍ତୁ",
+  "featuresLabel": "ଅନ୍ତର୍ଭୁକ୍ତ ଉତ୍ପାଦ",
   "items": [
     {
       "id": "A",
-      "name": "Package A",
+      "name": "ପ୍ୟାକେଜ A",
       "price": 2500,
-      "description": "Cotton saree with essentials including T-Shirt.",
+      "description": "T-Shirt ସହ କଟନ୍ ସାରୀ ଓ ମୂଳଭୂତ ଜିନିଷ।",
       "badge": "",
       "features": [
         "Cotton Saree",
@@ -27,10 +27,10 @@
     },
     {
       "id": "B",
-      "name": "Package B",
+      "name": "ପ୍ୟାକେଜ B",
       "price": 2500,
-      "description": "Cotton saree with protein powder and extended essentials.",
-      "badge": "Extended",
+      "description": "ପ୍ରୋଟିନ୍ ପାଉଡର୍ ଓ ବିସ୍ତୃତ ମୂଳଭୂତ ଜିନିଷ ସହ କଟନ୍ ସାରୀ।",
+      "badge": "ବିସ୍ତୃତ",
       "features": [
         "Cotton Saree",
         "Protein Powder",
@@ -47,5 +47,5 @@
       ]
     }
   ],
-  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+  "note": "PayU ମାଧ୍ୟମରେ ବାଧ୍ୟତାମୂଳକ ₹2,500 ପ୍ରବେଶ ଶୁଳ୍କ। ସଫଳ ସାଇନ୍-ଅପ୍ ପେମେଣ୍ଟରେ ସ୍ଟକ୍ କମିଯାଏ।"
 }

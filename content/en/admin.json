@@ -13,19 +13,33 @@
     "logout": "Log out"
   },
   "analytics": {
-    "title": "Revenue analytics",
+    "title": "Overview",
     "subtitle": "Platform performance at a glance.",
     "stats": {
+      "grossRevenue": "Gross Revenue",
+      "clearedPayouts": "Cleared Payouts",
+      "pendingPayouts": "Pending Payouts",
+      "totalMembers": "Total Members",
+      "activeMembers": "Active Members",
+      "pendingRewards": "Pending Rewards",
       "totalRevenue": "Total revenue",
       "totalUsers": "Total users",
       "activeUsers": "Active users",
       "totalPayouts": "Total payouts",
-      "pendingRewards": "Pending rewards",
       "monthlyGrowth": "Monthly growth"
     },
+    "memberGrowthTitle": "Member Growth",
+    "revenueOverviewTitle": "Revenue Overview",
     "revenueTitle": "Revenue trend",
     "revenueSubtitle": "Last 6 months",
-    "recentTitle": "Recent signups"
+    "recentTitle": "Recent signups",
+    "quickActionsTitle": "Quick Actions",
+    "quickActions": {
+      "addProduct": "Add Product",
+      "searchMember": "Search Member",
+      "reviewRewards": "Review Rewards",
+      "processPayout": "Process Payout"
+    }
   },
   "users": {
     "title": "User management",
@@ -64,21 +78,41 @@
     "saved": "Package updated"
   },
   "rewards": {
-    "title": "Reward verification",
+    "title": "03. Rewards Queue",
     "subtitle": "Review and approve pending reward claims.",
-    "table": {
-      "user": "User",
-      "milestone": "Milestone",
-      "requested": "Requested",
-      "status": "Status",
-      "actions": "Actions"
+    "tabs": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "fulfilled": "Fulfilled",
+      "rejected": "Rejected"
     },
+    "table": {
+      "member": "Member",
+      "milestone": "Mission",
+      "reward": "Reward",
+      "achievedOn": "Achieved On",
+      "status": "Status",
+      "actions": "Action"
+    },
+    "statusLabels": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "fulfilled": "Fulfilled",
+      "rejected": "Rejected"
+    },
+    "review": "Review",
+    "reviewTitle": "Review reward claim",
+    "markFulfilled": "Mark Fulfilled",
+    "fulfilledLabel": "Fulfilled",
+    "viewAll": "View All",
+    "showLess": "Show Less",
     "approve": "Approve",
     "reject": "Reject",
     "approved": "Reward approved",
     "rejected": "Reward rejected",
+    "fulfilled": "Reward marked as fulfilled",
     "emptyTitle": "Queue is clear",
-    "emptyDescription": "No pending reward claims right now."
+    "emptyDescription": "No reward claims in this category right now."
   },
   "withdrawals": {
     "title": "Withdrawal queue",

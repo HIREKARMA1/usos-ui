@@ -2,6 +2,7 @@ const theme = require('./theme/theme.config.js');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ['./app/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -13,24 +14,37 @@ module.exports = {
       colors: {
         brand: theme.brand,
         primary: {
-          DEFAULT: theme.brand.blue,
+          DEFAULT: 'var(--color-primary)',
           ...theme.colors.primary,
         },
         secondary: theme.colors.secondary,
         accent: theme.colors.accent,
         neutral: theme.colors.neutral,
-        surface: theme.colors.surface,
+        surface: {
+          page: 'var(--color-surface-page)',
+          card: 'var(--color-surface-card)',
+          muted: 'var(--color-surface-muted)',
+          soft: 'var(--color-surface-soft)',
+          hero: theme.colors.surface.hero,
+        },
         muted: {
-          DEFAULT: theme.colors.surface.muted,
-          foreground: theme.colors.text.muted,
+          DEFAULT: 'var(--color-surface-muted)',
+          foreground: 'var(--color-text-muted)',
         },
         ink: {
-          DEFAULT: theme.colors.text.primary,
-          ...theme.colors.text,
+          DEFAULT: 'var(--color-ink)',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          muted: 'var(--color-text-muted)',
+          inverse: 'var(--color-text-inverse)',
+          link: 'var(--color-text-link)',
+          linkHover: 'var(--color-text-link-hover)',
         },
         line: {
-          DEFAULT: theme.colors.border.default,
-          ...theme.colors.border,
+          DEFAULT: 'var(--color-line)',
+          default: 'var(--color-border)',
+          strong: 'var(--color-border-strong)',
+          focus: 'var(--color-border-focus)',
         },
         state: theme.colors.semantic,
         sky: theme.brand.sky,
@@ -38,15 +52,15 @@ module.exports = {
         orange: theme.brand.orange,
         red: theme.brand.red,
         green: theme.brand.green,
-        soft: theme.colors.surface.soft,
+        soft: 'var(--color-surface-soft)',
       },
       borderRadius: {
         ...theme.radius,
       },
       boxShadow: {
-        card: theme.colors.shadow.md,
-        elevated: theme.colors.shadow.lg,
-        soft: theme.colors.shadow.sm,
+        card: 'var(--shadow-md)',
+        elevated: 'var(--shadow-lg)',
+        soft: 'var(--shadow-sm)',
       },
       backgroundImage: {
         'hero-gradient': 'var(--gradient-hero)',

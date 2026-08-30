@@ -101,7 +101,7 @@ export default function AdminWithdrawalsPage() {
       </div>
       <Card padding={false}>
         {loading ? (
-          <div className="flex justify-center py-16">
+          <div className="flex justify-center py-8">
             <Spinner />
           </div>
         ) : rows.length ? (

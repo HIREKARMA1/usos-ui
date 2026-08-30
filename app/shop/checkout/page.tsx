@@ -131,7 +131,7 @@ export default function CheckoutPage() {
                 <span className="font-medium text-ink">{label}</span>
                 <input
                   required
-                  className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+                  className="mt-1 w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink placeholder:text-ink-muted"
                   value={form[key]}
                   onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                 />

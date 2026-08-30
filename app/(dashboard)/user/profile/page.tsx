@@ -282,7 +282,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10">
         <Spinner />
       </div>
     );
@@ -388,7 +388,7 @@ export default function ProfilePage() {
               <textarea
                 id="addressLine"
                 rows={3}
-                className="w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink focus-ring"
+                className="w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink placeholder:text-ink-muted focus-ring"
                 value={addressLine}
                 onChange={(e) => onAddressChange(e.target.value)}
                 placeholder={t.searchPlaceholder}
@@ -398,7 +398,7 @@ export default function ProfilePage() {
               <span className="text-xs text-ink-muted">{searching ? t.searching : t.searchHint}</span>
             </label>
             {hits.length > 0 ? (
-              <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-line bg-white shadow-elevated">
+              <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-line bg-surface-card shadow-none">
                 {hits.map((hit) => (
                   <li key={`${hit.latitude}-${hit.longitude}-${hit.display_name}`}>
                     <button

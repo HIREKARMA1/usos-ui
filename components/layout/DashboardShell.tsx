@@ -20,8 +20,8 @@ import {
   Coins,
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
-import { BrandStripe } from '@/components/ui/BrandStripe';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
@@ -92,9 +92,8 @@ export function DashboardShell({
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-surface-soft">
-      <BrandStripe className="shrink-0" />
       <div className="flex min-h-0 flex-1">
-        <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-white lg:flex">
+        <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-surface-card lg:flex">
           <div className="shrink-0 border-b border-line px-4 py-4">
             <BrandLogo href={mode === 'admin' ? '/admin' : '/user'} showFull />
           </div>
@@ -104,7 +103,7 @@ export function DashboardShell({
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
-          <header className="z-20 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-line bg-white px-4 sm:px-6">
+          <header className="z-20 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-line bg-surface-card px-4 sm:px-6">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -123,6 +122,7 @@ export function DashboardShell({
               </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
+              <ThemeToggle />
               <LanguageSwitcher />
               <button
                 type="button"
@@ -139,7 +139,7 @@ export function DashboardShell({
           </header>
 
           <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
-          <footer className="shrink-0 border-t border-line bg-white px-4 py-3 text-center text-xs text-ink-muted">
+          <footer className="shrink-0 border-t border-line bg-surface-card px-4 py-3 text-center text-xs text-ink-muted">
             {common.brand.poweredBy}
           </footer>
         </div>
@@ -148,7 +148,7 @@ export function DashboardShell({
       {open ? (
         <div className="fixed inset-0 z-50 lg:hidden">
           <button type="button" className="absolute inset-0 bg-ink/40" onClick={() => setOpen(false)} aria-label="close" />
-          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-white shadow-elevated">
+          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-surface-card shadow-none">
             <div className="flex items-center justify-between border-b border-line px-4 py-4">
               <BrandLogo showFull />
               <button type="button" onClick={() => setOpen(false)} className="rounded-lg p-2 hover:bg-surface-muted">

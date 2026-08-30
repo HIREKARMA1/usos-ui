@@ -16,8 +16,9 @@ const emptyForm = {
   sku: '',
   name: '',
   description: '',
+  category: '',
   price_inr: '',
-  image_url: '',
+  image_urls: [] as string[],
   stock_count: '100',
   points_per_unit: '10',
 };
@@ -70,12 +71,19 @@ export default function AdminProductsPage() {
 
   function startEdit(p: any) {
     setEditingId(p.id);
+    const urls =
+      Array.isArray(p.image_urls) && p.image_urls.length
+        ? p.image_urls
+        : p.image_url
+          ? [p.image_url]
+          : [];
     setForm({
       sku: p.sku,
       name: p.name,
       description: p.description || '',
+      category: p.category || '',
       price_inr: String((p.price_paise || 0) / 100),
-      image_url: p.image_url || '',
+      image_urls: urls,
       stock_count: String(p.stock_count ?? 0),
       points_per_unit: String(p.points_per_unit ?? 0),
     });
@@ -83,33 +91,44 @@ export default function AdminProductsPage() {
     setFormOpen(true);
   }
 
-  async function onImageSelected(file: File | null) {
-    if (!file) return;
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please choose an image file');
-      return;
+  async function onImagesSelected(files: FileList | null) {
+    if (!files?.length) return;
+    const list = Array.from(files);
+    for (const file of list) {
+      if (!file.type.startsWith('image/')) {
+        toast.error(`Skipped ${file.name}: not an image`);
+        continue;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`Skipped ${file.name}: must be under 5 MB`);
+        continue;
+      }
     }
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('Image must be under 5 MB');
-      return;
-    }
+    const valid = list.filter((f) => f.type.startsWith('image/') && f.size <= 5 * 1024 * 1024);
+    if (!valid.length) return;
+
     setUploading(true);
     try {
-      const { url } = await api.uploadProductImage(file);
-      setForm((f) => ({ ...f, image_url: url }));
-      toast.success('Image uploaded');
+      const uploaded: string[] = [];
+      for (const file of valid) {
+        const { url } = await api.uploadProductImage(file);
+        uploaded.push(url);
+      }
+      setForm((f) => ({ ...f, image_urls: [...f.image_urls, ...uploaded] }));
+      toast.success(uploaded.length === 1 ? 'Image uploaded' : `${uploaded.length} images uploaded`);
     } catch (err: any) {
       toast.error(err?.response?.data?.detail || 'Image upload failed');
       if (fileRef.current) fileRef.current.value = '';
     } finally {
       setUploading(false);
+      if (fileRef.current) fileRef.current.value = '';
     }
   }
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    if (!form.image_url) {
-      toast.error('Upload a product image');
+    if (!form.image_urls.length) {
+      toast.error('Upload at least one product image');
       return;
     }
     setSaving(true);
@@ -117,8 +136,10 @@ export default function AdminProductsPage() {
       sku: form.sku,
       name: form.name,
       description: form.description,
+      category: form.category.trim() || null,
       price_paise: Math.round(Number(form.price_inr) * 100),
-      image_url: form.image_url,
+      image_url: form.image_urls[0],
+      image_urls: form.image_urls,
       stock_count: Number(form.stock_count),
       points_per_unit: Number(form.points_per_unit),
     };
@@ -193,7 +214,7 @@ export default function AdminProductsPage() {
 
       <Card padding={false}>
         {loading ? (
-          <div className="flex justify-center py-16">
+          <div className="flex justify-center py-8">
             <Spinner />
           </div>
         ) : (
@@ -321,6 +342,7 @@ export default function AdminProductsPage() {
                     [
                       ['sku', 'SKU'],
                       ['name', 'Name'],
+                      ['category', 'Category'],
                       ['price_inr', 'Price (₹)'],
                       ['points_per_unit', 'Points per unit'],
                       ['stock_count', 'Stock'],
@@ -329,8 +351,9 @@ export default function AdminProductsPage() {
                     <label key={key} className="text-sm">
                       <span className="font-medium">{label}</span>
                       <input
-                        required
-                        className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+                        required={key !== 'category'}
+                        placeholder={key === 'category' ? 'e.g. Personal Care' : undefined}
+                        className="mt-1 w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink"
                         value={(form as any)[key]}
                         onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                       />
@@ -338,18 +361,38 @@ export default function AdminProductsPage() {
                   ))}
 
                   <div className="text-sm sm:col-span-2">
-                    <span className="font-medium">Product image</span>
+                    <span className="font-medium">Product images</span>
                     <div className="mt-1 flex flex-wrap items-start gap-4">
-                      <div className="h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted">
-                        {form.image_url ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={form.image_url}
-                            alt="Product preview"
-                            className="h-full w-full object-cover"
-                          />
+                      <div className="flex flex-wrap gap-2">
+                        {form.image_urls.length ? (
+                          form.image_urls.map((url, idx) => (
+                            <div
+                              key={`${url}-${idx}`}
+                              className="relative h-28 w-28 overflow-hidden rounded-lg border border-line bg-surface-muted"
+                            >
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={url}
+                                alt={`Product preview ${idx + 1}`}
+                                className="h-full w-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                aria-label={`Remove image ${idx + 1}`}
+                                className="absolute right-1 top-1 rounded-md bg-ink/70 p-0.5 text-white hover:bg-accent-red"
+                                onClick={() =>
+                                  setForm((f) => ({
+                                    ...f,
+                                    image_urls: f.image_urls.filter((_, i) => i !== idx),
+                                  }))
+                                }
+                              >
+                                <X className="h-3.5 w-3.5" />
+                              </button>
+                            </div>
+                          ))
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center text-ink-muted">
+                          <div className="flex h-28 w-28 items-center justify-center rounded-lg border border-line bg-surface-muted text-ink-muted">
                             <Upload className="h-6 w-6" />
                           </div>
                         )}
@@ -358,28 +401,29 @@ export default function AdminProductsPage() {
                         <input
                           ref={fileRef}
                           type="file"
+                          multiple
                           accept="image/jpeg,image/png,image/webp,image/gif"
-                          className="block w-full max-w-xs text-sm text-ink-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-600"
-                          onChange={(e) => onImageSelected(e.target.files?.[0] || null)}
+                          className="block w-full max-w-xs text-sm text-ink-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-[var(--color-primary-hover)]"
+                          onChange={(e) => onImagesSelected(e.target.files)}
                           disabled={uploading || saving}
                         />
                         <p className="text-xs text-ink-muted">
-                          JPEG, PNG, WEBP or GIF · max 5 MB · stored on S3
+                          JPEG, PNG, WEBP or GIF · max 5 MB each · multiple files · stored on S3
                         </p>
                         {uploading ? (
                           <p className="text-xs font-medium text-primary">Uploading to S3…</p>
                         ) : null}
-                        {form.image_url ? (
+                        {form.image_urls.length ? (
                           <button
                             type="button"
                             className="inline-flex items-center gap-1 text-xs font-medium text-ink-muted hover:text-accent-red"
                             onClick={() => {
-                              setForm((f) => ({ ...f, image_url: '' }));
+                              setForm((f) => ({ ...f, image_urls: [] }));
                               if (fileRef.current) fileRef.current.value = '';
                             }}
                           >
                             <X className="h-3.5 w-3.5" />
-                            Remove image
+                            Remove all images
                           </button>
                         ) : null}
                       </div>
@@ -389,7 +433,7 @@ export default function AdminProductsPage() {
                   <label className="text-sm sm:col-span-2">
                     <span className="font-medium">Description</span>
                     <textarea
-                      className="mt-1 w-full rounded-lg border border-line px-3 py-2"
+                      className="mt-1 w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink"
                       rows={3}
                       value={form.description}
                       onChange={(e) => setForm({ ...form, description: e.target.value })}
@@ -415,7 +459,7 @@ export default function AdminProductsPage() {
           <div
             role="dialog"
             aria-modal="true"
-            className="w-full max-w-md rounded-xl border border-line bg-white p-6 shadow-lg"
+            className="w-full max-w-md rounded-xl border border-line bg-surface-card p-6 shadow-none"
           >
             <h3 className="font-display text-lg font-bold text-ink">
               {confirmAction.action === 'activate'

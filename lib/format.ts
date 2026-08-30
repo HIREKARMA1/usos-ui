@@ -1,10 +1,11 @@
 export function formatCurrency(value: number, currency = 'INR', locale = 'en-IN'): string {
-  if (Number.isNaN(value)) return '—';
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return '₹0';
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     maximumFractionDigits: 0,
-  }).format(value);
+  }).format(amount);
 }
 
 export function formatNumber(value: number, locale = 'en-IN'): string {

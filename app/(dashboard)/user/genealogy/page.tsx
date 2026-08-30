@@ -26,7 +26,7 @@ export default function GenealogyPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10">
         <Spinner />
       </div>
     );
