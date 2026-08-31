@@ -45,6 +45,8 @@ export interface OverviewStats {
   totalDownline: number;
   activeDownline: number;
   rank: string;
+  kycStatus?: string;
+  kycRejectedReason?: string | null;
 }
 
 export interface TreeMember {
@@ -132,6 +134,55 @@ export interface AdminStats {
   pendingPayouts: number;
   pendingRewards: number;
   monthlyGrowth: number;
+  kycTotal: number;
+  kycPending: number;
+  kycApproved: number;
+  kycRejected: number;
+}
+
+export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected';
+
+export interface KycStats {
+  total: number;
+  pending: number;
+  approved: number;
+  rejected: number;
+}
+
+export interface KycRow {
+  id: string;
+  full_name: string;
+  email: string;
+  phone?: string | null;
+  referral_code?: string | null;
+  pan_number?: string | null;
+  aadhaar_number?: string | null;
+  aadhaar_masked?: string | null;
+  kyc_status: KycStatus;
+  rejected_reason?: string | null;
+  approved_by?: string | null;
+  approved_by_name?: string | null;
+  approved_at?: string | null;
+  submitted_at?: string | null;
+  created_at?: string | null;
+}
+
+export interface KycListResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  items: KycRow[];
+  stats: KycStats;
+}
+
+export interface UserNotification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  read_at?: string | null;
+  created_at?: string | null;
 }
 
 export interface PaymentOrder {

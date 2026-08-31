@@ -2,6 +2,7 @@
   "nav": {
     "analytics": "Analytics",
     "users": "Users",
+    "kyc": "KYC Verification",
     "products": "Products",
     "packages": "Packages",
     "rewards": "Rewards",
@@ -22,6 +23,10 @@
       "totalMembers": "Total Members",
       "activeMembers": "Active Members",
       "pendingRewards": "Pending Rewards",
+      "kycTotal": "Total KYC Requests",
+      "kycPending": "Pending Requests",
+      "kycApproved": "Approved Requests",
+      "kycRejected": "Rejected Requests",
       "totalRevenue": "Total revenue",
       "totalUsers": "Total users",
       "activeUsers": "Active users",
@@ -38,6 +43,7 @@
       "addProduct": "Add Product",
       "searchMember": "Search Member",
       "reviewRewards": "Review Rewards",
+      "reviewKyc": "Review KYC",
       "processPayout": "Process Payout"
     }
   },
@@ -143,5 +149,65 @@
     "resultLabel": "Showing network for",
     "emptyTitle": "Search for a member",
     "emptyDescription": "Enter a name or referral code to view their downline tree."
+  },
+  "kyc": {
+    "title": "KYC Verification",
+    "subtitle": "Review member PAN and Aadhaar submissions.",
+    "breadcrumb": "Users",
+    "searchPlaceholder": "Search by name, user ID, or PAN…",
+    "stats": {
+      "total": "Total KYC Requests",
+      "pending": "Pending Requests",
+      "approved": "Approved Requests",
+      "rejected": "Rejected Requests"
+    },
+    "filters": {
+      "all": "All statuses",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "status": {
+      "not_submitted": "Not submitted",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "table": {
+      "name": "User Name",
+      "userId": "User ID",
+      "email": "Email",
+      "pan": "PAN Number",
+      "aadhaar": "Aadhaar Number",
+      "submitted": "Submission Date",
+      "status": "KYC Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "view": "View Details",
+      "approve": "Approve",
+      "reject": "Reject",
+      "reset": "Reset"
+    },
+    "detailsTitle": "KYC details",
+    "approveTitle": "Approve KYC",
+    "approveConfirm": "Approve KYC for {name}? This will lock their PAN and Aadhaar.",
+    "rejectTitle": "Reject KYC",
+    "rejectConfirm": "Reject KYC for {name}? They will see your reason and can resubmit.",
+    "rejectReasonLabel": "Rejection reason",
+    "rejectReasonPlaceholder": "Explain what the member should correct…",
+    "rejectReasonRequired": "Please enter a rejection reason",
+    "cancel": "Cancel",
+    "confirmApprove": "Yes, approve",
+    "confirmReject": "Yes, reject",
+    "confirmReset": "Yes, reset",
+    "resetTitle": "Reset KYC",
+    "resetConfirm": "Reset KYC for {name}? They will be able to edit and resubmit.",
+    "approved": "KYC approved",
+    "rejected": "KYC rejected",
+    "resetDone": "KYC reset",
+    "loadError": "Could not load KYC requests",
+    "emptyTitle": "No KYC requests",
+    "emptyDescription": "When members submit PAN and Aadhaar, they appear here."
   }
 }

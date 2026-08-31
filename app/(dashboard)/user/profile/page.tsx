@@ -35,6 +35,8 @@ type Profile = {
   package_code?: string | null;
   package_name?: string | null;
   kyc_status?: string;
+  kyc_rejected_reason?: string | null;
+  kyc_submitted_at?: string | null;
   pan_number?: string | null;
   aadhaar_number?: string | null;
   bank_account_name?: string | null;
@@ -293,6 +295,17 @@ export default function ProfilePage() {
       ? `${profile.package_name} (${profile.package_code})`
       : profile?.package_name || profile?.package_code || '—';
 
+  const kycStatus = profile?.kyc_status === 'verified' ? 'approved' : profile?.kyc_status || 'not_submitted';
+  const kycLocked = kycStatus === 'approved';
+  const kycLabels = (t.status || {
+    not_submitted: 'Not submitted',
+    pending: 'Pending',
+    approved: 'Approved',
+    rejected: 'Rejected',
+  }) as Record<string, string>;
+  const kycTone =
+    kycStatus === 'approved' ? 'success' : kycStatus === 'rejected' ? 'danger' : kycStatus === 'pending' ? 'warning' : 'default';
+
   return (
     <div className="space-y-6">
       <div>
@@ -435,16 +448,43 @@ export default function ProfilePage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-bold">{t.kycTitle}</h2>
-          {profile?.kyc_status ? (
-            <Badge tone={profile.kyc_status === 'verified' ? 'success' : 'warning'}>{profile.kyc_status}</Badge>
-          ) : null}
+          <Badge tone={kycTone}>{kycLabels[kycStatus] || kycStatus}</Badge>
         </div>
+        {kycStatus === 'rejected' && profile?.kyc_rejected_reason ? (
+          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
+            <p className="font-semibold">{t.rejectedReasonLabel || 'Rejection reason'}</p>
+            <p className="mt-0.5">{profile.kyc_rejected_reason}</p>
+          </div>
+        ) : null}
+        <p className="mt-3 text-sm text-ink-muted">
+          {kycLocked
+            ? t.kycLocked
+            : kycStatus === 'rejected'
+              ? t.kycRejectedHint
+              : kycStatus === 'pending'
+                ? t.kycPendingHint
+                : t.kycNotSubmittedHint}
+        </p>
         <form onSubmit={saveKyc} className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Input id="pan" label={t.fields.pan} value={pan} onChange={(e) => setPan(e.target.value)} />
-          <Input id="aadhaar" label={t.fields.aadhaar} value={aadhaar} onChange={(e) => setAadhaar(e.target.value)} />
+          <Input
+            id="pan"
+            label={t.fields.pan}
+            value={pan}
+            onChange={(e) => setPan(e.target.value.toUpperCase())}
+            disabled={kycLocked}
+            required
+          />
+          <Input
+            id="aadhaar"
+            label={t.fields.aadhaar}
+            value={aadhaar}
+            onChange={(e) => setAadhaar(e.target.value.replace(/\D/g, '').slice(0, 12))}
+            disabled={kycLocked}
+            required
+          />
           <div className="sm:col-span-2">
-            <Button type="submit" loading={saving}>
-              {t.save}
+            <Button type="submit" loading={saving} disabled={kycLocked}>
+              {t.submitKyc || t.save}
             </Button>
           </div>
         </form>

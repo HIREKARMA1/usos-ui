@@ -2,6 +2,7 @@
   "nav": {
     "analytics": "विश्लेषण",
     "users": "उपयोगकर्ता",
+    "kyc": "KYC सत्यापन",
     "products": "उत्पाद",
     "packages": "पैकेज",
     "rewards": "रिवॉर्ड",
@@ -22,6 +23,10 @@
       "totalMembers": "कुल सदस्य",
       "activeMembers": "सक्रिय सदस्य",
       "pendingRewards": "लंबित रिवॉर्ड",
+      "kycTotal": "कुल KYC अनुरोध",
+      "kycPending": "लंबित अनुरोध",
+      "kycApproved": "स्वीकृत अनुरोध",
+      "kycRejected": "अस्वीकृत अनुरोध",
       "totalRevenue": "कुल राजस्व",
       "totalUsers": "कुल उपयोगकर्ता",
       "activeUsers": "सक्रिय उपयोगकर्ता",
@@ -38,6 +43,7 @@
       "addProduct": "उत्पाद जोड़ें",
       "searchMember": "सदस्य खोजें",
       "reviewRewards": "रिवॉर्ड समीक्षा",
+      "reviewKyc": "KYC समीक्षा",
       "processPayout": "भुगतान प्रक्रिया"
     }
   },
@@ -143,5 +149,65 @@
     "resultLabel": "नेटवर्क दिखा रहे हैं",
     "emptyTitle": "किसी सदस्य को खोजें",
     "emptyDescription": "उनका डाउनलाइन ट्री देखने के लिए नाम या रेफ़रल कोड दर्ज करें।"
+  },
+  "kyc": {
+    "title": "KYC सत्यापन",
+    "subtitle": "सदस्यों के PAN और आधार विवरण की समीक्षा करें।",
+    "breadcrumb": "उपयोगकर्ता",
+    "searchPlaceholder": "नाम, यूज़र ID या PAN से खोजें…",
+    "stats": {
+      "total": "कुल KYC अनुरोध",
+      "pending": "लंबित अनुरोध",
+      "approved": "स्वीकृत अनुरोध",
+      "rejected": "अस्वीकृत अनुरोध"
+    },
+    "filters": {
+      "all": "सभी स्थितियाँ",
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
+    "status": {
+      "not_submitted": "जमा नहीं",
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
+    "table": {
+      "name": "उपयोगकर्ता नाम",
+      "userId": "यूज़र ID",
+      "email": "ईमेल",
+      "pan": "PAN नंबर",
+      "aadhaar": "आधार नंबर",
+      "submitted": "जमा तिथि",
+      "status": "KYC स्थिति",
+      "actions": "कार्रवाई"
+    },
+    "actions": {
+      "view": "विवरण देखें",
+      "approve": "स्वीकृत करें",
+      "reject": "अस्वीकार करें",
+      "reset": "रीसेट"
+    },
+    "detailsTitle": "KYC विवरण",
+    "approveTitle": "KYC स्वीकृत करें",
+    "approveConfirm": "{name} का KYC स्वीकृत करें? PAN और आधार लॉक हो जाएंगे।",
+    "rejectTitle": "KYC अस्वीकार करें",
+    "rejectConfirm": "{name} का KYC अस्वीकार करें? वे कारण देखकर दोबारा जमा कर सकते हैं।",
+    "rejectReasonLabel": "अस्वीकृति का कारण",
+    "rejectReasonPlaceholder": "सदस्य को क्या सुधारना चाहिए, लिखें…",
+    "rejectReasonRequired": "कृपया अस्वीकृति का कारण लिखें",
+    "cancel": "रद्द करें",
+    "confirmApprove": "हाँ, स्वीकृत करें",
+    "confirmReject": "हाँ, अस्वीकार करें",
+    "confirmReset": "हाँ, रीसेट करें",
+    "resetTitle": "KYC रीसेट",
+    "resetConfirm": "{name} का KYC रीसेट करें? वे फिर से संपादित कर सकेंगे।",
+    "approved": "KYC स्वीकृत",
+    "rejected": "KYC अस्वीकृत",
+    "resetDone": "KYC रीसेट हो गया",
+    "loadError": "KYC अनुरोध लोड नहीं हो सके",
+    "emptyTitle": "कोई KYC अनुरोध नहीं",
+    "emptyDescription": "जब सदस्य PAN और आधार जमा करेंगे, वे यहाँ दिखेंगे।"
   }
 }
