@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IndianRupee, Users, UserCheck, Gift, Clock, TrendingUp, Package, Search, Wallet } from 'lucide-react';
+import { IndianRupee, Users, UserCheck, Gift, Clock, TrendingUp, Package, Search, Wallet, ShieldCheck, CheckCircle2, XCircle } from 'lucide-react';
 import { KpiCard } from '@/components/dashboard/admin/KpiCard';
 import { MemberGrowthChart } from '@/components/dashboard/admin/MemberGrowthChart';
 import { RevenueOverviewChart } from '@/components/dashboard/admin/RevenueOverviewChart';
@@ -21,6 +21,10 @@ const EMPTY_STATS: AdminStats = {
   pendingPayouts: 0,
   pendingRewards: 0,
   monthlyGrowth: 0,
+  kycTotal: 0,
+  kycPending: 0,
+  kycApproved: 0,
+  kycRejected: 0,
 };
 
 export default function AdminAnalyticsPage() {
@@ -91,6 +95,10 @@ export default function AdminAnalyticsPage() {
           icon={Gift}
           change={indicators.pendingRewards}
         />
+        <KpiCard label={t.stats.kycTotal || 'Total KYC Requests'} value={formatNumber(data.kycTotal || 0)} icon={ShieldCheck} />
+        <KpiCard label={t.stats.kycPending || 'Pending KYC'} value={formatNumber(data.kycPending || 0)} icon={Clock} />
+        <KpiCard label={t.stats.kycApproved || 'Approved KYC'} value={formatNumber(data.kycApproved || 0)} icon={CheckCircle2} />
+        <KpiCard label={t.stats.kycRejected || 'Rejected KYC'} value={formatNumber(data.kycRejected || 0)} icon={XCircle} />
       </div>
 
       <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
@@ -105,6 +113,7 @@ export default function AdminAnalyticsPage() {
             { href: '/admin/products', label: t.quickActions.addProduct, icon: Package },
             { href: '/admin/users', label: t.quickActions.searchMember, icon: Search },
             { href: '/admin/rewards', label: t.quickActions.reviewRewards, icon: Gift },
+            { href: '/admin/kyc', label: t.quickActions.reviewKyc || 'Review KYC', icon: ShieldCheck },
             { href: '/admin/withdrawals', label: t.quickActions.processPayout, icon: Wallet },
           ]}
         />

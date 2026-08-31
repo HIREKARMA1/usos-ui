@@ -2,6 +2,7 @@
   "nav": {
     "analytics": "ବିଶ୍ଳେଷଣ",
     "users": "ଉପଯୋଗକର୍ତ୍ତା",
+    "kyc": "KYC ଯାଞ୍ଚ",
     "products": "ଉତ୍ପାଦ",
     "packages": "ପ୍ୟାକେଜ",
     "rewards": "ରିୱାର୍ଡ",
@@ -22,6 +23,10 @@
       "totalMembers": "ମୋଟ ସଦସ୍ୟ",
       "activeMembers": "ସକ୍ରିୟ ସଦସ୍ୟ",
       "pendingRewards": "ବିଚାରାଧୀନ ରିୱାର୍ଡ",
+      "kycTotal": "ମୋଟ KYC ଅନୁରୋଧ",
+      "kycPending": "ବିଚାରାଧୀନ ଅନୁରୋଧ",
+      "kycApproved": "ଅନୁମୋଦିତ ଅନୁରୋଧ",
+      "kycRejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ ଅନୁରୋଧ",
       "totalRevenue": "ମୋଟ ରାଜସ୍ୱ",
       "totalUsers": "ମୋଟ ଉପଯୋଗକର୍ତ୍ତା",
       "activeUsers": "ସକ୍ରିୟ ଉପଯୋଗକର୍ତ୍ତା",
@@ -38,6 +43,7 @@
       "addProduct": "ଉତ୍ପାଦ ଯୋଡ଼ନ୍ତୁ",
       "searchMember": "ସଦସ୍ୟ ଖୋଜନ୍ତୁ",
       "reviewRewards": "ରିୱାର୍ଡ ସମୀକ୍ଷା",
+      "reviewKyc": "KYC ସମୀକ୍ଷା",
       "processPayout": "ପେଆଉଟ୍ ପ୍ରକ୍ରିୟା"
     }
   },
@@ -143,5 +149,65 @@
     "resultLabel": "ନେଟୱାର୍କ ଦେଖାଉଛି",
     "emptyTitle": "ସଦସ୍ୟ ଖୋଜନ୍ତୁ",
     "emptyDescription": "ତାଲିକା ଟ୍ରି ଦେଖିବାକୁ ନାମ କିମ୍ବା ରେଫରାଲ କୋଡ୍ ଲେଖନ୍ତୁ।"
+  },
+  "kyc": {
+    "title": "KYC ଯାଞ୍ଚ",
+    "subtitle": "ସଦସ୍ୟଙ୍କ PAN ଓ ଆଧାର ବିବରଣୀ ସମୀକ୍ଷା କରନ୍ତୁ।",
+    "breadcrumb": "ଉପଯୋଗକର୍ତ୍ତା",
+    "searchPlaceholder": "ନାମ, ୟୁଜର୍ ID କିମ୍ବା PAN ଦ୍ୱାରା ଖୋଜନ୍ତୁ…",
+    "stats": {
+      "total": "ମୋଟ KYC ଅନୁରୋଧ",
+      "pending": "ବିଚାରାଧୀନ ଅନୁରୋଧ",
+      "approved": "ଅନୁମୋଦିତ ଅନୁରୋଧ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ ଅନୁରୋଧ"
+    },
+    "filters": {
+      "all": "ସମସ୍ତ ସ୍ଥିତି",
+      "pending": "ବିଚାରାଧୀନ",
+      "approved": "ଅନୁମୋଦିତ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ"
+    },
+    "status": {
+      "not_submitted": "ଦାଖଲ ହୋଇନାହିଁ",
+      "pending": "ବିଚାରାଧୀନ",
+      "approved": "ଅନୁମୋଦିତ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ"
+    },
+    "table": {
+      "name": "ଉପଯୋଗକର୍ତ୍ତା ନାମ",
+      "userId": "ୟୁଜର୍ ID",
+      "email": "ଇମେଲ୍",
+      "pan": "PAN ନମ୍ବର",
+      "aadhaar": "ଆଧାର ନମ୍ବର",
+      "submitted": "ଦାଖଲ ତାରିଖ",
+      "status": "KYC ସ୍ଥିତି",
+      "actions": "କାର୍ଯ୍ୟ"
+    },
+    "actions": {
+      "view": "ବିବରଣୀ ଦେଖନ୍ତୁ",
+      "approve": "ଅନୁମୋଦନ",
+      "reject": "ପ୍ରତ୍ୟାଖ୍ୟାନ",
+      "reset": "ରିସେଟ୍"
+    },
+    "detailsTitle": "KYC ବିବରଣୀ",
+    "approveTitle": "KYC ଅନୁମୋଦନ",
+    "approveConfirm": "{name} ଙ୍କ KYC ଅନୁମୋଦନ କରିବେ? PAN ଓ ଆଧାର ଲକ୍ ହେବ।",
+    "rejectTitle": "KYC ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "rejectConfirm": "{name} ଙ୍କ KYC ପ୍ରତ୍ୟାଖ୍ୟାନ କରିବେ? ସେମାନେ କାରଣ ଦେଖି ପୁଣି ଦାଖଲ କରିପାରିବେ।",
+    "rejectReasonLabel": "ପ୍ରତ୍ୟାଖ୍ୟାନ କାରଣ",
+    "rejectReasonPlaceholder": "ସଦସ୍ୟ କ’ଣ ସୁଧାରିବେ ଲେଖନ୍ତୁ…",
+    "rejectReasonRequired": "ଦୟାକରି ପ୍ରତ୍ୟାଖ୍ୟାନ କାରଣ ଲେଖନ୍ତୁ",
+    "cancel": "ବାତିଲ୍",
+    "confirmApprove": "ହଁ, ଅନୁମୋଦନ",
+    "confirmReject": "ହଁ, ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "confirmReset": "ହଁ, ରିସେଟ୍",
+    "resetTitle": "KYC ରିସେଟ୍",
+    "resetConfirm": "{name} ଙ୍କ KYC ରିସେଟ୍ କରିବେ? ସେମାନେ ପୁଣି ସମ୍ପାଦନା କରିପାରିବେ।",
+    "approved": "KYC ଅନୁମୋଦିତ",
+    "rejected": "KYC ପ୍ରତ୍ୟାଖ୍ୟାତ",
+    "resetDone": "KYC ରିସେଟ୍ ହୋଇଛି",
+    "loadError": "KYC ଅନୁରୋଧ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
+    "emptyTitle": "କୌଣସି KYC ଅନୁରୋଧ ନାହିଁ",
+    "emptyDescription": "ସଦସ୍ୟମାନେ PAN ଓ ଆଧାର ଦାଖଲ କଲେ ଏଠାରେ ଦେଖାଯିବେ।"
   }
 }

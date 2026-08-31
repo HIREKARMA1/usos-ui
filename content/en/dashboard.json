@@ -17,6 +17,11 @@
     "profile": "Profile",
     "logout": "Log out"
   },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet",
+    "markAllRead": "Mark all as read"
+  },
   "overview": {
     "title": "Overview",
     "subtitle": "Track your 4 referral slots, 7-day window, and current rank.",
@@ -35,6 +40,7 @@
       "downline": "Total downline",
       "activeTeam": "Active team",
       "rank": "Current Rank",
+      "kycStatus": "KYC",
       "windowLeft": "Days left in window",
       "qualifiedDirects": "Qualified Directs"
     },
@@ -66,7 +72,10 @@
       "invite": "Invite a member",
       "withdraw": "Withdraw funds",
       "viewTree": "View genealogy",
-      "completeKyc": "Complete KYC"
+      "completeKyc": "Complete KYC",
+      "kycPending": "KYC pending",
+      "kycRejected": "Fix KYC",
+      "kycApproved": "KYC approved"
     }
   },
   "genealogy": {
@@ -213,6 +222,18 @@
     "addressRequired": "Enter or select an address",
     "saveLocation": "Save location",
     "kycStatusLabel": "KYC status",
+    "kycLocked": "KYC is approved. Contact support if you need a change.",
+    "kycRejectedHint": "Your KYC was rejected. Update the details and resubmit.",
+    "kycPendingHint": "Your KYC is under review. You can still correct details until it is approved.",
+    "kycNotSubmittedHint": "Submit your PAN and Aadhaar to complete verification.",
+    "rejectedReasonLabel": "Rejection reason",
+    "submitKyc": "Submit KYC",
+    "status": {
+      "not_submitted": "Not submitted",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
     "save": "Save changes",
     "saved": "Your profile has been updated",
     "saveFailed": "Could not save changes",

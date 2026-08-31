@@ -18,10 +18,12 @@ import {
   Gift,
   ShoppingBag,
   Coins,
+  ShieldCheck,
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { NotificationBell } from './NotificationBell';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
@@ -58,6 +60,7 @@ export function DashboardShell({
   const adminNav: NavItem[] = [
     { href: '/admin', label: admin.nav.analytics, icon: BarChart3 },
     { href: '/admin/users', label: admin.nav.users, icon: Users },
+    { href: '/admin/kyc', label: admin.nav.kyc || 'KYC Verification', icon: ShieldCheck },
     { href: '/admin/products', label: admin.nav.products || 'Products', icon: Package },
     { href: '/admin/packages', label: admin.nav.packages, icon: Package },
     { href: '/admin/rewards', label: admin.nav.rewards, icon: Gift },
@@ -122,6 +125,13 @@ export function DashboardShell({
               </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
+              {mode === 'user' ? (
+                <NotificationBell
+                  title={dash.topbar.notifications}
+                  markAllLabel={dash.notifications?.markAllRead || 'Mark all as read'}
+                  emptyLabel={dash.notifications?.empty || 'No notifications yet'}
+                />
+              ) : null}
               <ThemeToggle />
               <LanguageSwitcher />
               <button

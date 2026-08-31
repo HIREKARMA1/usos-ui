@@ -105,6 +105,7 @@ function NetworkSlot({
 export default function UserOverviewPage() {
   const t = useContent('dashboard').overview;
   const wallet = useContent('dashboard').wallet;
+  const kycLabels = useContent('dashboard').profile?.status as Record<string, string> | undefined;
   const { user } = useAuth();
   const [stats, setStats] = useState<OverviewStats | null>(null);
   const [txns, setTxns] = useState<Transaction[]>([]);
@@ -189,6 +190,24 @@ export default function UserOverviewPage() {
           </span>
         </h1>
         <p className="mt-1 text-xs text-ink-muted sm:text-sm">{t.greetingSubtitle || t.subtitle}</p>
+        {stats?.kycStatus ? (
+          <p className="mt-2 text-xs font-medium sm:text-sm">
+            <span className="text-ink-muted">{t.stats.kycStatus || 'KYC'}: </span>
+            <span
+              className={
+                stats.kycStatus === 'approved'
+                  ? 'text-green'
+                  : stats.kycStatus === 'rejected'
+                    ? 'text-red'
+                    : stats.kycStatus === 'pending'
+                      ? 'text-amber-600'
+                      : 'text-ink-muted'
+              }
+            >
+              {kycLabels?.[stats.kycStatus] || stats.kycStatus}
+            </span>
+          </p>
+        ) : null}
       </div>
 
       <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
@@ -386,8 +405,18 @@ export default function UserOverviewPage() {
               </Button>
             </Link>
             <Link href="/user/profile">
-              <Button className="w-full" variant="primary">
-                {t.quickActions.completeKyc}
+              <Button
+                className="w-full"
+                variant={stats?.kycStatus === 'approved' ? 'outline' : stats?.kycStatus === 'rejected' ? 'danger' : 'primary'}
+                disabled={stats?.kycStatus === 'approved'}
+              >
+                {stats?.kycStatus === 'approved'
+                  ? t.quickActions.kycApproved || 'KYC approved'
+                  : stats?.kycStatus === 'rejected'
+                    ? t.quickActions.kycRejected || t.quickActions.completeKyc
+                    : stats?.kycStatus === 'pending'
+                      ? t.quickActions.kycPending || t.quickActions.completeKyc
+                      : t.quickActions.completeKyc}
               </Button>
             </Link>
           </div>

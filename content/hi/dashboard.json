@@ -14,6 +14,11 @@
     "profile": "प्रोफ़ाइल",
     "logout": "लॉग आउट"
   },
+  "notifications": {
+    "title": "सूचनाएँ",
+    "empty": "अभी कोई सूचना नहीं",
+    "markAllRead": "सभी पढ़ा चिह्नित करें"
+  },
   "overview": {
     "title": "अवलोकन",
     "subtitle": "आज आपका नेटवर्क कैसा प्रदर्शन कर रहा है, यहाँ देखें।",
@@ -23,7 +28,8 @@
       "directReferrals": "प्रत्यक्ष रेफ़रल",
       "downline": "कुल डाउनलाइन",
       "activeTeam": "सक्रिय टीम",
-      "rank": "वर्तमान रैंक"
+      "rank": "वर्तमान रैंक",
+      "kycStatus": "KYC"
     },
     "recentTitle": "हाल के लेन-देन",
     "quickActionsTitle": "त्वरित कार्य",
@@ -31,7 +37,10 @@
       "invite": "सदस्य आमंत्रित करें",
       "withdraw": "धनराशि निकालें",
       "viewTree": "वंशावली देखें",
-      "completeKyc": "KYC पूरा करें"
+      "completeKyc": "KYC पूरा करें",
+      "kycPending": "KYC लंबित",
+      "kycRejected": "KYC सुधारें",
+      "kycApproved": "KYC स्वीकृत"
     }
   },
   "genealogy": {
@@ -177,6 +186,18 @@
     "addressRequired": "पता दर्ज करें या चुनें",
     "saveLocation": "लोकेशन सहेजें",
     "kycStatusLabel": "KYC स्थिति",
+    "kycLocked": "KYC स्वीकृत है। बदलाव के लिए सहायता से संपर्क करें।",
+    "kycRejectedHint": "आपका KYC अस्वीकृत हुआ। विवरण अपडेट कर फिर जमा करें।",
+    "kycPendingHint": "आपका KYC समीक्षा में है। स्वीकृति तक आप विवरण सुधार सकते हैं।",
+    "kycNotSubmittedHint": "सत्यापन पूरा करने के लिए PAN और आधार जमा करें।",
+    "rejectedReasonLabel": "अस्वीकृति का कारण",
+    "submitKyc": "KYC जमा करें",
+    "status": {
+      "not_submitted": "जमा नहीं",
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
     "save": "बदलाव सहेजें",
     "saved": "आपकी प्रोफ़ाइल अपडेट हो गई है",
     "saveFailed": "बदलाव सहेजे नहीं जा सके",

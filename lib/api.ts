@@ -5,6 +5,8 @@ import type {
   AdminStats,
   AdminUserRow,
   AuthUser,
+  KycListResponse,
+  KycRow,
   OverviewStats,
   PackagePlan,
   PaymentOrder,
@@ -13,6 +15,7 @@ import type {
   TokenResponse,
   Transaction,
   TreeMember,
+  UserNotification,
   UserRole,
 } from '@/types';
 
@@ -166,6 +169,8 @@ class ApiClient {
       totalDownline: d.total_downline || 0,
       activeDownline: d.active_downline || 0,
       rank,
+      kycStatus: d.kyc_status || 'not_submitted',
+      kycRejectedReason: d.kyc_rejected_reason || null,
     };
   }
 
@@ -239,6 +244,10 @@ class ApiClient {
       pendingPayouts: (d.pending_payouts_paise || 0) / 100,
       pendingRewards: d.pending_rewards || 0,
       monthlyGrowth: 0,
+      kycTotal: d.kyc_total || 0,
+      kycPending: d.kyc_pending || 0,
+      kycApproved: d.kyc_approved || 0,
+      kycRejected: d.kyc_rejected || 0,
     };
   }
 
@@ -456,6 +465,50 @@ class ApiClient {
 
   async rejectWithdrawal(id: string, note?: string) {
     return this.post(`/api/v1/wallet/admin/withdrawals/${id}/reject`, { note: note || null });
+  }
+
+  async getKycStatus() {
+    return this.get<{
+      kyc_status: string;
+      pan_number?: string | null;
+      aadhaar_number?: string | null;
+      rejected_reason?: string | null;
+      approved_at?: string | null;
+      submitted_at?: string | null;
+      editable: boolean;
+    }>('/api/v1/users/me/kyc-status');
+  }
+
+  async getAdminKyc(params?: { q?: string; status?: string; page?: number; page_size?: number }) {
+    return this.get<KycListResponse>('/api/v1/admin/kyc', params);
+  }
+
+  async getAdminKycDetail(userId: string) {
+    return this.get<KycRow>(`/api/v1/admin/kyc/${userId}`);
+  }
+
+  async approveKyc(userId: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/approve`);
+  }
+
+  async rejectKyc(userId: string, reason: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/reject`, { reason });
+  }
+
+  async resetKyc(userId: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/reset`);
+  }
+
+  async getNotifications() {
+    return this.get<{ unread_count: number; items: UserNotification[] }>('/api/v1/users/me/notifications');
+  }
+
+  async markNotificationRead(id: string) {
+    return this.post<UserNotification>(`/api/v1/users/me/notifications/${id}/read`);
+  }
+
+  async markAllNotificationsRead() {
+    return this.post<{ updated: number }>('/api/v1/users/me/notifications/read-all');
   }
 }
 
