@@ -15,6 +15,7 @@ export const ROUTES = {
   register: '/register',
   userDashboard: '/user',
   adminDashboard: '/admin',
+  payment: '/payment',
 } as const;
 
 export const BINARY_SIDES = ['left', 'right'] as const;
