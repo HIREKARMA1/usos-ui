@@ -21,4 +21,6 @@ npm run dev
 
 App: http://localhost:3000
 
+Production VPS install: see [`DEPLOYMENT.md`](../DEPLOYMENT.md).
+
 Point `NEXT_PUBLIC_API_URL` at `usos-server` (default `http://localhost:8000`).
