@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { clearSession } from './auth';
+import { isPaymentRequiredError, PAYMENT_PATH } from './access';
 import { env, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
@@ -76,6 +77,12 @@ class ApiClient {
     this.client.interceptors.response.use(
       (res) => res,
       (error: AxiosError) => {
+        if (typeof window !== 'undefined' && isPaymentRequiredError(error)) {
+          if (!window.location.pathname.startsWith(PAYMENT_PATH)) {
+            window.location.href = `${PAYMENT_PATH}?reason=pending`;
+          }
+          return Promise.reject(error);
+        }
         if (error.response?.status === 401 && typeof window !== 'undefined') {
           // Clear token + user together so admin UI cannot stay "logged in" without auth.
           clearSession();

@@ -10,12 +10,12 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
-import { api, roleHome } from '@/lib/api';
+import { api } from '@/lib/api';
 import { env } from '@/lib/constants';
-import { PayUCheckoutForm } from './PayUCheckoutForm';
+import { needsPayment, postAuthPath } from '@/lib/access';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import Link from 'next/link';
-import type { PaymentOrder, TokenResponse } from '@/types';
+import type { TokenResponse } from '@/types';
 
 export function LoginForm() {
   const t = useContent('auth').login;
@@ -29,26 +29,24 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [checkout, setCheckout] = useState<PaymentOrder | null>(null);
   const googleEnabled = Boolean(env.googleClientId.trim());
 
-  function afterLoginDestination(role: TokenResponse['role']) {
-    if (nextPath.startsWith('/') && !nextPath.startsWith('//')) {
+  function afterLoginDestination(user: TokenResponse['user']) {
+    if (!needsPayment(user) && nextPath.startsWith('/') && !nextPath.startsWith('//')) {
       return nextPath;
     }
-    return roleHome(role);
+    return postAuthPath(user);
   }
 
-  async function finishAuth(res: TokenResponse) {
+  function finishAuth(res: TokenResponse) {
     loginSuccess(res.access_token, res.user);
-    if (res.user.status === 'pending') {
+    if (needsPayment(res.user)) {
       toast.success(t.resumePayment || pay.redirecting);
-      const order = await api.createPaymentOrder();
-      setCheckout(order);
+      router.push('/payment?autostart=1');
       return;
     }
     toast.success(t.success);
-    router.push(afterLoginDestination(res.role));
+    router.push(afterLoginDestination(res.user));
   }
 
   async function onSubmit(e: FormEvent) {
@@ -62,7 +60,7 @@ export function LoginForm() {
     setLoading(true);
     try {
       const res = await api.login(email.trim(), password);
-      await finishAuth(res);
+      finishAuth(res);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       const msg =
@@ -85,26 +83,13 @@ export function LoginForm() {
     setLoading(true);
     try {
       const res = await api.googleAuth({ id_token: response.credential });
-      await finishAuth(res);
+      finishAuth(res);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       toast.error(typeof detail === 'string' ? detail : t.googleError || t.error);
     } finally {
       setLoading(false);
     }
-  }
-
-  if (checkout) {
-    return (
-      <Card className="w-full max-w-md">
-        <p className="section-eyebrow">{pay.eyebrow}</p>
-        <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{pay.title}</h1>
-        <p className="mt-1 text-sm text-ink-muted">{pay.subtitle}</p>
-        <p className="mt-4 text-sm text-ink-muted">{pay.redirecting}</p>
-        <PayUCheckoutForm action={checkout.action} fields={checkout.fields} buttonLabel={pay.manualButton} />
-        <p className="mt-4 text-center text-xs text-ink-muted">{pay.securedBy}</p>
-      </Card>
-    );
   }
 
   return (

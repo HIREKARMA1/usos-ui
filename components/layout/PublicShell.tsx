@@ -8,7 +8,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
-import { roleHome } from '@/lib/api';
+import { needsPayment, postAuthPath } from '@/lib/access';
 
 export function AuthShell({ children }: { children: ReactNode }) {
   const common = useContent('common');
@@ -32,8 +32,14 @@ export function AuthShell({ children }: { children: ReactNode }) {
 export function PublicHeader() {
   const common = useContent('common');
   const { user, loading, isAuthenticated } = useAuth();
-  const dashboardHref = user ? roleHome(user.role) : '/user';
-  const profileHref = user?.role === 'admin' ? '/admin' : '/user/profile';
+  const dashboardHref = user ? postAuthPath(user) : '/user';
+  const pending = needsPayment(user);
+  const shopHref = pending ? '/payment?reason=pending' : '/shop';
+  const profileHref = pending
+    ? '/payment?reason=pending'
+    : user?.role === 'admin'
+      ? '/admin'
+      : '/user/profile';
 
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-surface-card/90 backdrop-blur">
@@ -49,7 +55,7 @@ export function PublicHeader() {
           <a href="/#packages" className="hover:text-primary">
             {common.nav.packages}
           </a>
-          <Link href="/shop" className="hover:text-primary">
+          <Link href={shopHref} className="hover:text-primary">
             {common.nav.shop || 'Shop'}
           </Link>
         </nav>
@@ -57,7 +63,7 @@ export function PublicHeader() {
           <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <Link
-            href="/shop/cart"
+            href={pending ? '/payment?reason=pending' : '/shop/cart'}
             aria-label="Cart"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink hover:bg-surface-muted hover:text-primary"
           >
@@ -116,10 +122,12 @@ export function PublicFooter() {
             {isAuthenticated && user ? (
               <>
                 <li>
-                  <Link href={roleHome(user.role)}>{common.nav.dashboard}</Link>
+                  <Link href={postAuthPath(user)}>{common.nav.dashboard}</Link>
                 </li>
                 <li>
-                  <Link href="/shop">{common.nav.shop || 'Shop'}</Link>
+                  <Link href={needsPayment(user) ? '/payment?reason=pending' : '/shop'}>
+                    {common.nav.shop || 'Shop'}
+                  </Link>
                 </li>
               </>
             ) : (

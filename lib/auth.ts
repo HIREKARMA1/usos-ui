@@ -1,16 +1,19 @@
 import { TOKEN_KEY, USER_KEY } from './constants';
+import { persistPaymentGateCookie } from './access';
 import type { AuthUser } from '@/types';
 
 export function saveSession(token: string, user: AuthUser): void {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(TOKEN_KEY, token);
   window.localStorage.setItem(USER_KEY, JSON.stringify(user));
+  persistPaymentGateCookie(user);
 }
 
 export function clearSession(): void {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(TOKEN_KEY);
   window.localStorage.removeItem(USER_KEY);
+  persistPaymentGateCookie(null);
 }
 
 export function getStoredUser(): AuthUser | null {

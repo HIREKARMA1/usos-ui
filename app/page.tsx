@@ -7,7 +7,7 @@ import { PublicFooter, PublicHeader } from '@/components/layout/PublicShell';
 import { Button } from '@/components/ui/Button';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
-import { roleHome } from '@/lib/api';
+import { postAuthPath } from '@/lib/access';
 
 const featureIcons = [Network, Wallet, Gift, ShieldCheck, BadgeCheck, Languages];
 
@@ -16,7 +16,7 @@ export default function LandingPage() {
   const packages = useContent('packages');
   const common = useContent('common');
   const { user, isAuthenticated } = useAuth();
-  const dash = user ? roleHome(user.role) : '/user';
+  const dash = user ? postAuthPath(user) : '/user';
 
   return (
     <div className="min-h-screen bg-surface-page">
