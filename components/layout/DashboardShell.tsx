@@ -14,6 +14,7 @@ import {
   X,
   LogOut,
   Package,
+  Boxes,
   BarChart3,
   Gift,
   ShoppingBag,
@@ -62,7 +63,7 @@ export function DashboardShell({
     { href: '/admin/users', label: admin.nav.users, icon: Users },
     { href: '/admin/kyc', label: admin.nav.kyc || 'KYC Verification', icon: ShieldCheck },
     { href: '/admin/products', label: admin.nav.products || 'Products', icon: Package },
-    { href: '/admin/packages', label: admin.nav.packages, icon: Package },
+    { href: '/admin/packages', label: admin.nav.packages, icon: Boxes },
     { href: '/admin/rewards', label: admin.nav.rewards, icon: Gift },
     { href: '/admin/withdrawals', label: admin.nav.withdrawals || 'Withdrawals', icon: Wallet },
     { href: '/admin/genealogy', label: admin.nav.genealogy, icon: Network },
@@ -71,7 +72,7 @@ export function DashboardShell({
   const items = mode === 'admin' ? adminNav : userNav;
 
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
-    <nav className="flex flex-col gap-1 p-3">
+    <nav className="flex flex-col gap-1.5 p-3">
       {items.map((item) => {
         const active = pathname === item.href;
         const Icon = item.icon;
@@ -81,11 +82,13 @@ export function DashboardShell({
             href={item.href}
             onClick={onNavigate}
             className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition',
-              active ? 'bg-primary text-white' : 'text-ink-secondary hover:bg-surface-muted hover:text-ink'
+              'flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition duration-200',
+              active
+                ? 'bg-primary text-white shadow-sm'
+                : 'text-ink-secondary hover:bg-surface-muted hover:text-ink'
             )}
           >
-            <Icon className="h-4 w-4 shrink-0" />
+            <Icon className="h-4 w-4 shrink-0" strokeWidth={1.75} />
             {item.label}
           </Link>
         );
@@ -119,9 +122,9 @@ export function DashboardShell({
               <div className="lg:hidden">
                 <BrandLogo href={mode === 'admin' ? '/admin' : '/user'} />
               </div>
-              <p className="hidden text-sm text-ink-muted sm:block">
+              <p className="hidden text-sm font-medium text-ink sm:block">
                 {dash.topbar.welcome}
-                {user?.name ? `, ${user.name}` : ''}
+                {user?.name ? `, ${user.name}` : ''} 👋
               </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
@@ -140,7 +143,7 @@ export function DashboardShell({
                   logout();
                   router.push('/login');
                 }}
-                className="inline-flex items-center gap-2 rounded-lg border border-line px-3 py-2 text-sm font-medium text-ink hover:bg-surface-muted"
+                className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface-card px-3 py-2 text-sm font-medium text-ink transition hover:bg-surface-muted"
               >
                 <LogOut className="h-4 w-4" />
                 <span className="hidden sm:inline">{dash.topbar.logout}</span>

@@ -8,8 +8,7 @@ import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
 import { formatCurrency, formatDate, getInitials } from '@/lib/format';
-import { PACKAGE_IDS, type PackageId } from '@/lib/constants';
-import type { AccountStatus, AdminUserRow } from '@/types';
+import type { AccountStatus, AdminUserRow, PackagePlan } from '@/types';
 
 const PAGE_SIZE = 8;
 
@@ -29,7 +28,7 @@ const iconBtnClass =
   'flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface-muted text-ink-muted transition duration-300 hover:bg-surface-soft hover:text-ink disabled:pointer-events-none disabled:opacity-30 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60 dark:hover:bg-white/[0.08] dark:hover:text-white';
 
 type StatusFilter = 'all' | 'active' | 'inactive';
-type PackageFilter = 'all' | PackageId;
+type PackageFilter = 'all' | string;
 
 function avatarGradient(name: string) {
   const index = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
@@ -127,6 +126,7 @@ export default function AdminUsersPage() {
   const t = useContent('admin').users;
   const common = useContent('common');
   const [rows, setRows] = useState<AdminUserRow[]>([]);
+  const [packages, setPackages] = useState<PackagePlan[]>([]);
   const [q, setQ] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [packageFilter, setPackageFilter] = useState<PackageFilter>('all');
@@ -148,6 +148,8 @@ export default function AdminUsersPage() {
         });
       }
       setRows(data);
+      const pkgs = await api.getPackages({ activeOnly: false }).catch(() => [] as PackagePlan[]);
+      setPackages(pkgs);
     } finally {
       setLoading(false);
     }
@@ -160,6 +162,18 @@ export default function AdminUsersPage() {
   useEffect(() => {
     setPage(1);
   }, [q, statusFilter, packageFilter]);
+
+  const packageOptions = useMemo(() => {
+    if (packages.length) return packages.map((p) => ({ code: p.code, name: p.name }));
+    const codes = Array.from(new Set(rows.map((r) => r.packageId).filter(Boolean)));
+    return codes.map((code) => ({ code, name: code }));
+  }, [packages, rows]);
+
+  const packageNameByCode = useMemo(() => {
+    const map = new Map<string, string>();
+    packageOptions.forEach((p) => map.set(p.code, p.name));
+    return map;
+  }, [packageOptions]);
 
   const filtered = useMemo(
     () =>
@@ -241,9 +255,9 @@ export default function AdminUsersPage() {
                     className={cn(controlClass, 'appearance-none py-2 pl-3 pr-8')}
                   >
                     <option value="all">{t.table.package}: All</option>
-                    {PACKAGE_IDS.map((id) => (
-                      <option key={id} value={id}>
-                        Package {id}
+                    {packageOptions.map((pkg) => (
+                      <option key={pkg.code} value={pkg.code}>
+                        {pkg.name}
                       </option>
                     ))}
                   </select>
@@ -328,7 +342,7 @@ export default function AdminUsersPage() {
                           </td>
                           <td className="px-4 py-4 text-ink-secondary dark:text-white/70">{u.phone || '—'}</td>
                           <td className="px-4 py-4 font-medium text-ink dark:text-white/80">
-                            Package {u.packageId}
+                            {packageNameByCode.get(u.packageId) || u.packageId || '—'}
                           </td>
                           <td className="px-4 py-4 text-right font-medium text-emerald-600 dark:text-[#22C55E]">
                             {formatCurrency(getUserEarnings(u))}
