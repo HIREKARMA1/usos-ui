@@ -81,13 +81,18 @@ export interface Referral {
 }
 
 export interface PackagePlan {
-  id: PackageId;
+  id: string;
+  code: string;
   name: string;
   price: number;
   description: string;
   features: string[];
   badge?: string;
   stock?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  imageUrl?: string;
+  items?: { name: string; quantity: number }[];
 }
 
 export interface Milestone {

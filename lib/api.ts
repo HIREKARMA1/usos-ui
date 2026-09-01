@@ -59,6 +59,36 @@ export function mapAuthUser(d: {
   };
 }
 
+function mapPackage(p: any): PackagePlan {
+  return {
+    id: String(p.id),
+    code: p.code,
+    name: p.name,
+    price: (p.price_paise || 0) / 100,
+    description: p.description || '',
+    features: (p.items || []).map((i: any) => i.name),
+    stock: p.stock_count,
+    isActive: p.is_active !== false,
+    createdAt: p.created_at,
+    imageUrl: p.image_url || '',
+    items: (p.items || []).map((i: any) => ({
+      name: i.name,
+      quantity: Number(i.quantity ?? 1),
+    })),
+  };
+}
+
+export type PackagePayload = {
+  code?: string;
+  name?: string;
+  description?: string | null;
+  image_url?: string | null;
+  price_paise?: number;
+  stock_count?: number;
+  is_active?: boolean;
+  items?: { name: string; quantity: number }[];
+};
+
 class ApiClient {
   readonly client: AxiosInstance;
 
@@ -229,16 +259,38 @@ class ApiClient {
     }));
   }
 
-  async getPackages(): Promise<PackagePlan[]> {
-    const rows = await this.get<any[]>('/api/v1/packages');
-    return (rows || []).map((p) => ({
-      id: p.code,
-      name: p.name,
-      price: (p.price_paise || 0) / 100,
-      description: p.description || '',
-      features: (p.items || []).map((i: any) => i.name),
-      stock: p.stock_count,
-    }));
+  async getPackages(opts?: { activeOnly?: boolean }): Promise<PackagePlan[]> {
+    const activeOnly = opts?.activeOnly !== false;
+    const rows = await this.get<any[]>('/api/v1/packages', { active_only: activeOnly });
+    return (rows || []).map(mapPackage);
+  }
+
+  async createPackage(data: PackagePayload): Promise<PackagePlan> {
+    const row = await this.post<any>('/api/v1/packages', data);
+    return mapPackage(row);
+  }
+
+  async updatePackage(id: string, data: PackagePayload): Promise<PackagePlan> {
+    const row = await this.patch<any>(`/api/v1/packages/${id}`, data);
+    return mapPackage(row);
+  }
+
+  async duplicatePackage(id: string): Promise<PackagePlan> {
+    const row = await this.post<any>(`/api/v1/packages/${id}/duplicate`);
+    return mapPackage(row);
+  }
+
+  async deletePackage(id: string): Promise<void> {
+    await this.delete(`/api/v1/packages/${id}`);
+  }
+
+  async uploadPackageImage(file: File) {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await this.client.post<{ url: string }>('/api/v1/uploads/packages', body, {
+      headers: { 'Content-Type': false as unknown as string },
+    });
+    return res.data;
   }
 
   async getAdminStats(): Promise<AdminStats> {
@@ -272,7 +324,7 @@ class ApiClient {
         name: u.full_name,
         email: u.email,
         phone: u.phone || '',
-        packageId: (u.package_code || 'A') as PackageId,
+        packageId: (u.package_code || '') as PackageId,
         status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
         joinedAt: u.created_at,
         totalEarningsPaise,

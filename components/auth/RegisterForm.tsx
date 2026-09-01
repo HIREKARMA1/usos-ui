@@ -33,7 +33,9 @@ export function RegisterForm() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [packageCode, setPackageCode] = useState('A');
+  const [packageCode, setPackageCode] = useState(
+    () => (search.get('package') || packagesContent.items[0]?.id || '').toString()
+  );
   const [sponsor, setSponsor] = useState(refFromLink);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -44,11 +46,23 @@ export function RegisterForm() {
   }, [refFromLink]);
 
   useEffect(() => {
-    api.getPackages().then(setApiPackages).catch(() => undefined);
-  }, []);
+    api
+      .getPackages()
+      .then((pkgs) => {
+        setApiPackages(pkgs);
+        const requested = (search.get('package') || '').trim();
+        const match = pkgs.find((p) => p.code === requested || p.id === requested);
+        setPackageCode((current) => {
+          if (match) return match.code;
+          if (current && pkgs.some((p) => p.code === current)) return current;
+          return pkgs[0]?.code || current;
+        });
+      })
+      .catch(() => undefined);
+  }, [search]);
 
   const packageOptions = (apiPackages.length ? apiPackages : packagesContent.items).map((p: any) => ({
-    value: p.id || p.code,
+    value: p.code || p.id,
     label: `${p.name} — ₹${p.price}`,
   }));
 

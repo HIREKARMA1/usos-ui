@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Network, Wallet, ShieldCheck, Gift, Languages, BadgeCheck } from 'lucide-react';
@@ -8,6 +9,8 @@ import { Button } from '@/components/ui/Button';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { postAuthPath } from '@/lib/access';
+import { api } from '@/lib/api';
+import type { PackagePlan } from '@/types';
 
 const featureIcons = [Network, Wallet, Gift, ShieldCheck, BadgeCheck, Languages];
 
@@ -17,6 +20,16 @@ export default function LandingPage() {
   const common = useContent('common');
   const { user, isAuthenticated } = useAuth();
   const dash = user ? postAuthPath(user) : '/user';
+  const [livePackages, setLivePackages] = useState<PackagePlan[] | null>(null);
+
+  useEffect(() => {
+    api
+      .getPackages()
+      .then(setLivePackages)
+      .catch(() => setLivePackages(null));
+  }, []);
+
+  const packageCards = livePackages && livePackages.length ? livePackages : packages.items;
 
   return (
     <div className="min-h-screen bg-surface-page">
@@ -129,8 +142,11 @@ export default function LandingPage() {
         <h2 className="section-title mt-2">{landing.packages.title}</h2>
         <p className="mt-3 max-w-2xl text-ink-muted">{landing.packages.subtitle}</p>
         <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {packages.items.map((pkg: any) => (
-            <div key={pkg.id} className="rounded-xl border border-line bg-surface-card p-6 shadow-none">
+          {packageCards.map((pkg: any, idx: number) => {
+            const code = pkg.code || pkg.id;
+            const features: string[] = pkg.features || (pkg.items || []).map((i: { name: string }) => i.name);
+            return (
+            <div key={code} className="rounded-xl border border-line bg-surface-card p-6 shadow-none">
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <h3 className="font-display text-2xl font-bold text-ink">{pkg.name}</h3>
@@ -139,17 +155,18 @@ export default function LandingPage() {
                 <p className="font-display text-3xl font-extrabold text-primary">₹{pkg.price}</p>
               </div>
               <ul className="mt-5 grid gap-2 sm:grid-cols-2">
-                {pkg.features.map((f: string) => (
+                {features.map((f: string) => (
                   <li key={f} className="text-sm text-ink-secondary">
                     • {f}
                   </li>
                 ))}
               </ul>
-              <Link href={`/register?package=${pkg.id}`} className="mt-6 inline-block">
-                <Button variant={pkg.id === 'B' ? 'accent' : 'primary'}>{packages.selectLabel}</Button>
+              <Link href={`/register?package=${code}`} className="mt-6 inline-block">
+                <Button variant={idx === 1 ? 'accent' : 'primary'}>{packages.selectLabel}</Button>
               </Link>
             </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
