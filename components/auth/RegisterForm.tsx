@@ -13,15 +13,12 @@ import { Card } from '@/components/ui/Card';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
-import { saveSession } from '@/lib/auth';
 import { env } from '@/lib/constants';
-import { PayUCheckoutForm } from './PayUCheckoutForm';
 import { GoogleSignInButton } from './GoogleSignInButton';
-import type { PackagePlan, PaymentOrder, TokenResponse } from '@/types';
+import type { PackagePlan, TokenResponse } from '@/types';
 
 export function RegisterForm() {
   const t = useContent('auth').register;
-  const pay = useContent('auth').payment;
   const v = useContent('auth').validation;
   const packagesContent = useContent('packages');
   const search = useSearchParams();
@@ -36,11 +33,12 @@ export function RegisterForm() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [packageCode, setPackageCode] = useState('A');
+  const [packageCode, setPackageCode] = useState(
+    () => (search.get('package') || packagesContent.items[0]?.id || '').toString()
+  );
   const [sponsor, setSponsor] = useState(refFromLink);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [checkout, setCheckout] = useState<PaymentOrder | null>(null);
   const [apiPackages, setApiPackages] = useState<PackagePlan[]>([]);
 
   useEffect(() => {
@@ -48,21 +46,23 @@ export function RegisterForm() {
   }, [refFromLink]);
 
   useEffect(() => {
-    api.getPackages().then(setApiPackages).catch(() => undefined);
-  }, []);
-
-  useEffect(() => {
-    const status = search.get('payment');
-    if (status === 'success') {
-      toast.success(pay.redirecting);
-      router.push('/user');
-    } else if (status === 'failed') {
-      toast.error(search.get('message') || pay.error);
-    }
-  }, [search, pay, router]);
+    api
+      .getPackages()
+      .then((pkgs) => {
+        setApiPackages(pkgs);
+        const requested = (search.get('package') || '').trim();
+        const match = pkgs.find((p) => p.code === requested || p.id === requested);
+        setPackageCode((current) => {
+          if (match) return match.code;
+          if (current && pkgs.some((p) => p.code === current)) return current;
+          return pkgs[0]?.code || current;
+        });
+      })
+      .catch(() => undefined);
+  }, [search]);
 
   const packageOptions = (apiPackages.length ? apiPackages : packagesContent.items).map((p: any) => ({
-    value: p.id || p.code,
+    value: p.code || p.id,
     label: `${p.name} — ₹${p.price}`,
   }));
 
@@ -70,17 +70,15 @@ export function RegisterForm() {
     return (sponsorLocked ? refFromLink : sponsor.trim().toUpperCase()) || undefined;
   }
 
-  async function goToPayU(res: TokenResponse, message: string) {
+  function goToPayment(res: TokenResponse, message: string) {
     loginSuccess(res.access_token, res.user);
-    saveSession(res.access_token, res.user);
     toast.success(message);
-    const order = await api.createPaymentOrder();
-    setCheckout(order);
+    router.push('/payment?autostart=1');
   }
 
-  async function startPayU(message: string) {
+  async function startPayment(message: string) {
     const tokens = await api.login(email.trim(), password);
-    await goToPayU(tokens, message);
+    goToPayment(tokens, message);
   }
 
   function validateForGoogle(): boolean {
@@ -110,7 +108,7 @@ export function RegisterForm() {
         sponsor_referral_code: sponsorCode(),
         full_name: fullName.trim() || undefined,
       });
-      await goToPayU(res, t.success);
+      goToPayment(res, t.success);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       toast.error(typeof detail === 'string' ? detail : t.googleError || t.error);
@@ -150,7 +148,7 @@ export function RegisterForm() {
       if (code) payload.sponsor_referral_code = code;
       const registered = await api.register(payload);
       const resumed = Boolean((registered as { resumed?: boolean })?.resumed);
-      await startPayU(resumed ? t.resumePayment || t.success : t.success);
+      await startPayment(resumed ? t.resumePayment || t.success : t.success);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       const msg =
@@ -163,19 +161,6 @@ export function RegisterForm() {
     } finally {
       setLoading(false);
     }
-  }
-
-  if (checkout) {
-    return (
-      <Card className="w-full max-w-md">
-        <p className="section-eyebrow">{pay.eyebrow}</p>
-        <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{pay.title}</h1>
-        <p className="mt-1 text-sm text-ink-muted">{pay.subtitle}</p>
-        <p className="mt-4 text-sm text-ink-muted">{pay.redirecting}</p>
-        <PayUCheckoutForm action={checkout.action} fields={checkout.fields} buttonLabel={pay.manualButton} />
-        <p className="mt-4 text-center text-xs text-ink-muted">{pay.securedBy}</p>
-      </Card>
-    );
   }
 
   return (

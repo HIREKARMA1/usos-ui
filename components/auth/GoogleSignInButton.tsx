@@ -62,7 +62,7 @@ export function GoogleSignInButton({ label, onSuccess, onError, disabled }: Goog
         />
       </div>
       <div
-        className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-3 rounded-lg border border-line bg-white px-4 text-sm font-semibold text-ink"
+        className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center gap-3 rounded-lg border border-line bg-surface-card px-4 text-sm font-semibold text-ink"
         aria-hidden
       >
         <GoogleIcon className="h-5 w-5 shrink-0" />

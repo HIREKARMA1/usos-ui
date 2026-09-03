@@ -14,6 +14,11 @@
     "profile": "प्रोफ़ाइल",
     "logout": "लॉग आउट"
   },
+  "notifications": {
+    "title": "सूचनाएँ",
+    "empty": "अभी कोई सूचना नहीं",
+    "markAllRead": "सभी पढ़ा चिह्नित करें"
+  },
   "overview": {
     "title": "अवलोकन",
     "subtitle": "आज आपका नेटवर्क कैसा प्रदर्शन कर रहा है, यहाँ देखें।",
@@ -23,7 +28,8 @@
       "directReferrals": "प्रत्यक्ष रेफ़रल",
       "downline": "कुल डाउनलाइन",
       "activeTeam": "सक्रिय टीम",
-      "rank": "वर्तमान रैंक"
+      "rank": "वर्तमान रैंक",
+      "kycStatus": "KYC"
     },
     "recentTitle": "हाल के लेन-देन",
     "quickActionsTitle": "त्वरित कार्य",
@@ -31,7 +37,10 @@
       "invite": "सदस्य आमंत्रित करें",
       "withdraw": "धनराशि निकालें",
       "viewTree": "वंशावली देखें",
-      "completeKyc": "KYC पूरा करें"
+      "completeKyc": "KYC पूरा करें",
+      "kycPending": "KYC लंबित",
+      "kycRejected": "KYC सुधारें",
+      "kycApproved": "KYC स्वीकृत"
     }
   },
   "genealogy": {
@@ -68,8 +77,18 @@
     "requestsTitle": "निकासी अनुरोध",
     "requestsSubtitle": "एडमिन स्वीकृति के बाद राशि आपके बैंक में स्वतः भेजी जाएगी।",
     "noRequests": "अभी कोई निकासी अनुरोध नहीं।",
-    "totalEarned": "कुल अर्जित",
+    "totalEarned": "कुल कमाई",
     "totalWithdrawn": "कुल निकाला गया",
+    "pendingWithdrawals": "लंबित निकासी",
+    "recentTransactions": "हाल की लेन-देन",
+    "viewAll": "सभी देखें",
+    "credit": "क्रेडिट",
+    "debit": "डेबिट",
+    "tabs": {
+      "overview": "अवलोकन",
+      "transactions": "लेन-देन",
+      "withdrawals": "निकासी"
+    },
     "table": {
       "date": "तारीख़",
       "type": "प्रकार",
@@ -91,18 +110,33 @@
   "referrals": {
     "title": "रेफ़रल",
     "subtitle": "अपना लिंक साझा करें और अपने द्वारा जोड़े गए सभी लोगों को ट्रैक करें।",
+    "myReferralsTitle": "मेरे रेफ़रल",
+    "slotsUsed": "{used} / {max} स्लॉट उपयोग में",
     "yourCodeLabel": "आपका रेफ़रल कोड",
     "yourLinkLabel": "आपका रेफ़रल लिंक",
+    "copy": "कॉपी",
+    "share": "शेयर",
+    "shareTitle": "मेरे रेफ़रल से जुड़ें",
+    "shareText": "मेरे रेफ़रल लिंक से साइन अप करें",
     "copyCode": "कोड कॉपी करें",
     "copyLink": "लिंक कॉपी करें",
     "copied": "क्लिपबोर्ड पर कॉपी हो गया",
+    "slotsLabel": "रेफ़रल स्लॉट",
+    "slotsFull": "सभी 4 स्लॉट भर गए — आपका प्रत्यक्ष रेफ़रल काम पूरा हो गया।",
+    "windowLabel": "योग्यता विंडो",
     "directTeamTitle": "आपकी प्रत्यक्ष टीम",
+    "listTitle": "रेफ़रल सूची",
     "table": {
       "name": "नाम",
       "joined": "शामिल हुए",
       "code": "कोड",
       "package": "पैकेज",
       "status": "स्थिति"
+    },
+    "status": {
+      "active": "सक्रिय",
+      "pending": "भुगतान लंबित",
+      "inactive": "निष्क्रिय"
     },
     "emptyTitle": "अभी कोई रेफ़रल नहीं",
     "emptyDescription": "अपनी प्रत्यक्ष टीम बनाना शुरू करने के लिए अपना लिंक साझा करें।"
@@ -152,21 +186,39 @@
     "addressRequired": "पता दर्ज करें या चुनें",
     "saveLocation": "लोकेशन सहेजें",
     "kycStatusLabel": "KYC स्थिति",
+    "kycLocked": "KYC स्वीकृत है। बदलाव के लिए सहायता से संपर्क करें।",
+    "kycRejectedHint": "आपका KYC अस्वीकृत हुआ। विवरण अपडेट कर फिर जमा करें।",
+    "kycPendingHint": "आपका KYC समीक्षा में है। स्वीकृति तक आप विवरण सुधार सकते हैं।",
+    "kycNotSubmittedHint": "सत्यापन पूरा करने के लिए PAN और आधार जमा करें।",
+    "rejectedReasonLabel": "अस्वीकृति का कारण",
+    "submitKyc": "KYC जमा करें",
+    "status": {
+      "not_submitted": "जमा नहीं",
+      "pending": "लंबित",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
     "save": "बदलाव सहेजें",
     "saved": "आपकी प्रोफ़ाइल अपडेट हो गई है",
     "saveFailed": "बदलाव सहेजे नहीं जा सके",
-    "loadError": "प्रोफ़ाइल लोड नहीं हो सकी"
+    "loadError": "प्रोफ़ाइल लोड नहीं हो सकी",
+    "phoneInvalid": "एक वैध 10 अंकों का फ़ोन नंबर दर्ज करें",
+    "phoneTooLong": "फ़ोन नंबर 10 अंकों से अधिक नहीं हो सकता"
   },
   "rewards": {
-    "title": "रिवॉर्ड और माइलस्टोन",
-    "subtitle": "अपनी प्रगति ट्रैक करें और अपने रैंक रिवॉर्ड का दावा करें।",
+    "title": "रिवॉर्ड / मिशन प्लान",
+    "subtitle": "SMART से DOUBLE CROWN तक आठ स्तर — 4×4 मैट्रिक्स भरने पर नकद और उपहार।",
     "achieved": "प्राप्त",
-    "locked": "प्रगति में",
+    "completed": "पूर्ण",
+    "current": "वर्तमान",
+    "locked": "लॉक",
     "rewardLabel": "रिवॉर्ड",
     "progressLabel": "प्रगति",
     "claimButton": "रिवॉर्ड का दावा करें",
     "membersUnit": "सदस्य",
-    "emptyTitle": "कोई माइलस्टोन उपलब्ध नहीं",
-    "emptyDescription": "प्रोग्राम अपडेट होने पर माइलस्टोन यहाँ दिखाई देंगे।"
+    "pointsUnit": "ID",
+    "planTitle": "मिशन स्तर",
+    "emptyTitle": "कोई रैंक अनलॉक नहीं",
+    "emptyDescription": "SMART (स्तर 1) अनलॉक करने के लिए 7 दिनों में 4 सदस्यों को रेफर करें।"
   }
 }

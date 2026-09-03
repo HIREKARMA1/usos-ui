@@ -1,0 +1,240 @@
+.banner {
+  --banner-bg: #fbfcfd;
+  --banner-bg-2: #f3f6fa;
+  --banner-ink: #10182b;
+  --banner-ink-muted: #5a6478;
+  --banner-border: rgba(16, 24, 43, 0.09);
+  --banner-grid-line: rgba(16, 24, 43, 0.05);
+  --banner-accent: #2f5fe0;
+  --banner-accent-soft: rgba(47, 95, 224, 0.1);
+  --banner-accent-line: rgba(47, 95, 224, 0.3);
+
+  position: relative;
+  width: 100%;
+  height: 420px;
+  border-radius: 16px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, var(--banner-bg-2) 0%, var(--banner-bg) 40%),
+    var(--banner-bg);
+  border: 1px solid var(--banner-border);
+  display: flex;
+}
+
+:global(html.dark) .banner {
+  --banner-bg: #10141d;
+  --banner-bg-2: #0c1017;
+  --banner-ink: #edf0f6;
+  --banner-ink-muted: #8b93a8;
+  --banner-border: rgba(255, 255, 255, 0.09);
+  --banner-grid-line: rgba(255, 255, 255, 0.055);
+  --banner-accent: #6c93ff;
+  --banner-accent-soft: rgba(108, 147, 255, 0.14);
+  --banner-accent-line: rgba(108, 147, 255, 0.32);
+}
+
+.gridBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-image:
+    linear-gradient(var(--banner-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--banner-grid-line) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 30% 50%, black 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 80% 90% at 30% 50%, black 30%, transparent 85%);
+  pointer-events: none;
+}
+
+.glowBg {
+  position: absolute;
+  z-index: 0;
+  top: -20%;
+  right: -8%;
+  width: 60%;
+  height: 140%;
+  background: radial-gradient(circle, var(--banner-accent-soft) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  width: 52%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: clamp(32px, 5vw, 72px);
+  padding-right: 24px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: var(--banner-accent-soft);
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--banner-accent);
+  margin-bottom: 22px;
+}
+
+.eyebrowDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--banner-accent);
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--font-sora), 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  line-height: 1.18;
+  color: var(--banner-ink);
+  letter-spacing: -0.01em;
+}
+
+.accent {
+  color: var(--banner-accent);
+}
+
+.sub {
+  margin-top: 18px;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 15.5px;
+  color: var(--banner-ink-muted);
+  max-width: 410px;
+  line-height: 1.65;
+}
+
+.statRow {
+  display: flex;
+  margin-top: 34px;
+  width: fit-content;
+}
+
+.stat {
+  padding-right: 30px;
+  margin-right: 30px;
+  border-right: 1px solid var(--banner-border);
+}
+
+.stat:last-child {
+  border-right: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.statNum {
+  font-family: var(--font-sora), 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--banner-ink);
+}
+
+.statLbl {
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--banner-ink-muted);
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+}
+
+.footnote {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans), 'Inter', sans-serif;
+  font-size: 12.5px;
+  color: var(--banner-ink-muted);
+}
+
+.footnote svg {
+  width: 14px;
+  height: 14px;
+  color: var(--banner-accent);
+  flex-shrink: 0;
+}
+
+.diagram {
+  position: relative;
+  z-index: 2;
+  width: 48%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.diagram svg {
+  width: 92%;
+  height: 92%;
+  overflow: visible;
+}
+
+.conn {
+  stroke: var(--banner-accent-line);
+  stroke-width: 1.4;
+  fill: none;
+}
+
+.connFaint {
+  stroke: var(--banner-accent-line);
+  stroke-width: 1.1;
+  fill: none;
+  opacity: 0.5;
+}
+
+.nodeRing {
+  fill: var(--banner-bg);
+  stroke: var(--banner-accent);
+  stroke-width: 1.6;
+}
+
+.nodeFill {
+  fill: var(--banner-accent);
+}
+
+.nodeFillSoft {
+  fill: var(--banner-accent);
+  opacity: 0.16;
+}
+
+.nodeFillMid {
+  fill: var(--banner-accent);
+  opacity: 0.55;
+}
+
+@media (max-width: 980px) {
+  .banner {
+    flex-direction: column;
+    height: auto;
+    padding: 36px 0;
+  }
+
+  .content {
+    width: 100%;
+    padding: 0 32px;
+  }
+
+  .diagram {
+    display: none;
+  }
+
+  .glowBg {
+    display: none;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+}

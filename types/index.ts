@@ -45,6 +45,8 @@ export interface OverviewStats {
   totalDownline: number;
   activeDownline: number;
   rank: string;
+  kycStatus?: string;
+  kycRejectedReason?: string | null;
 }
 
 export interface TreeMember {
@@ -79,13 +81,18 @@ export interface Referral {
 }
 
 export interface PackagePlan {
-  id: PackageId;
+  id: string;
+  code: string;
   name: string;
   price: number;
   description: string;
   features: string[];
   badge?: string;
   stock?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  imageUrl?: string;
+  items?: { name: string; quantity: number }[];
 }
 
 export interface Milestone {
@@ -106,15 +113,22 @@ export interface AdminUserRow {
   packageId: PackageId;
   status: AccountStatus;
   joinedAt: string;
+  totalEarningsPaise: number;
   earnings: number;
 }
+
+export type RewardClaimStatus = 'pending' | 'approved' | 'fulfilled' | 'rejected';
 
 export interface RewardClaim {
   id: string;
   userName: string;
+  referralCode?: string;
   milestone: string;
+  level?: number;
+  cashPaise: number;
+  materialReward?: string | null;
   requestedAt: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: RewardClaimStatus;
 }
 
 export interface AdminStats {
@@ -122,8 +136,58 @@ export interface AdminStats {
   totalUsers: number;
   activeUsers: number;
   totalPayouts: number;
+  pendingPayouts: number;
   pendingRewards: number;
   monthlyGrowth: number;
+  kycTotal: number;
+  kycPending: number;
+  kycApproved: number;
+  kycRejected: number;
+}
+
+export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected';
+
+export interface KycStats {
+  total: number;
+  pending: number;
+  approved: number;
+  rejected: number;
+}
+
+export interface KycRow {
+  id: string;
+  full_name: string;
+  email: string;
+  phone?: string | null;
+  referral_code?: string | null;
+  pan_number?: string | null;
+  aadhaar_number?: string | null;
+  aadhaar_masked?: string | null;
+  kyc_status: KycStatus;
+  rejected_reason?: string | null;
+  approved_by?: string | null;
+  approved_by_name?: string | null;
+  approved_at?: string | null;
+  submitted_at?: string | null;
+  created_at?: string | null;
+}
+
+export interface KycListResponse {
+  total: number;
+  page: number;
+  page_size: number;
+  items: KycRow[];
+  stats: KycStats;
+}
+
+export interface UserNotification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  read: boolean;
+  read_at?: string | null;
+  created_at?: string | null;
 }
 
 export interface PaymentOrder {

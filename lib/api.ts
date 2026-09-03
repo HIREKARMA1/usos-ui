@@ -1,8 +1,13 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
-import { env, TOKEN_KEY } from './constants';
+import { clearSession } from './auth';
+import { isPaymentRequiredError, PAYMENT_PATH } from './access';
+import { env, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
   AdminUserRow,
+  AuthUser,
+  KycListResponse,
+  KycRow,
   OverviewStats,
   PackagePlan,
   PaymentOrder,
@@ -11,6 +16,7 @@ import type {
   TokenResponse,
   Transaction,
   TreeMember,
+  UserNotification,
   UserRole,
 } from '@/types';
 
@@ -19,9 +25,69 @@ export function getToken(): string | null {
   return window.localStorage.getItem(TOKEN_KEY);
 }
 
-function mapRole(role: string): UserRole {
+export function mapRole(role: string): UserRole {
   return role === 'super_admin' ? 'admin' : 'user';
 }
+
+export function mapAuthUser(d: {
+  id?: string;
+  user_id?: string;
+  full_name?: string;
+  name?: string;
+  email: string;
+  phone?: string;
+  role: string;
+  referral_code?: string;
+  referralCode?: string;
+  status?: string;
+}): AuthUser {
+  return {
+    id: d.id || d.user_id || '',
+    name: d.full_name || d.name || '',
+    email: d.email,
+    phone: d.phone,
+    role: mapRole(d.role),
+    referralCode: d.referral_code || d.referralCode || '',
+    status:
+      d.status === 'active'
+        ? 'active'
+        : d.status === 'pending_payment'
+          ? 'pending'
+          : d.status
+            ? 'inactive'
+            : undefined,
+  };
+}
+
+function mapPackage(p: any): PackagePlan {
+  return {
+    id: String(p.id),
+    code: p.code,
+    name: p.name,
+    price: (p.price_paise || 0) / 100,
+    description: p.description || '',
+    features: (p.items || []).map((i: any) => i.name),
+    stock: p.stock_count,
+    isActive: p.is_active !== false,
+    createdAt: p.created_at,
+    imageUrl: p.image_url || '',
+    items: (p.items || []).map((i: any) => ({
+      name: i.name,
+      quantity: Number(i.quantity ?? 1),
+    })),
+  };
+}
+
+export type PackagePayload = {
+  code?: string;
+  name?: string;
+  description?: string | null;
+  image_url?: string | null;
+  price_paise?: number;
+  stock_count?: number;
+  is_active?: boolean;
+  items?: { name: string; quantity: number }[];
+};
 
 class ApiClient {
   readonly client: AxiosInstance;
@@ -41,8 +107,15 @@ class ApiClient {
     this.client.interceptors.response.use(
       (res) => res,
       (error: AxiosError) => {
+        if (typeof window !== 'undefined' && isPaymentRequiredError(error)) {
+          if (!window.location.pathname.startsWith(PAYMENT_PATH)) {
+            window.location.href = `${PAYMENT_PATH}?reason=pending`;
+          }
+          return Promise.reject(error);
+        }
         if (error.response?.status === 401 && typeof window !== 'undefined') {
-          window.localStorage.removeItem(TOKEN_KEY);
+          // Clear token + user together so admin UI cannot stay "logged in" without auth.
+          clearSession();
           if (!window.location.pathname.startsWith('/login')) {
             window.location.href = '/login';
           }
@@ -55,17 +128,11 @@ class ApiClient {
   async login(email: string, password: string): Promise<TokenResponse> {
     const res = await this.client.post('/api/v1/auth/login', { email, password });
     const d = res.data;
+    const user = mapAuthUser(d);
     return {
       access_token: d.access_token,
-      role: mapRole(d.role),
-      user: {
-        id: d.user_id,
-        name: d.full_name,
-        email: d.email,
-        role: mapRole(d.role),
-        referralCode: d.referral_code,
-        status: d.status === 'active' ? 'active' : d.status === 'pending_payment' ? 'pending' : 'inactive',
-      },
+      role: user.role,
+      user: { ...user, id: d.user_id },
     };
   }
 
@@ -78,17 +145,11 @@ class ApiClient {
   }): Promise<TokenResponse> {
     const res = await this.client.post('/api/v1/auth/google', body);
     const d = res.data;
+    const user = mapAuthUser(d);
     return {
       access_token: d.access_token,
-      role: mapRole(d.role),
-      user: {
-        id: d.user_id,
-        name: d.full_name,
-        email: d.email,
-        role: mapRole(d.role),
-        referralCode: d.referral_code,
-        status: d.status === 'active' ? 'active' : d.status === 'pending_payment' ? 'pending' : 'inactive',
-      },
+      role: user.role,
+      user: { ...user, id: d.user_id },
     };
   }
 
@@ -145,6 +206,8 @@ class ApiClient {
       totalDownline: d.total_downline || 0,
       activeDownline: d.active_downline || 0,
       rank,
+      kycStatus: d.kyc_status || 'not_submitted',
+      kycRejectedReason: d.kyc_rejected_reason || null,
     };
   }
 
@@ -196,16 +259,38 @@ class ApiClient {
     }));
   }
 
-  async getPackages(): Promise<PackagePlan[]> {
-    const rows = await this.get<any[]>('/api/v1/packages');
-    return (rows || []).map((p) => ({
-      id: p.code,
-      name: p.name,
-      price: (p.price_paise || 0) / 100,
-      description: p.description || '',
-      features: (p.items || []).map((i: any) => i.name),
-      stock: p.stock_count,
-    }));
+  async getPackages(opts?: { activeOnly?: boolean }): Promise<PackagePlan[]> {
+    const activeOnly = opts?.activeOnly !== false;
+    const rows = await this.get<any[]>('/api/v1/packages', { active_only: activeOnly });
+    return (rows || []).map(mapPackage);
+  }
+
+  async createPackage(data: PackagePayload): Promise<PackagePlan> {
+    const row = await this.post<any>('/api/v1/packages', data);
+    return mapPackage(row);
+  }
+
+  async updatePackage(id: string, data: PackagePayload): Promise<PackagePlan> {
+    const row = await this.patch<any>(`/api/v1/packages/${id}`, data);
+    return mapPackage(row);
+  }
+
+  async duplicatePackage(id: string): Promise<PackagePlan> {
+    const row = await this.post<any>(`/api/v1/packages/${id}/duplicate`);
+    return mapPackage(row);
+  }
+
+  async deletePackage(id: string): Promise<void> {
+    await this.delete(`/api/v1/packages/${id}`);
+  }
+
+  async uploadPackageImage(file: File) {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await this.client.post<{ url: string }>('/api/v1/uploads/packages', body, {
+      headers: { 'Content-Type': false as unknown as string },
+    });
+    return res.data;
   }
 
   async getAdminStats(): Promise<AdminStats> {
@@ -215,47 +300,98 @@ class ApiClient {
       totalUsers: d.total_members || 0,
       activeUsers: d.active_members || 0,
       totalPayouts: (d.cleared_payouts_paise || 0) / 100,
+      pendingPayouts: (d.pending_payouts_paise || 0) / 100,
       pendingRewards: d.pending_rewards || 0,
       monthlyGrowth: 0,
+      kycTotal: d.kyc_total || 0,
+      kycPending: d.kyc_pending || 0,
+      kycApproved: d.kyc_approved || 0,
+      kycRejected: d.kyc_rejected || 0,
     };
   }
 
   async getAdminUsers(): Promise<AdminUserRow[]> {
     const rows = await this.get<any[]>('/api/v1/admin/users');
-    return (rows || []).map((u) => ({
-      id: u.id,
-      name: u.full_name,
-      email: u.email,
-      phone: u.phone || '',
-      packageId: 'A',
-      status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
-      joinedAt: u.created_at,
-      earnings: 0,
-    }));
+    return (rows || []).map((u) => {
+      const totalEarningsPaise = Number(u.total_earnings_paise ?? u.totalEarningsPaise ?? 0);
+      const earnings =
+        totalEarningsPaise > 0
+          ? totalEarningsPaise / 100
+          : Number(u.earnings ?? 0);
+
+      return {
+        id: u.id,
+        name: u.full_name,
+        email: u.email,
+        phone: u.phone || '',
+        packageId: (u.package_code || '') as PackageId,
+        status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
+        joinedAt: u.created_at,
+        totalEarningsPaise,
+        earnings: Number.isFinite(earnings) ? earnings : 0,
+      };
+    });
   }
 
   async toggleUserStatus(userId: string, status: string) {
     return this.client.patch(`/api/v1/admin/users/${userId}/status`, { status });
   }
 
-  async getRewardClaims(): Promise<RewardClaim[]> {
-    const rows = await this.get<any[]>('/api/v1/rewards/queue');
-    return (rows || []).map((r) => ({
+  async getRewardClaims(status?: RewardClaim['status']): Promise<RewardClaim[]> {
+    const apiStatus =
+      status === 'pending' ? 'pending_verification' : status;
+    const params = apiStatus ? { status: apiStatus } : undefined;
+    const rows = await this.get<any[]>('/api/v1/rewards/queue', params);
+    return (rows || []).map((r) => this.mapRewardClaim(r));
+  }
+
+  async updateRewardStatus(
+    id: string,
+    status: 'approved' | 'fulfilled' | 'rejected'
+  ) {
+    return this.patch(`/api/v1/rewards/${id}`, { status });
+  }
+
+  private mapRewardClaim(r: {
+    id: string;
+    user_name?: string;
+    referral_code?: string;
+    milestone_key: string;
+    level?: number;
+    cash_paise?: number;
+    material_reward?: string | null;
+    achieved_at: string;
+    status: string;
+  }): RewardClaim {
+    let claimStatus: RewardClaim['status'] = 'pending';
+    if (r.status === 'approved') claimStatus = 'approved';
+    else if (r.status === 'fulfilled') claimStatus = 'fulfilled';
+    else if (r.status === 'rejected') claimStatus = 'rejected';
+
+    return {
       id: r.id,
       userName: r.user_name || r.referral_code || '',
+      referralCode: r.referral_code,
       milestone: r.milestone_key,
+      level: r.level,
+      cashPaise: r.cash_paise || 0,
+      materialReward: r.material_reward,
       requestedAt: r.achieved_at,
-      status:
-        r.status === 'approved' || r.status === 'fulfilled'
-          ? 'approved'
-          : r.status === 'rejected'
-            ? 'rejected'
-            : 'pending',
-    }));
+      status: claimStatus,
+    };
   }
 
   async getMe() {
-    return this.get('/api/v1/auth/me');
+    const d = await this.get<{
+      id: string;
+      email: string;
+      phone?: string;
+      full_name: string;
+      role: string;
+      referral_code: string;
+      status: string;
+    }>('/api/v1/auth/me');
+    return mapAuthUser(d);
   }
 
   async get<T = unknown>(path: string, params?: Record<string, unknown>): Promise<T> {
@@ -307,6 +443,10 @@ class ApiClient {
 
   async deleteProduct(id: string) {
     return this.delete(`/api/v1/shop/admin/products/${id}`);
+  }
+
+  async permanentlyDeleteProduct(id: string) {
+    return this.delete(`/api/v1/shop/admin/products/${id}/permanent`);
   }
 
   async uploadProductImage(file: File) {
@@ -384,6 +524,50 @@ class ApiClient {
 
   async rejectWithdrawal(id: string, note?: string) {
     return this.post(`/api/v1/wallet/admin/withdrawals/${id}/reject`, { note: note || null });
+  }
+
+  async getKycStatus() {
+    return this.get<{
+      kyc_status: string;
+      pan_number?: string | null;
+      aadhaar_number?: string | null;
+      rejected_reason?: string | null;
+      approved_at?: string | null;
+      submitted_at?: string | null;
+      editable: boolean;
+    }>('/api/v1/users/me/kyc-status');
+  }
+
+  async getAdminKyc(params?: { q?: string; status?: string; page?: number; page_size?: number }) {
+    return this.get<KycListResponse>('/api/v1/admin/kyc', params);
+  }
+
+  async getAdminKycDetail(userId: string) {
+    return this.get<KycRow>(`/api/v1/admin/kyc/${userId}`);
+  }
+
+  async approveKyc(userId: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/approve`);
+  }
+
+  async rejectKyc(userId: string, reason: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/reject`, { reason });
+  }
+
+  async resetKyc(userId: string) {
+    return this.put<KycRow>(`/api/v1/admin/kyc/${userId}/reset`);
+  }
+
+  async getNotifications() {
+    return this.get<{ unread_count: number; items: UserNotification[] }>('/api/v1/users/me/notifications');
+  }
+
+  async markNotificationRead(id: string) {
+    return this.post<UserNotification>(`/api/v1/users/me/notifications/${id}/read`);
+  }
+
+  async markAllNotificationsRead() {
+    return this.post<{ updated: number }>('/api/v1/users/me/notifications/read-all');
   }
 }
 

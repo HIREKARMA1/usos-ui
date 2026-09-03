@@ -15,13 +15,14 @@ export const ROUTES = {
   register: '/register',
   userDashboard: '/user',
   adminDashboard: '/admin',
+  payment: '/payment',
 } as const;
 
 export const BINARY_SIDES = ['left', 'right'] as const;
 export type BinarySide = (typeof BINARY_SIDES)[number];
 
 export const PACKAGE_IDS = ['A', 'B'] as const;
-export type PackageId = (typeof PACKAGE_IDS)[number];
+export type PackageId = string;
 
 export const USER_ROLES = ['user', 'admin'] as const;
 export type UserRole = (typeof USER_ROLES)[number];

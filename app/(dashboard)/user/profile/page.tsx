@@ -35,6 +35,8 @@ type Profile = {
   package_code?: string | null;
   package_name?: string | null;
   kyc_status?: string;
+  kyc_rejected_reason?: string | null;
+  kyc_submitted_at?: string | null;
   pan_number?: string | null;
   aadhaar_number?: string | null;
   bank_account_name?: string | null;
@@ -62,6 +64,7 @@ export default function ProfilePage() {
 
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [pan, setPan] = useState('');
   const [aadhaar, setAadhaar] = useState('');
   const [bankName, setBankName] = useState('');
@@ -86,7 +89,8 @@ export default function ProfilePage() {
   const applyProfile = useCallback((p: Profile) => {
     setProfile(p);
     setName(p.full_name || '');
-    setPhone(p.phone || '');
+    setPhone((p.phone || '').replace(/\D/g, '').slice(0, 10));
+    setPhoneError('');
     setPan(p.pan_number || '');
     setAadhaar(p.aadhaar_number || '');
     setBankName(p.bank_name || '');
@@ -185,8 +189,24 @@ export default function ProfilePage() {
     }
   }
 
+  function handlePhoneChange(value: string) {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length > 10) {
+      setPhone(digits.slice(0, 10));
+      setPhoneError(t.phoneTooLong || 'Phone number cannot exceed 10 digits');
+      return;
+    }
+    setPhone(digits);
+    setPhoneError('');
+  }
+
   async function savePersonal(e: FormEvent) {
     e.preventDefault();
+    if (!/^\d{10}$/.test(phone)) {
+      setPhoneError(t.phoneInvalid || 'Enter a valid 10-digit phone number');
+      return;
+    }
+    setPhoneError('');
     setSaving(true);
     try {
       const p = await api.patch('/api/v1/users/me', { full_name: name, phone });
@@ -264,7 +284,7 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10">
         <Spinner />
       </div>
     );
@@ -274,6 +294,17 @@ export default function ProfilePage() {
     profile?.package_name && profile?.package_code
       ? `${profile.package_name} (${profile.package_code})`
       : profile?.package_name || profile?.package_code || '—';
+
+  const kycStatus = profile?.kyc_status === 'verified' ? 'approved' : profile?.kyc_status || 'not_submitted';
+  const kycLocked = kycStatus === 'approved';
+  const kycLabels = (t.status || {
+    not_submitted: 'Not submitted',
+    pending: 'Pending',
+    approved: 'Approved',
+    rejected: 'Rejected',
+  }) as Record<string, string>;
+  const kycTone =
+    kycStatus === 'approved' ? 'success' : kycStatus === 'rejected' ? 'danger' : kycStatus === 'pending' ? 'warning' : 'default';
 
   return (
     <div className="space-y-6">
@@ -333,7 +364,17 @@ export default function ProfilePage() {
         <form onSubmit={savePersonal} className="mt-4 grid gap-4 sm:grid-cols-2">
           <Input id="name" label={t.fields.name} value={name} onChange={(e) => setName(e.target.value)} required />
           <Input id="email" label={t.fields.email} value={profile?.email || user?.email || ''} disabled />
-          <Input id="phone" label={t.fields.phone} value={phone} onChange={(e) => setPhone(e.target.value)} required />
+          <Input
+            id="phone"
+            label={t.fields.phone}
+            type="tel"
+            inputMode="numeric"
+            autoComplete="tel"
+            value={phone}
+            onChange={(e) => handlePhoneChange(e.target.value)}
+            error={phoneError}
+            required
+          />
           <div className="sm:col-span-2">
             <Button type="submit" loading={saving}>
               {t.save}
@@ -360,7 +401,7 @@ export default function ProfilePage() {
               <textarea
                 id="addressLine"
                 rows={3}
-                className="w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink focus-ring"
+                className="w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink placeholder:text-ink-muted focus-ring"
                 value={addressLine}
                 onChange={(e) => onAddressChange(e.target.value)}
                 placeholder={t.searchPlaceholder}
@@ -370,7 +411,7 @@ export default function ProfilePage() {
               <span className="text-xs text-ink-muted">{searching ? t.searching : t.searchHint}</span>
             </label>
             {hits.length > 0 ? (
-              <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-line bg-white shadow-elevated">
+              <ul className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-lg border border-line bg-surface-card shadow-none">
                 {hits.map((hit) => (
                   <li key={`${hit.latitude}-${hit.longitude}-${hit.display_name}`}>
                     <button
@@ -407,16 +448,43 @@ export default function ProfilePage() {
       <Card>
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-display text-lg font-bold">{t.kycTitle}</h2>
-          {profile?.kyc_status ? (
-            <Badge tone={profile.kyc_status === 'verified' ? 'success' : 'warning'}>{profile.kyc_status}</Badge>
-          ) : null}
+          <Badge tone={kycTone}>{kycLabels[kycStatus] || kycStatus}</Badge>
         </div>
+        {kycStatus === 'rejected' && profile?.kyc_rejected_reason ? (
+          <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-300">
+            <p className="font-semibold">{t.rejectedReasonLabel || 'Rejection reason'}</p>
+            <p className="mt-0.5">{profile.kyc_rejected_reason}</p>
+          </div>
+        ) : null}
+        <p className="mt-3 text-sm text-ink-muted">
+          {kycLocked
+            ? t.kycLocked
+            : kycStatus === 'rejected'
+              ? t.kycRejectedHint
+              : kycStatus === 'pending'
+                ? t.kycPendingHint
+                : t.kycNotSubmittedHint}
+        </p>
         <form onSubmit={saveKyc} className="mt-4 grid gap-4 sm:grid-cols-2">
-          <Input id="pan" label={t.fields.pan} value={pan} onChange={(e) => setPan(e.target.value)} />
-          <Input id="aadhaar" label={t.fields.aadhaar} value={aadhaar} onChange={(e) => setAadhaar(e.target.value)} />
+          <Input
+            id="pan"
+            label={t.fields.pan}
+            value={pan}
+            onChange={(e) => setPan(e.target.value.toUpperCase())}
+            disabled={kycLocked}
+            required
+          />
+          <Input
+            id="aadhaar"
+            label={t.fields.aadhaar}
+            value={aadhaar}
+            onChange={(e) => setAadhaar(e.target.value.replace(/\D/g, '').slice(0, 12))}
+            disabled={kycLocked}
+            required
+          />
           <div className="sm:col-span-2">
-            <Button type="submit" loading={saving}>
-              {t.save}
+            <Button type="submit" loading={saving} disabled={kycLocked}>
+              {t.submitKyc || t.save}
             </Button>
           </div>
         </form>

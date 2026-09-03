@@ -53,7 +53,7 @@ export default function PointsPage() {
 
   if (loading) {
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex justify-center py-10">
         <Spinner />
       </div>
     );
@@ -89,7 +89,7 @@ export default function PointsPage() {
                 type="number"
                 min={1}
                 max={bal}
-                className="mt-1 block w-40 rounded-lg border border-line px-3 py-2"
+                className="mt-1 block w-40 rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink placeholder:text-ink-muted"
                 value={points}
                 onChange={(e) => setPoints(e.target.value)}
               />
