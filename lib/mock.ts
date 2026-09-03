@@ -110,6 +110,10 @@ export const mockAdminStats: AdminStats = {
   pendingPayouts: 245800,
   pendingRewards: 18,
   monthlyGrowth: 12.4,
+  kycTotal: 420,
+  kycPending: 120,
+  kycApproved: 250,
+  kycRejected: 50,
 };
 
 export const mockAdminUsers: AdminUserRow[] = [

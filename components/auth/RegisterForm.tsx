@@ -52,7 +52,7 @@ export function RegisterForm() {
         setApiPackages(pkgs);
         const requested = (search.get('package') || '').trim();
         const match = pkgs.find((p) => p.code === requested || p.id === requested);
-        setPackageCode((current) => {
+        setPackageCode((current: string) => {
           if (match) return match.code;
           if (current && pkgs.some((p) => p.code === current)) return current;
           return pkgs[0]?.code || current;
