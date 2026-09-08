@@ -52,7 +52,7 @@ export function RegisterForm() {
         setApiPackages(pkgs);
         const requested = (search.get('package') || '').trim();
         const match = pkgs.find((p) => p.code === requested || p.id === requested);
-        setPackageCode((current) => {
+        setPackageCode((current:any) => {
           if (match) return match.code;
           if (current && pkgs.some((p) => p.code === current)) return current;
           return pkgs[0]?.code || current;
@@ -205,7 +205,7 @@ export function RegisterForm() {
           />
         </div>
 
-        {googleEnabled ? (
+        {googleEnabled && (
           <div className="sm:col-span-2 space-y-3">
             <GoogleSignInButton
               label={t.continueGoogle || 'Continue with Google'}
@@ -220,10 +220,6 @@ export function RegisterForm() {
               <span className="h-px flex-1 bg-line" />
             </div>
           </div>
-        ) : (
-          <p className="sm:col-span-2 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-muted">
-            {t.configureGoogle || 'Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google Sign-Up.'}
-          </p>
         )}
 
         <div className="sm:col-span-2">
