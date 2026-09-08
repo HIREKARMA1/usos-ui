@@ -98,7 +98,7 @@ export function LoginForm() {
       <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{t.title}</h1>
       <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
 
-      {googleEnabled ? (
+      {googleEnabled && (
         <div className="mt-6 space-y-3">
           <GoogleSignInButton
             label={t.continueGoogle || 'Continue with Google'}
@@ -112,10 +112,6 @@ export function LoginForm() {
             <span className="h-px flex-1 bg-line" />
           </div>
         </div>
-      ) : (
-        <p className="mt-4 rounded-lg bg-surface-muted px-3 py-2 text-xs text-ink-muted">
-          {t.configureGoogle || 'Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google Sign-In.'}
-        </p>
       )}
 
       <form onSubmit={onSubmit} className="mt-4 space-y-4">
