@@ -139,10 +139,10 @@ export interface AdminStats {
   pendingPayouts: number;
   pendingRewards: number;
   monthlyGrowth: number;
-  kycTotal: number;
-  kycPending: number;
-  kycApproved: number;
-  kycRejected: number;
+  kycTotal: any;
+  kycPending: any;
+  kycApproved: any;
+  kycRejected: any;
 }
 
 export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected';
