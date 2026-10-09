@@ -190,7 +190,97 @@ export interface UserNotification {
   created_at?: string | null;
 }
 
+export interface UpiPayment {
+  id: string;
+  user_id: string;
+  application_id: string;
+  package_id?: string | null;
+  amount_paise: number;
+  amount_inr: number;
+  currency: string;
+  payment_method: string;
+  transaction_id?: string | null;
+  status: string;
+  submitted_at?: string | null;
+  rejection_reason?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface UpiCheckout {
+  upi_id: string;
+  display_name: string;
+  qr_code_url?: string | null;
+  instructions: string[];
+  amount_paise: number;
+  amount_inr: number;
+  currency: string;
+  package_name?: string | null;
+  payment?: UpiPayment | null;
+}
+
+export interface PaymentSettings {
+  upi_id: string;
+  display_name: string;
+  qr_code_url?: string | null;
+  instructions: string;
+  updated_at?: string | null;
+}
+
+export interface AdminPaymentRow {
+  id: string;
+  kind?: string;
+  user_id: string;
+  user_name: string;
+  email: string;
+  application_id: string;
+  package_name?: string | null;
+  amount_paise: number;
+  amount_inr: number;
+  currency: string;
+  payment_method: string;
+  transaction_id?: string | null;
+  status: string;
+  submitted_at?: string | null;
+  reviewed_at?: string | null;
+  reviewed_by?: string | null;
+  rejection_reason?: string | null;
+  created_at?: string | null;
+}
+
+export interface AdminPaymentList {
+  items: AdminPaymentRow[];
+  total: number;
+  page: number;
+  page_size: number;
+  stats: { total: number; pending: number; approved: number; rejected: number };
+}
+
 export interface PaymentOrder {
-  action: string;
-  fields: Record<string, string>;
+  action?: string;
+  fields?: Record<string, string>;
+  provider?: string;
+  order_id?: string;
+  amount?: number;
+  currency?: string;
+  checkout?: {
+    mode?: string;
+    action_url?: string;
+    params?: Record<string, string>;
+    key_id?: string;
+    order_id?: string;
+    amount?: number;
+    currency?: string;
+    name?: string;
+    description?: string;
+    prefill?: {
+      name?: string;
+      email?: string;
+      contact?: string;
+    };
+    theme?: {
+      color?: string;
+    };
+    [key: string]: any;
+  };
 }

@@ -1,21 +1,20 @@
 'use client';
 
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { ChevronDown } from 'lucide-react';
 import type { CredentialResponse } from '@react-oauth/google';
 import { Input } from '@/components/ui/Input';
 import { PasswordInput } from '@/components/ui/PasswordInput';
-import { Select } from '@/components/ui/Select';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { env } from '@/lib/constants';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import type { PackagePlan, TokenResponse } from '@/types';
+import styles from './AuthForm.module.css';
 
 export function RegisterForm() {
   const t = useContent('auth').register;
@@ -40,10 +39,31 @@ export function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiPackages, setApiPackages] = useState<PackagePlan[]>([]);
+  const [packageOpen, setPackageOpen] = useState(false);
+  const packageSelectRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (refFromLink) setSponsor(refFromLink);
   }, [refFromLink]);
+
+  useEffect(() => {
+    if (!packageOpen) return;
+    function onPointerDown(e: MouseEvent | TouchEvent) {
+      const el = packageSelectRef.current;
+      if (el && !el.contains(e.target as Node)) setPackageOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') setPackageOpen(false);
+    }
+    document.addEventListener('mousedown', onPointerDown);
+    document.addEventListener('touchstart', onPointerDown);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onPointerDown);
+      document.removeEventListener('touchstart', onPointerDown);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [packageOpen]);
 
   useEffect(() => {
     api
@@ -61,10 +81,14 @@ export function RegisterForm() {
       .catch(() => undefined);
   }, [search]);
 
-  const packageOptions = (apiPackages.length ? apiPackages : packagesContent.items).map((p: any) => ({
-    value: p.code || p.id,
+  const packageOptions: { value: string; label: string }[] = (
+    apiPackages.length ? apiPackages : packagesContent.items
+  ).map((p: { code?: string; id?: string; name: string; price: number | string }) => ({
+    value: String(p.code || p.id),
     label: `${p.name} — ₹${p.price}`,
   }));
+  const selectedPackageLabel =
+    packageOptions.find((o) => o.value === packageCode)?.label || packageOptions[0]?.label || 'Select package';
 
   function sponsorCode() {
     return (sponsorLocked ? refFromLink : sponsor.trim().toUpperCase()) || undefined;
@@ -73,7 +97,7 @@ export function RegisterForm() {
   function goToPayment(res: TokenResponse, message: string) {
     loginSuccess(res.access_token, res.user);
     toast.success(message);
-    router.push('/payment?autostart=1');
+    router.push('/payment');
   }
 
   async function startPayment(message: string) {
@@ -164,106 +188,162 @@ export function RegisterForm() {
   }
 
   return (
-    <Card className="w-full max-w-lg">
-      <p className="section-eyebrow">{t.eyebrow}</p>
-      <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{t.title}</h1>
-      <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+    <div className={styles.card}>
+      <p className={styles.eyebrow}>{t.eyebrow}</p>
+      <h1 className={styles.title}>{t.title}</h1>
+      <p className={styles.subtitle}>{t.subtitle}</p>
 
-      <form onSubmit={onSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <Input
-            id="phone"
-            label={t.phoneLabel}
-            placeholder={t.phonePlaceholder}
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            error={errors.phone}
-          />
-        </div>
-        <div className="sm:col-span-2">
-          <Select
-            id="package"
-            label={t.packageLabel}
-            options={packageOptions}
-            value={packageCode}
-            onChange={(e) => setPackageCode(e.target.value)}
-            error={errors.package}
-          />
-        </div>
-        <div className="sm:col-span-2">
-          <Input
-            id="sponsor"
-            label={sponsorLocked ? t.sponsorLabelLocked || t.sponsorLabel : t.sponsorLabel}
-            placeholder={t.sponsorPlaceholder}
-            hint={sponsorLocked ? t.sponsorHintLocked : t.sponsorHint}
-            value={sponsor}
-            onChange={(e) => {
-              if (!sponsorLocked) setSponsor(e.target.value);
-            }}
-            readOnly={sponsorLocked}
-            error={errors.sponsor}
-          />
-        </div>
-
-        {googleEnabled && (
-          <div className="sm:col-span-2 space-y-3">
-            <GoogleSignInButton
-              label={t.continueGoogle || 'Continue with Google'}
-              onSuccess={onGoogle}
-              onError={() => toast.error(t.googleError || t.error)}
-              disabled={loading}
+      <form onSubmit={onSubmit} className={styles.form}>
+        <div className={styles.fields}>
+          <div className={styles.field}>
+            <Input
+              id="phone"
+              label={t.phoneLabel}
+              placeholder={t.phonePlaceholder}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              error={errors.phone}
             />
-            <p className="text-xs text-ink-muted">{t.googleHint}</p>
-            <div className="flex items-center gap-3 text-xs text-ink-muted">
-              <span className="h-px flex-1 bg-line" />
-              <span>{t.orEmail || 'or register with email'}</span>
-              <span className="h-px flex-1 bg-line" />
-            </div>
           </div>
-        )}
 
-        <div className="sm:col-span-2">
-          <Input
-            id="name"
-            label={t.nameLabel}
-            placeholder={t.namePlaceholder}
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            error={errors.name}
-          />
+          <div className={styles.field}>
+            <span className={styles.fieldLabel} id="package-label">
+              {t.packageLabel}
+            </span>
+            <div
+              className={`${styles.softSelect} ${packageOpen ? styles.softSelectOpen : ''}`}
+              ref={packageSelectRef}
+            >
+              <button
+                type="button"
+                id="package"
+                className={styles.softSelectTrigger}
+                aria-haspopup="listbox"
+                aria-expanded={packageOpen}
+                aria-labelledby="package-label"
+                onClick={() => setPackageOpen((open) => !open)}
+              >
+                <span className={styles.softSelectValue}>{selectedPackageLabel}</span>
+                <ChevronDown className={styles.softSelectChevron} aria-hidden />
+              </button>
+              {packageOpen ? (
+                <ul className={styles.softSelectMenu} role="listbox" aria-labelledby="package-label">
+                  {packageOptions.map((option) => {
+                    const active = option.value === packageCode;
+                    return (
+                      <li key={option.value} role="option" aria-selected={active}>
+                        <button
+                          type="button"
+                          className={`${styles.softSelectOption} ${active ? styles.softSelectOptionActive : ''}`}
+                          onClick={() => {
+                            setPackageCode(option.value);
+                            setPackageOpen(false);
+                            if (errors.package) {
+                              setErrors((prev) => {
+                                const next = { ...prev };
+                                delete next.package;
+                                return next;
+                              });
+                            }
+                          }}
+                        >
+                          {option.label}
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+            </div>
+            {errors.package ? <span className={styles.fieldError}>{errors.package}</span> : null}
+          </div>
+
+          <div className={styles.field}>
+            <Input
+              id="sponsor"
+              label={sponsorLocked ? t.sponsorLabelLocked || t.sponsorLabel : t.sponsorLabel}
+              placeholder={t.sponsorPlaceholder}
+              hint={sponsorLocked ? t.sponsorHintLocked : t.sponsorHint}
+              value={sponsor}
+              onChange={(e) => {
+                if (!sponsorLocked) setSponsor(e.target.value);
+              }}
+              readOnly={sponsorLocked}
+              error={errors.sponsor}
+            />
+          </div>
+
+          {googleEnabled && (
+            <div>
+              <GoogleSignInButton
+                label={t.continueGoogle || 'Continue with Google'}
+                onSuccess={onGoogle}
+                onError={() => toast.error(t.googleError || t.error)}
+                disabled={loading}
+              />
+              <p className={styles.googleHint}>{t.googleHint}</p>
+              <div className={styles.divider}>
+                {t.orEmail || 'or register with email'}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.field}>
+            <Input
+              id="name"
+              label={t.nameLabel}
+              placeholder={t.namePlaceholder}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              error={errors.name}
+            />
+          </div>
+
+          <div className={styles.field}>
+            <Input
+              id="email"
+              label={t.emailLabel}
+              placeholder={t.emailPlaceholder}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={errors.email}
+            />
+          </div>
+
+          <div className={styles.field}>
+            <PasswordInput
+              id="password"
+              label={t.passwordLabel}
+              placeholder={t.passwordPlaceholder}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              autoComplete="new-password"
+            />
+          </div>
         </div>
-        <Input
-          id="email"
-          label={t.emailLabel}
-          placeholder={t.emailPlaceholder}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
-        />
-        <div className="sm:col-span-2">
-          <PasswordInput
-            id="password"
-            label={t.passwordLabel}
-            placeholder={t.passwordPlaceholder}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            error={errors.password}
-            autoComplete="new-password"
-          />
-        </div>
-        <div className="sm:col-span-2">
-          <Button type="submit" className="w-full" loading={loading}>
-            {loading ? t.submitting : t.submit}
-          </Button>
-          <p className="mt-3 text-xs text-ink-muted">{t.terms}</p>
+
+        <div className={styles.actions}>
+          <button type="submit" className={styles.submit} disabled={loading}>
+            <span className={styles.submitLabel}>
+              {loading ? (
+                <>
+                  <span className={styles.spinner} />
+                  {t.submitting}
+                </>
+              ) : (
+                t.submit
+              )}
+            </span>
+          </button>
+          <p className={styles.terms}>{t.terms}</p>
         </div>
       </form>
-      <p className="mt-6 text-center text-sm text-ink-muted">
+
+      <p className={styles.footer}>
         {t.haveAccount}{' '}
-        <Link href="/login" className="font-semibold text-primary hover:underline">
-          {t.loginLink}
-        </Link>
+        <Link href="/login">{t.loginLink}</Link>
       </p>
-    </Card>
+    </div>
   );
 }

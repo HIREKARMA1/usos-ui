@@ -30,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             __html: `(function(){try{var d=document.documentElement;var lk='usos_locale';var l=localStorage.getItem(lk);if(l==='en'||l==='hi'||l==='or')d.lang=l;var k='usos-color-mode';var m=localStorage.getItem(k);if(m!=='dark'&&m!=='light'){m=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}if(m==='dark')d.classList.add('dark');d.style.colorScheme=m;}catch(e){}})();`,
           }}
         />
+        <script src="https://checkout.razorpay.com/v1/checkout.js" async />
       </head>
       <body>
         <AppProviders>{children}</AppProviders>

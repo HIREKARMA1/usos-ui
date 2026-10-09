@@ -31,7 +31,7 @@
     "eyebrow": "How it works",
     "title": "Start earning in three simple steps",
     "steps": [
-      { "step": "01", "title": "Register & pay ₹2,500", "description": "Create your ID with package A or B and complete PayU checkout." },
+      { "step": "01", "title": "Register & pay ₹2,500", "description": "Create your ID with package A or B, pay by UPI QR, and wait for admin approval." },
       { "step": "02", "title": "Refer 4 within 7 days", "description": "Share your link, fill your four slots, and unlock SMART level rewards." },
       { "step": "03", "title": "Grow through 8 levels", "description": "As each generation completes their 4, you climb MASTER → STAR → … → DOUBLE CROWN." }
     ]

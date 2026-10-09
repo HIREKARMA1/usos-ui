@@ -47,5 +47,5 @@
       ]
     }
   ],
-  "note": "Mandatory entry fee ₹2,500 via PayU. Stock decrements on successful signup payment."
+  "note": "Mandatory entry fee ₹2,500 via UPI. An admin verifies the payment before the account is activated. Stock decrements after approval."
 }

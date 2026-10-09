@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import {
   LayoutDashboard,
   Network,
@@ -20,11 +20,11 @@ import {
   ShoppingBag,
   Coins,
   ShieldCheck,
+  QrCode,
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
-import { NotificationBell } from './NotificationBell';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/cn';
@@ -46,6 +46,19 @@ export function DashboardShell({
   const common = useContent('common');
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const prevHtml = html.style.overflow;
+    const prevBody = body.style.overflow;
+    html.style.overflow = 'hidden';
+    body.style.overflow = 'hidden';
+    return () => {
+      html.style.overflow = prevHtml;
+      body.style.overflow = prevBody;
+    };
+  }, []);
+
   const userNav: NavItem[] = [
     { href: '/user', label: dash.nav.overview, icon: LayoutDashboard },
     { href: '/shop', label: dash.nav.shop || 'Shop', icon: ShoppingBag },
@@ -62,6 +75,7 @@ export function DashboardShell({
     { href: '/admin', label: admin.nav.analytics, icon: BarChart3 },
     { href: '/admin/users', label: admin.nav.users, icon: Users },
     { href: '/admin/kyc', label: admin.nav.kyc || 'KYC Verification', icon: ShieldCheck },
+    { href: '/admin/payments', label: admin.nav.payments || 'Payments', icon: QrCode },
     { href: '/admin/products', label: admin.nav.products || 'Products', icon: Package },
     { href: '/admin/packages', label: admin.nav.packages, icon: Boxes },
     { href: '/admin/rewards', label: admin.nav.rewards, icon: Gift },
@@ -70,6 +84,11 @@ export function DashboardShell({
   ];
 
   const items = mode === 'admin' ? adminNav : userNav;
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   const NavLinks = ({ onNavigate }: { onNavigate?: () => void }) => (
     <nav className="flex flex-col gap-1.5 p-3">
@@ -96,8 +115,24 @@ export function DashboardShell({
     </nav>
   );
 
+  const LogoutButton = ({ onNavigate }: { onNavigate?: () => void }) => (
+    <div className="shrink-0 border-t border-line p-3">
+      <button
+        type="button"
+        onClick={() => {
+          onNavigate?.();
+          handleLogout();
+        }}
+        className="inline-flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-ink-secondary transition hover:bg-surface-muted hover:text-ink"
+      >
+        <LogOut className="h-4 w-4 shrink-0" strokeWidth={1.75} />
+        {dash.topbar.logout}
+      </button>
+    </div>
+  );
+
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-surface-soft">
+    <div className="fixed inset-x-0 top-0 z-10 flex h-[100svh] max-h-[100svh] flex-col overflow-hidden bg-surface-soft">
       <div className="flex min-h-0 flex-1">
         <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-surface-card lg:flex">
           <div className="shrink-0 border-b border-line px-4 py-4">
@@ -106,6 +141,7 @@ export function DashboardShell({
           <div className="min-h-0 flex-1 overflow-y-auto">
             <NavLinks />
           </div>
+          <LogoutButton />
         </aside>
 
         <div className="flex min-w-0 flex-1 flex-col">
@@ -128,31 +164,13 @@ export function DashboardShell({
               </p>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              {mode === 'user' ? (
-                <NotificationBell
-                  title={dash.topbar.notifications}
-                  markAllLabel={dash.notifications?.markAllRead || 'Mark all as read'}
-                  emptyLabel={dash.notifications?.empty || 'No notifications yet'}
-                />
-              ) : null}
               <ThemeToggle />
               <LanguageSwitcher />
-              <button
-                type="button"
-                onClick={() => {
-                  logout();
-                  router.push('/login');
-                }}
-                className="inline-flex items-center gap-2 rounded-xl border border-line bg-surface-card px-3 py-2 text-sm font-medium text-ink transition hover:bg-surface-muted"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline">{dash.topbar.logout}</span>
-              </button>
             </div>
           </header>
 
           <main className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">{children}</main>
-          <footer className="shrink-0 border-t border-line bg-surface-card px-4 py-3 text-center text-xs text-ink-muted">
+          <footer className="shrink-0 border-t border-line bg-surface-card px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] text-center text-xs text-ink-muted">
             {common.brand.poweredBy}
           </footer>
         </div>
@@ -171,6 +189,7 @@ export function DashboardShell({
             <div className="min-h-0 flex-1 overflow-y-auto">
               <NavLinks onNavigate={() => setOpen(false)} />
             </div>
+            <LogoutButton onNavigate={() => setOpen(false)} />
           </div>
         </div>
       ) : null}

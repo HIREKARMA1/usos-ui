@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { IndianRupee, Users, UserCheck, Gift, Clock, TrendingUp, Package, Search, Wallet, ShieldCheck, CheckCircle2, XCircle } from 'lucide-react';
+import { IndianRupee, Users, UserCheck, Gift, Clock, TrendingUp, Package, Search, Wallet, ShieldCheck, CheckCircle2, XCircle, QrCode } from 'lucide-react';
 import { KpiCard } from '@/components/dashboard/admin/KpiCard';
 import { MemberGrowthChart } from '@/components/dashboard/admin/MemberGrowthChart';
 import { RevenueOverviewChart } from '@/components/dashboard/admin/RevenueOverviewChart';
@@ -114,6 +114,7 @@ export default function AdminAnalyticsPage() {
             { href: '/admin/users', label: t.quickActions.searchMember, icon: Search },
             { href: '/admin/rewards', label: t.quickActions.reviewRewards, icon: Gift },
             { href: '/admin/kyc', label: t.quickActions.reviewKyc || 'Review KYC', icon: ShieldCheck },
+            { href: '/admin/payments', label: t.quickActions.reviewPayments || 'Review Payments', icon: QrCode },
             { href: '/admin/withdrawals', label: t.quickActions.processPayout, icon: Wallet },
           ]}
         />
