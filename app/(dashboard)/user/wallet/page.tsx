@@ -374,7 +374,7 @@ export default function WalletPage() {
             {!hasBank ? (
               <p className="text-sm text-ink-muted">
                 {t.bankHint}{' '}
-                <Link href="/user/profile" className="font-semibold text-primary underline">
+                <Link href="/user/profile#bank-details" className="font-semibold text-primary underline">
                   {t.bankLink}
                 </Link>
               </p>

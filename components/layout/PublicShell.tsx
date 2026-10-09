@@ -13,16 +13,18 @@ import { needsPayment, postAuthPath } from '@/lib/access';
 export function AuthShell({ children }: { children: ReactNode }) {
   const common = useContent('common');
   return (
-    <div className="flex min-h-screen flex-col bg-surface-soft">
-      <header className="flex items-center justify-between px-4 py-4 sm:px-8">
+    <div className="flex min-h-dvh flex-col bg-surface-soft">
+      <header className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-8">
         <BrandLogo showFull />
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <LanguageSwitcher />
         </div>
       </header>
-      <main className="flex flex-1 items-center justify-center px-4 py-8">{children}</main>
-      <footer className="px-4 py-6 text-center text-xs text-ink-muted">
+      <main className="flex w-full flex-1 items-center justify-center px-3 py-4 sm:px-4 sm:py-6">
+        {children}
+      </main>
+      <footer className="shrink-0 px-4 py-3 text-center text-xs text-ink-muted">
         {common.brand.poweredBy} · {common.footer.rights}
       </footer>
     </div>
