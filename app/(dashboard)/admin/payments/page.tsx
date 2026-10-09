@@ -22,6 +22,7 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/cn';
+import { resolveUploadUrl } from '@/lib/media';
 import { formatCurrency, formatDateTime, getInitials } from '@/lib/format';
 import type { AdminPaymentRow, PaymentSettings } from '@/types';
 
@@ -581,7 +582,7 @@ export default function AdminPaymentsPage() {
                       {settings.qr_code_url ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={settings.qr_code_url}
+                          src={resolveUploadUrl(settings.qr_code_url)}
                           alt={t.qrUrl}
                           className="h-full w-full object-contain p-3"
                         />
