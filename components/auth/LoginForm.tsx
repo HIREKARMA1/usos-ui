@@ -3,23 +3,21 @@
 import { FormEvent, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 import type { CredentialResponse } from '@react-oauth/google';
 import { Input } from '@/components/ui/Input';
 import { PasswordInput } from '@/components/ui/PasswordInput';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { env } from '@/lib/constants';
 import { needsPayment, postAuthPath } from '@/lib/access';
 import { GoogleSignInButton } from './GoogleSignInButton';
-import Link from 'next/link';
 import type { TokenResponse } from '@/types';
+import styles from './AuthForm.module.css';
 
 export function LoginForm() {
   const t = useContent('auth').login;
-  const pay = useContent('auth').payment;
   const v = useContent('auth').validation;
   const { loginSuccess } = useAuth();
   const router = useRouter();
@@ -41,8 +39,8 @@ export function LoginForm() {
   function finishAuth(res: TokenResponse) {
     loginSuccess(res.access_token, res.user);
     if (needsPayment(res.user)) {
-      toast.success(t.resumePayment || pay.redirecting);
-      router.push('/payment?autostart=1');
+      toast.success(t.resumePayment);
+      router.push('/payment');
       return;
     }
     toast.success(t.success);
@@ -93,56 +91,72 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-full max-w-md">
-      <p className="section-eyebrow">{t.eyebrow}</p>
-      <h1 className="mt-2 font-display text-2xl font-extrabold text-ink">{t.title}</h1>
-      <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
+    <div className={styles.card}>
+      <p className={styles.eyebrow}>{t.eyebrow}</p>
+      <h1 className={styles.title}>{t.title}</h1>
+      <p className={styles.subtitle}>{t.subtitle}</p>
 
-      {googleEnabled && (
-        <div className="mt-6 space-y-3">
-          <GoogleSignInButton
-            label={t.continueGoogle || 'Continue with Google'}
-            onSuccess={onGoogle}
-            onError={() => toast.error(t.googleError || t.error)}
-            disabled={loading}
-          />
-          <div className="flex items-center gap-3 text-xs text-ink-muted">
-            <span className="h-px flex-1 bg-line" />
-            <span>{t.orEmail || 'or continue with email'}</span>
-            <span className="h-px flex-1 bg-line" />
+      <form onSubmit={onSubmit} className={styles.form}>
+        <div className={styles.fields}>
+          {googleEnabled && (
+            <div>
+              <GoogleSignInButton
+                label={t.continueGoogle || 'Continue with Google'}
+                onSuccess={onGoogle}
+                onError={() => toast.error(t.googleError || t.error)}
+                disabled={loading}
+              />
+              <div className={styles.divider}>
+                {t.orEmail || 'or continue with email'}
+              </div>
+            </div>
+          )}
+
+          <div className={styles.field}>
+            <Input
+              id="email"
+              label={t.identifierLabel}
+              placeholder={t.identifierPlaceholder}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              error={errors.email}
+              autoComplete="username"
+            />
+          </div>
+
+          <div className={styles.field}>
+            <PasswordInput
+              id="password"
+              label={t.passwordLabel}
+              placeholder={t.passwordPlaceholder}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors.password}
+              autoComplete="current-password"
+            />
           </div>
         </div>
-      )}
 
-      <form onSubmit={onSubmit} className="mt-4 space-y-4">
-        <Input
-          id="email"
-          label={t.identifierLabel}
-          placeholder={t.identifierPlaceholder}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors.email}
-          autoComplete="username"
-        />
-        <PasswordInput
-          id="password"
-          label={t.passwordLabel}
-          placeholder={t.passwordPlaceholder}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          error={errors.password}
-          autoComplete="current-password"
-        />
-        <Button type="submit" className="w-full" loading={loading}>
-          {loading ? t.submitting : t.submit}
-        </Button>
+        <div className={styles.actions}>
+          <button type="submit" className={styles.submit} disabled={loading}>
+            <span className={styles.submitLabel}>
+              {loading ? (
+                <>
+                  <span className={styles.spinner} />
+                  {t.submitting}
+                </>
+              ) : (
+                t.submit
+              )}
+            </span>
+          </button>
+        </div>
       </form>
-      <p className="mt-6 text-center text-sm text-ink-muted">
+
+      <p className={styles.footer}>
         {t.noAccount}{' '}
-        <Link href="/register" className="font-semibold text-primary hover:underline">
-          {t.registerLink}
-        </Link>
+        <Link href="/register">{t.registerLink}</Link>
       </p>
-    </Card>
+    </div>
   );
 }

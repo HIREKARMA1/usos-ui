@@ -115,6 +115,15 @@ export default function ProfilePage() {
       .finally(() => setLoading(false));
   }, [applyProfile, t.loadError]);
 
+  useEffect(() => {
+    if (loading) return;
+    if (typeof window === 'undefined' || window.location.hash !== '#bank-details') return;
+    const timer = window.setTimeout(() => {
+      document.getElementById('bank-details')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+    return () => window.clearTimeout(timer);
+  }, [loading]);
+
   function applyLocation(hit: LocationHit, source: string) {
     setAddressLine(hit.address_line || hit.display_name);
     setLocality(hit.address_locality || '');
@@ -490,7 +499,7 @@ export default function ProfilePage() {
         </form>
       </Card>
 
-      <Card>
+      <Card id="bank-details">
         <h2 className="font-display text-lg font-bold">{t.bankTitle}</h2>
         <form onSubmit={saveBank} className="mt-4 grid gap-4 sm:grid-cols-2">
           <Input

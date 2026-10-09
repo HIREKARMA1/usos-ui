@@ -10,7 +10,10 @@ import type {
   KycRow,
   OverviewStats,
   PackagePlan,
-  PaymentOrder,
+  AdminPaymentList,
+  PaymentSettings,
+  UpiCheckout,
+  UpiPayment,
   Referral,
   RewardClaim,
   TokenResponse,
@@ -173,17 +176,25 @@ class ApiClient {
     return res.data;
   }
 
-  async createPaymentOrder() {
-    const res = await this.client.post('/api/v1/payments/create-order');
-    const d = res.data;
-    const checkout = d.checkout || {};
-    return {
-      action: checkout.action_url as string,
-      fields: (checkout.params || {}) as Record<string, string>,
-      provider: d.provider,
-      order_id: d.order_id,
-      amount: d.amount,
-    } satisfies PaymentOrder & { provider?: string; order_id?: string; amount?: number };
+  async getUpiCheckout(): Promise<UpiCheckout> {
+    return this.get<UpiCheckout>('/api/v1/payments/upi');
+  }
+
+  async submitUpiPayment(transactionId: string): Promise<UpiPayment> {
+    return this.post<UpiPayment>('/api/v1/payments/submit', { transaction_id: transactionId });
+  }
+
+  async getUpiPaymentStatus(id: string): Promise<UpiPayment> {
+    return this.get<UpiPayment>(`/api/v1/payments/${id}/status`);
+  }
+
+  async verifyShopPayment(_payload: {
+    order_id: string;
+    payment_id: string;
+    signature: string;
+    status?: string;
+  }): Promise<{ message: string; status: string; order_id: string }> {
+    throw new Error('Shop payments use UPI QR submission');
   }
 
   async getOverview(): Promise<OverviewStats> {
@@ -282,6 +293,15 @@ class ApiClient {
 
   async deletePackage(id: string): Promise<void> {
     await this.delete(`/api/v1/packages/${id}`);
+  }
+
+  async uploadPaymentQr(file: File) {
+    const body = new FormData();
+    body.append('file', file);
+    const res = await this.client.post<{ url: string }>('/api/v1/uploads/payment-qr', body, {
+      headers: { 'Content-Type': false as unknown as string },
+    });
+    return res.data;
   }
 
   async uploadPackageImage(file: File) {
@@ -471,6 +491,16 @@ class ApiClient {
     return this.post<any>('/api/v1/shop/checkout', payload);
   }
 
+  async submitShopUpiPayment(orderId: string, transactionId: string) {
+    return this.post<any>(`/api/v1/shop/orders/${orderId}/submit-payment`, {
+      transaction_id: transactionId,
+    });
+  }
+
+  async getShopOrderPayment(orderId: string) {
+    return this.get<any>(`/api/v1/shop/orders/${orderId}/payment`);
+  }
+
   async getShopOrders() {
     return this.get<any[]>('/api/v1/shop/orders');
   }
@@ -536,6 +566,31 @@ class ApiClient {
       submitted_at?: string | null;
       editable: boolean;
     }>('/api/v1/users/me/kyc-status');
+  }
+
+  async getPaymentSettings() {
+    return this.get<PaymentSettings>('/api/v1/admin/payment-settings');
+  }
+
+  async updatePaymentSettings(data: {
+    upi_id: string;
+    display_name: string;
+    qr_code_url?: string | null;
+    instructions: string;
+  }) {
+    return this.put<PaymentSettings>('/api/v1/admin/payment-settings', data);
+  }
+
+  async getAdminPayments(params?: { q?: string; status?: string; page?: number; page_size?: number }) {
+    return this.get<AdminPaymentList>('/api/v1/admin/payments', params);
+  }
+
+  async approveAdminPayment(id: string) {
+    return this.patch(`/api/v1/admin/payments/${id}/approve`);
+  }
+
+  async rejectAdminPayment(id: string, reason: string) {
+    return this.patch(`/api/v1/admin/payments/${id}/reject`, { reason });
   }
 
   async getAdminKyc(params?: { q?: string; status?: string; page?: number; page_size?: number }) {

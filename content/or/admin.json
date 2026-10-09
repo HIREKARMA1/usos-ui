@@ -3,6 +3,7 @@
     "analytics": "ବିଶ୍ଳେଷଣ",
     "users": "ଉପଯୋଗକର୍ତ୍ତା",
     "kyc": "KYC ଯାଞ୍ଚ",
+    "payments": "ପେମେଣ୍ଟ",
     "products": "ଉତ୍ପାଦ",
     "packages": "ପ୍ୟାକେଜ",
     "rewards": "ରିୱାର୍ଡ",
@@ -44,6 +45,7 @@
       "searchMember": "ସଦସ୍ୟ ଖୋଜନ୍ତୁ",
       "reviewRewards": "ରିୱାର୍ଡ ସମୀକ୍ଷା",
       "reviewKyc": "KYC ସମୀକ୍ଷା",
+      "reviewPayments": "ପେମେଣ୍ଟ ସମୀକ୍ଷା",
       "processPayout": "ପେଆଉଟ୍ ପ୍ରକ୍ରିୟା"
     }
   },
@@ -262,5 +264,80 @@
     "loadError": "KYC ଅନୁରୋଧ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ",
     "emptyTitle": "କୌଣସି KYC ଅନୁରୋଧ ନାହିଁ",
     "emptyDescription": "ସଦସ୍ୟମାନେ PAN ଓ ଆଧାର ଦାଖଲ କଲେ ଏଠାରେ ଦେଖାଯିବେ।"
+  },
+  "payments": {
+    "breadcrumb": "ଆଡମିନ୍",
+    "title": "ପେମେଣ୍ଟ",
+    "subtitle": "ସଦସ୍ୟମାନେ ଦାଖଲ କରିଥିବା UPI ପେମେଣ୍ଟ ସମୀକ୍ଷା କରନ୍ତୁ। କେବଳ ଆଡମିନ୍ ଅନୁମୋଦନ କରିପାରିବେ।",
+    "loadError": "ପେମେଣ୍ଟ ଲୋଡ୍ ହୋଇପାରିଲା ନାହିଁ।",
+    "empty": "ଏଯାଏଁ କୌଣସି ପେମେଣ୍ଟ ନାହିଁ",
+    "emptyHint": "ଦାଖଲ ହୋଇଥିବା UPI ପେମେଣ୍ଟ ଏଠାରେ ଦେଖାଯିବ।",
+    "stats": {
+      "total": "ମୋଟ ପେମେଣ୍ଟ",
+      "pending": "ଅନୁମୋଦନ ବାକି",
+      "approved": "ଅନୁମୋଦିତ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ"
+    },
+    "filters": {
+      "all": "ସମସ୍ତ",
+      "pending_approval": "ବାକି",
+      "approved": "ଅନୁମୋଦିତ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ",
+      "search": "ନାମ, ଇମେଲ୍ କିମ୍ବା UTR ଖୋଜନ୍ତୁ"
+    },
+    "table": {
+      "user": "ଉପଯୋଗକର୍ତ୍ତା ନାମ",
+      "type": "ପ୍ରକାର",
+      "email": "ଇମେଲ୍",
+      "application": "ଆବେଦନ/ଅର୍ଡର ID",
+      "amount": "ରାଶି",
+      "utr": "UPI ଟ୍ରାଞ୍ଜାକ୍ସନ୍ ID",
+      "submitted": "ଦାଖଲ ତାରିଖ",
+      "status": "ସ୍ଥିତି",
+      "action": "କାର୍ଯ୍ୟ"
+    },
+    "kinds": {
+      "membership": "ସଦସ୍ୟତା",
+      "shop": "ଦୋକାନ"
+    },
+    "status": {
+      "pending_approval": "ଅନୁମୋଦନ ବାକି",
+      "approved": "ଅନୁମୋଦିତ",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ"
+    },
+    "approve": "ଅନୁମୋଦନ",
+    "reject": "ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "approveTitle": "ପେମେଣ୍ଟ ଅନୁମୋଦନ",
+    "rejectTitle": "ପେମେଣ୍ଟ ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "approveConfirm": "{name} ଙ୍କ ଏହି ପେମେଣ୍ଟ ଅନୁମୋଦନ କରିବେ?",
+    "rejectConfirm": "{name} ଙ୍କ ଏହି ପେମେଣ୍ଟ ପ୍ରତ୍ୟାଖ୍ୟାନ କରିବେ?",
+    "rejectReasonLabel": "ପ୍ରତ୍ୟାଖ୍ୟାନ କାରଣ",
+    "rejectReasonPlaceholder": "ଏହି ପେମେଣ୍ଟ କାହିଁକି ପ୍ରତ୍ୟାଖ୍ୟାତ ହେଲା ଲେଖନ୍ତୁ",
+    "rejectReasonRequired": "ପ୍ରତ୍ୟାଖ୍ୟାନ କାରଣ ଲେଖନ୍ତୁ।",
+    "approvedToast": "ପେମେଣ୍ଟ ଅନୁମୋଦିତ।",
+    "rejectedToast": "ପେମେଣ୍ଟ ପ୍ରତ୍ୟାଖ୍ୟାତ।",
+    "cancel": "ବାତିଲ୍",
+    "confirmApprove": "ପେମେଣ୍ଟ ଅନୁମୋଦନ",
+    "confirmReject": "ପେମେଣ୍ଟ ପ୍ରତ୍ୟାଖ୍ୟାନ",
+    "settingsTitle": "UPI ଚେକଆଉଟ୍",
+    "settingsHint": "ସଦସ୍ୟମାନେ ଏହି UPI ID କୁ ପେମେଣ୍ଟ କରନ୍ତି। ରାଶି ପ୍ୟାକେଜରୁ ସ୍ୱୟଂଚାଳିତ ଭାବେ ଭର୍ତ୍ତି ହୁଏ।",
+    "configureUpi": "UPI ସେଟିଂ",
+    "upiConfigured": "{upi} କୁ ପେମେଣ୍ଟ",
+    "upiId": "UPI ID",
+    "displayName": "ବ୍ୟବସାୟୀ ନାମ",
+    "qrUrl": "ବୈକଳ୍ପିକ ସ୍ଥିର QR",
+    "qrOptionalHint": "ଆବଶ୍ୟକ ନୁହେଁ — ଚେକଆଉଟ୍ ସଠିକ୍ ରାଶି ସହ ଡାଇନାମିକ୍ QR ତିଆରି କରେ।",
+    "instructions": "ସଦସ୍ୟ ନିର୍ଦ୍ଦେଶ",
+    "instructionsHint": "ପ୍ରତି ଧାଡ଼ିରେ ଗୋଟିଏ ପଦକ୍ଷେପ। ପେମେଣ୍ଟ ପୃଷ୍ଠାରେ ଦେଖାଯାଏ।",
+    "uploadQr": "ଛବି ଅପଲୋଡ୍",
+    "replaceQr": "ଛବି ବଦଳାନ୍ତୁ",
+    "removeQr": "ହଟାନ୍ତୁ",
+    "uploading": "ଅପଲୋଡ୍ ହେଉଛି…",
+    "qrUploaded": "QR ଛବି ଅପଲୋଡ୍ ହେଲା। ପ୍ରକାଶ କରିବାକୁ ସେଟିଂ ସଞ୍ଚୟ କରନ୍ତୁ।",
+    "saveSettings": "UPI ସେଟିଂ ସଞ୍ଚୟ କରନ୍ତୁ",
+    "settingsSaved": "UPI ସେଟିଂ ସଞ୍ଚୟ ହେଲା।",
+    "settingsError": "UPI ସେଟିଂ ସଞ୍ଚୟ ହୋଇପାରିଲା ନାହିଁ।",
+    "merchantSection": "ବ୍ୟବସାୟୀ ବିବରଣୀ",
+    "qrSection": "ସ୍ଥିର QR (ବୈକଳ୍ପିକ)"
   }
 }
