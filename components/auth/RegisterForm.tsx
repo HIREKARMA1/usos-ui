@@ -11,6 +11,7 @@ import { PasswordInput } from '@/components/ui/PasswordInput';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { postAuthPath } from '@/lib/access';
 import { env } from '@/lib/constants';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import type { PackagePlan, TokenResponse } from '@/types';
@@ -94,15 +95,15 @@ export function RegisterForm() {
     return (sponsorLocked ? refFromLink : sponsor.trim().toUpperCase()) || undefined;
   }
 
-  function goToPayment(res: TokenResponse, message: string) {
+  function goToDashboard(res: TokenResponse, message: string) {
     loginSuccess(res.access_token, res.user);
     toast.success(message);
-    router.push('/payment');
+    router.push(postAuthPath(res.user));
   }
 
-  async function startPayment(message: string) {
-    const tokens = await api.login(email.trim(), password);
-    goToPayment(tokens, message);
+  async function finishRegistration(message: string) {
+    const tokens = await api.login(email.trim() || phone, password);
+    goToDashboard(tokens, message);
   }
 
   function validateForGoogle(): boolean {
@@ -132,7 +133,7 @@ export function RegisterForm() {
         sponsor_referral_code: sponsorCode(),
         full_name: fullName.trim() || undefined,
       });
-      goToPayment(res, t.success);
+      goToDashboard(res, t.success);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       toast.error(typeof detail === 'string' ? detail : t.googleError || t.error);
@@ -145,7 +146,7 @@ export function RegisterForm() {
     e.preventDefault();
     const next: Record<string, string> = {};
     if (!fullName.trim()) next.name = v.nameRequired;
-    if (!email.trim()) next.email = v.emailRequired;
+    if (email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) next.email = v.emailInvalid;
     if (!/^\d{10,15}$/.test(phone)) next.phone = v.phoneInvalid;
     if (password.length < 8) next.password = v.passwordMin;
     if (!packageCode) next.package = v.packageRequired;
@@ -156,23 +157,23 @@ export function RegisterForm() {
     try {
       const payload: {
         full_name: string;
-        email: string;
+        email?: string;
         phone: string;
         password: string;
         package_code: string;
         sponsor_referral_code?: string;
       } = {
         full_name: fullName.trim(),
-        email: email.trim(),
         phone,
         password,
         package_code: packageCode,
       };
+      if (email.trim()) payload.email = email.trim();
       const code = sponsorCode();
       if (code) payload.sponsor_referral_code = code;
       const registered = await api.register(payload);
       const resumed = Boolean((registered as { resumed?: boolean })?.resumed);
-      await startPayment(resumed ? t.resumePayment || t.success : t.success);
+      await finishRegistration(resumed ? t.resumePayment || t.success : t.success);
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
       const msg =
@@ -201,8 +202,9 @@ export function RegisterForm() {
               label={t.phoneLabel}
               placeholder={t.phonePlaceholder}
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 15))}
               error={errors.phone}
+              inputMode="numeric"
             />
           </div>
 
@@ -302,7 +304,8 @@ export function RegisterForm() {
           <div className={styles.field}>
             <Input
               id="email"
-              label={t.emailLabel}
+              label={t.emailLabelOptional || t.emailLabel}
+              hint={t.emailHint}
               placeholder={t.emailPlaceholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}

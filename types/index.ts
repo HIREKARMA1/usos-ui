@@ -9,6 +9,7 @@ export interface AuthUser {
   phone?: string;
   role: UserRole;
   referralCode: string;
+  usosId?: string;
   packageId?: PackageId;
   status?: AccountStatus;
 }
@@ -78,6 +79,7 @@ export interface Referral {
   packageId: PackageId;
   status: AccountStatus;
   referralCode?: string;
+  usosId?: string;
 }
 
 export interface PackagePlan {
@@ -107,11 +109,13 @@ export interface Milestone {
 
 export interface AdminUserRow {
   id: string;
+  usosId?: string;
   name: string;
   email: string;
   phone: string;
   packageId: PackageId;
   status: AccountStatus;
+  level: number;
   joinedAt: string;
   totalEarningsPaise: number;
   earnings: number;

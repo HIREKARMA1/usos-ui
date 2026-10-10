@@ -8,7 +8,7 @@ import { LanguageSwitcher } from '@/components/ui/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
-import { needsPayment, postAuthPath } from '@/lib/access';
+import { postAuthPath } from '@/lib/access';
 
 export function AuthShell({ children }: { children: ReactNode }) {
   const common = useContent('common');
@@ -35,13 +35,8 @@ export function PublicHeader() {
   const common = useContent('common');
   const { user, loading, isAuthenticated } = useAuth();
   const dashboardHref = user ? postAuthPath(user) : '/user';
-  const pending = needsPayment(user);
-  const shopHref = pending ? '/payment?reason=pending' : '/shop';
-  const profileHref = pending
-    ? '/payment?reason=pending'
-    : user?.role === 'admin'
-      ? '/admin'
-      : '/user/profile';
+  const shopHref = '/shop';
+  const profileHref = user?.role === 'admin' ? '/admin' : '/user/profile';
 
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-surface-card/90 backdrop-blur">
@@ -65,7 +60,7 @@ export function PublicHeader() {
           <ThemeToggle />
           <LanguageSwitcher className="hidden sm:inline-flex" />
           <Link
-            href={pending ? '/payment?reason=pending' : '/shop/cart'}
+            href="/shop/cart"
             aria-label="Cart"
             className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-ink hover:bg-surface-muted hover:text-primary"
           >
@@ -127,7 +122,7 @@ export function PublicFooter() {
                   <Link href={postAuthPath(user)}>{common.nav.dashboard}</Link>
                 </li>
                 <li>
-                  <Link href={needsPayment(user) ? '/payment?reason=pending' : '/shop'}>
+                  <Link href="/shop">
                     {common.nav.shop || 'Shop'}
                   </Link>
                 </li>

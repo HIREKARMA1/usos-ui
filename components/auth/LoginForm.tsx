@@ -11,7 +11,7 @@ import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
 import { env } from '@/lib/constants';
-import { needsPayment, postAuthPath } from '@/lib/access';
+import { postAuthPath } from '@/lib/access';
 import { GoogleSignInButton } from './GoogleSignInButton';
 import type { TokenResponse } from '@/types';
 import styles from './AuthForm.module.css';
@@ -30,7 +30,7 @@ export function LoginForm() {
   const googleEnabled = Boolean(env.googleClientId.trim());
 
   function afterLoginDestination(user: TokenResponse['user']) {
-    if (!needsPayment(user) && nextPath.startsWith('/') && !nextPath.startsWith('//')) {
+    if (nextPath.startsWith('/') && !nextPath.startsWith('//')) {
       return nextPath;
     }
     return postAuthPath(user);
@@ -38,11 +38,6 @@ export function LoginForm() {
 
   function finishAuth(res: TokenResponse) {
     loginSuccess(res.access_token, res.user);
-    if (needsPayment(res.user)) {
-      toast.success(t.resumePayment);
-      router.push('/payment');
-      return;
-    }
     toast.success(t.success);
     router.push(afterLoginDestination(res.user));
   }

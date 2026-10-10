@@ -14,14 +14,17 @@ import {
   Wallet as WalletIcon,
   X,
 } from 'lucide-react';
+import { ActivationNotice } from '@/components/dashboard/ActivationNotice';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Table, Td, Tr } from '@/components/ui/Table';
 import { Badge } from '@/components/ui/Badge';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Spinner } from '@/components/ui/Spinner';
+import { useAuth } from '@/hooks/useAuth';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
+import { ACTIVATION_REQUIRED_MESSAGE, apiErrorMessage, canAccessRewards } from '@/lib/access';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { cn } from '@/lib/cn';
 import type { Transaction, TransactionType } from '@/types';
@@ -70,6 +73,8 @@ function txnIcon(type: TransactionType) {
 
 export default function WalletPage() {
   const t = useContent('dashboard').wallet;
+  const { user } = useAuth();
+  const rewardsOpen = canAccessRewards(user);
   const [rows, setRows] = useState<Transaction[]>([]);
   const [withdrawals, setWithdrawals] = useState<Withdrawal[]>([]);
   const [balance, setBalance] = useState(0);
@@ -113,6 +118,10 @@ export default function WalletPage() {
   }, [rows, withdrawals]);
 
   async function onWithdraw() {
+    if (!rewardsOpen) {
+      toast.error(ACTIVATION_REQUIRED_MESSAGE);
+      return;
+    }
     if (!hasBank) {
       toast.error(t.bankRequired);
       return;
@@ -135,7 +144,7 @@ export default function WalletPage() {
       setShowWithdraw(false);
       await load();
     } catch (e: any) {
-      toast.error(e?.response?.data?.detail || 'Withdrawal failed');
+      toast.error(apiErrorMessage(e, 'Withdrawal failed'));
     } finally {
       setWithdrawing(false);
     }
@@ -160,6 +169,7 @@ export default function WalletPage() {
   return (
     <div className="space-y-6">
       <h1 className="font-display text-2xl font-extrabold text-ink">{t.title}</h1>
+      {rewardsOpen ? null : <ActivationNotice compact />}
 
       {/* Balance hero card */}
       <div className="relative overflow-hidden rounded-xl bg-primary-900 px-6 py-6 shadow-none sm:px-8 sm:py-7">
@@ -182,7 +192,14 @@ export default function WalletPage() {
             <Button
               variant="outline"
               className="border-0 bg-white font-semibold text-primary-900 hover:bg-white/90"
-              onClick={() => setShowWithdraw(true)}
+              disabled={!rewardsOpen}
+              onClick={() => {
+                if (!rewardsOpen) {
+                  toast.error(ACTIVATION_REQUIRED_MESSAGE);
+                  return;
+                }
+                setShowWithdraw(true);
+              }}
             >
               {t.withdrawButton}
             </Button>

@@ -3,15 +3,20 @@
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Coins } from 'lucide-react';
+import { ActivationNotice } from '@/components/dashboard/ActivationNotice';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Table, Td, Tr } from '@/components/ui/Table';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Spinner } from '@/components/ui/Spinner';
+import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { ACTIVATION_REQUIRED_MESSAGE, apiErrorMessage, canAccessRewards } from '@/lib/access';
 import { formatCurrency, formatDate } from '@/lib/format';
 
 export default function PointsPage() {
+  const { user } = useAuth();
+  const rewardsOpen = canAccessRewards(user);
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [points, setPoints] = useState('');
@@ -31,6 +36,10 @@ export default function PointsPage() {
 
   async function onRedeem(e: FormEvent) {
     e.preventDefault();
+    if (!rewardsOpen) {
+      toast.error(ACTIVATION_REQUIRED_MESSAGE);
+      return;
+    }
     const n = Number(points);
     if (!n || n < 1) {
       toast.error('Enter points to redeem');
@@ -45,7 +54,7 @@ export default function PointsPage() {
       setPoints('');
       load();
     } catch (err: any) {
-      toast.error(err?.response?.data?.detail || 'Redeem failed');
+      toast.error(apiErrorMessage(err, 'Redeem failed'));
     } finally {
       setRedeeming(false);
     }
@@ -59,7 +68,7 @@ export default function PointsPage() {
     );
   }
 
-  const valuePaise = data?.point_value_paise || 100;
+  const valuePaise = data?.point_value_paise || 200;
   const bal = data?.balance || 0;
 
   return (
@@ -71,6 +80,8 @@ export default function PointsPage() {
           wallet balance to your bank.
         </p>
       </div>
+
+      {rewardsOpen ? null : <ActivationNotice compact />}
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
@@ -94,12 +105,12 @@ export default function PointsPage() {
                 onChange={(e) => setPoints(e.target.value)}
               />
             </label>
-            <Button type="submit" loading={redeeming} disabled={bal < 1}>
+            <Button type="submit" loading={redeeming} disabled={!rewardsOpen || bal < 1}>
               Redeem to wallet
             </Button>
           </form>
           <p className="mt-3 text-xs text-ink-muted">
-            Example: redeem 100 pts (₹100) → ₹50 your wallet + ₹50 sponsor wallet.
+            Example: redeem 100 pts (₹200) → ₹100 your wallet + ₹100 sponsor wallet.
           </p>
         </Card>
       </div>

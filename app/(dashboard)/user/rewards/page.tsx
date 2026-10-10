@@ -2,10 +2,13 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Check, Star, Target, Trophy } from 'lucide-react';
+import { ActivationNotice } from '@/components/dashboard/ActivationNotice';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
+import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { canAccessRewards } from '@/lib/access';
 import { formatCurrency } from '@/lib/format';
 import { cn } from '@/lib/cn';
 
@@ -94,6 +97,8 @@ function StatusLabel({
 
 export default function RewardsPage() {
   const t = useContent('dashboard').rewards;
+  const { user } = useAuth();
+  const rewardsOpen = canAccessRewards(user);
   const [plan, setPlan] = useState<PlanLevel[]>([]);
   const [mine, setMine] = useState<Achievement[]>([]);
   const [loading, setLoading] = useState(true);
@@ -137,6 +142,8 @@ export default function RewardsPage() {
         <h1 className="font-display text-2xl font-extrabold text-primary">{t.title}</h1>
         <p className="mt-1 text-sm text-ink-muted">{t.subtitle}</p>
       </div>
+
+      {rewardsOpen ? null : <ActivationNotice />}
 
       {plan.length ? (
         <div>

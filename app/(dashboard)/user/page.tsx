@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Gift, Trophy } from 'lucide-react';
+import { ActiveAccountBadge, ActivationNotice } from '@/components/dashboard/ActivationNotice';
 import { MissionProgressCard } from '@/components/dashboard/MissionProgressCard';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -12,6 +13,7 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
+import { canAccessRewards } from '@/lib/access';
 import { formatCurrency, formatDate } from '@/lib/format';
 import { cn } from '@/lib/cn';
 import type { OverviewStats, Referral, Transaction } from '@/types';
@@ -190,6 +192,7 @@ export default function UserOverviewPage() {
           </span>
         </h1>
         <p className="mt-1 text-xs text-ink-muted sm:text-sm">{t.greetingSubtitle || t.subtitle}</p>
+        {canAccessRewards(user) ? <ActiveAccountBadge /> : null}
         {stats?.kycStatus ? (
           <p className="mt-2 text-xs font-medium sm:text-sm">
             <span className="text-ink-muted">{t.stats.kycStatus || 'KYC'}: </span>
@@ -209,6 +212,8 @@ export default function UserOverviewPage() {
           </p>
         ) : null}
       </div>
+
+      {user && !canAccessRewards(user) ? <ActivationNotice /> : null}
 
       <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 sm:gap-4 xl:grid-cols-4">
         <OverviewStatCard
