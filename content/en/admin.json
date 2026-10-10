@@ -67,6 +67,13 @@
     },
     "activate": "Activate",
     "deactivate": "Deactivate",
+    "delete": "Delete",
+    "deleteTitle": "Delete this user?",
+    "deleteBody": "Permanently delete {name}? This cannot be undone.",
+    "deleteConfirm": "Delete user",
+    "cancel": "Cancel",
+    "deleted": "User deleted",
+    "deleteFailed": "Could not delete user",
     "statusUpdated": "User status updated",
     "emptyTitle": "No users found",
     "emptyDescription": "Try adjusting your search."
