@@ -29,6 +29,7 @@ type Profile = {
   email?: string;
   phone?: string;
   status?: string;
+  usos_id?: string;
   referral_code?: string;
   sponsor_referral_code?: string | null;
   sponsor_name?: string | null;
@@ -336,6 +337,10 @@ export default function ProfilePage() {
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">{t.fields.email}</dt>
             <dd className="mt-0.5 text-sm font-medium text-ink">{profile?.email || user?.email || '—'}</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">{t.fields.userId}</dt>
+            <dd className="mt-0.5 font-mono text-sm font-semibold text-ink">{profile?.usos_id || '—'}</dd>
           </div>
           <div>
             <dt className="text-xs font-semibold uppercase tracking-wide text-ink-muted">{t.fields.referralCode}</dt>

@@ -29,6 +29,9 @@ const iconBtnClass =
 
 type StatusFilter = 'all' | 'active' | 'inactive';
 type PackageFilter = 'all' | string;
+type LevelFilter = 'all' | number;
+
+const FALLBACK_LEVELS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function avatarGradient(name: string) {
   const index = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
@@ -85,7 +88,7 @@ function exportUsers(
   rows: AdminUserRow[],
   statusLabels: Record<string, string>
 ) {
-  const headers = ['Name', 'Email', 'Contact', 'Package', 'Earnings', 'Status', 'Joined'];
+  const headers = ['Name', 'Email', 'Contact', 'Package', 'Level', 'Earnings', 'Status', 'Joined'];
   const escape = (value: string | number) => `"${String(value).replace(/"/g, '""')}"`;
   const lines = [
     headers.join(','),
@@ -104,6 +107,7 @@ function exportUsers(
         u.email,
         u.phone,
         `Package ${u.packageId}`,
+        u.level > 0 ? `Level ${u.level}` : '',
         earnings,
         statusLabels[u.status] || u.status,
         formatDate(u.joinedAt),
@@ -127,9 +131,11 @@ export default function AdminUsersPage() {
   const common = useContent('common');
   const [rows, setRows] = useState<AdminUserRow[]>([]);
   const [packages, setPackages] = useState<PackagePlan[]>([]);
+  const [levelOptions, setLevelOptions] = useState<number[]>(FALLBACK_LEVELS);
   const [q, setQ] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [packageFilter, setPackageFilter] = useState<PackageFilter>('all');
+  const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -150,6 +156,12 @@ export default function AdminUsersPage() {
       setRows(data);
       const pkgs = await api.getPackages({ activeOnly: false }).catch(() => [] as PackagePlan[]);
       setPackages(pkgs);
+      const plan = await api.getRewardPlan().catch(() => ({ levels: [] as { level: number }[] }));
+      const levels = (plan.levels || [])
+        .map((level) => Number(level.level))
+        .filter((level) => Number.isFinite(level) && level > 0)
+        .sort((a, b) => a - b);
+      if (levels.length) setLevelOptions(levels);
     } finally {
       setLoading(false);
     }
@@ -161,7 +173,7 @@ export default function AdminUsersPage() {
 
   useEffect(() => {
     setPage(1);
-  }, [q, statusFilter, packageFilter]);
+  }, [q, statusFilter, packageFilter, levelFilter]);
 
   const packageOptions = useMemo(() => {
     if (packages.length) return packages.map((p) => ({ code: p.code, name: p.name }));
@@ -184,9 +196,10 @@ export default function AdminUsersPage() {
         }
         if (statusFilter !== 'all' && r.status !== statusFilter) return false;
         if (packageFilter !== 'all' && r.packageId !== packageFilter) return false;
+        if (levelFilter !== 'all' && r.level !== levelFilter) return false;
         return true;
       }),
-    [rows, q, statusFilter, packageFilter]
+    [rows, q, statusFilter, packageFilter, levelFilter]
   );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
@@ -264,6 +277,26 @@ export default function AdminUsersPage() {
                   <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/50" />
                 </label>
 
+                <label className="relative">
+                  <span className="sr-only">{t.table.level}</span>
+                  <select
+                    value={levelFilter === 'all' ? 'all' : String(levelFilter)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setLevelFilter(value === 'all' ? 'all' : Number(value));
+                    }}
+                    className={cn(controlClass, 'appearance-none py-2 pl-3 pr-8')}
+                  >
+                    <option value="all">{t.levelAll}</option>
+                    {levelOptions.map((level) => (
+                      <option key={level} value={level}>
+                        Level {level}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/50" />
+                </label>
+
                 <button
                   type="button"
                   onClick={() => exportUsers(filtered, common.status)}
@@ -286,13 +319,15 @@ export default function AdminUsersPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+                <table className="w-full min-w-[960px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-line bg-surface-muted/80 dark:border-white/[0.06] dark:bg-white/[0.04]">
                       {[
+                        { label: t.table.userId, align: 'left' as const },
                         { label: t.table.name, align: 'left' as const },
                         { label: t.table.contact, align: 'left' as const },
                         { label: t.table.package, align: 'left' as const },
+                        { label: t.table.level, align: 'left' as const },
                         { label: t.table.earnings, align: 'right' as const },
                         { label: t.table.status, align: 'left' as const },
                         { label: t.table.joined, align: 'left' as const },
@@ -313,7 +348,7 @@ export default function AdminUsersPage() {
                   <tbody>
                     {paginated.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-4 py-16 text-center text-sm text-ink-muted dark:text-white/40">
+                        <td colSpan={9} className="px-4 py-16 text-center text-sm text-ink-muted dark:text-white/40">
                           <p className="font-medium text-ink-secondary dark:text-white/60">{t.emptyTitle}</p>
                           <p className="mt-1 text-xs">{t.emptyDescription}</p>
                         </td>
@@ -324,6 +359,9 @@ export default function AdminUsersPage() {
                           key={u.id}
                           className="border-b border-line/60 transition duration-300 last:border-0 hover:bg-surface-muted/60 dark:border-white/[0.04] dark:hover:bg-white/[0.03]"
                         >
+                          <td className="px-4 py-4 font-mono text-sm font-semibold text-ink dark:text-white">
+                            {u.usosId || '—'}
+                          </td>
                           <td className="px-4 py-4">
                             <div className="flex items-center gap-3">
                               <div
@@ -343,6 +381,9 @@ export default function AdminUsersPage() {
                           <td className="px-4 py-4 text-ink-secondary dark:text-white/70">{u.phone || '—'}</td>
                           <td className="px-4 py-4 font-medium text-ink dark:text-white/80">
                             {packageNameByCode.get(u.packageId) || u.packageId || '—'}
+                          </td>
+                          <td className="px-4 py-4 text-ink-secondary dark:text-white/70">
+                            {u.level > 0 ? `Level ${u.level}` : '—'}
                           </td>
                           <td className="px-4 py-4 text-right font-medium text-emerald-600 dark:text-[#22C55E]">
                             {formatCurrency(getUserEarnings(u))}

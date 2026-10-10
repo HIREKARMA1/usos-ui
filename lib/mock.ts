@@ -117,12 +117,12 @@ export const mockAdminStats: AdminStats = {
 };
 
 export const mockAdminUsers: AdminUserRow[] = [
-  { id: 'u1', name: 'Anita Sharma', email: 'anita@example.com', phone: '9876543210', packageId: 'B', status: 'active', joinedAt: '2026-07-15', totalEarningsPaise: 4230000, earnings: 42300 },
-  { id: 'u2', name: 'Rahul Verma', email: 'rahul@example.com', phone: '9876543211', packageId: 'A', status: 'active', joinedAt: '2026-07-12', totalEarningsPaise: 1870000, earnings: 18700 },
-  { id: 'u3', name: 'Priya Nayak', email: 'priya@example.com', phone: '9876543212', packageId: 'B', status: 'active', joinedAt: '2026-07-08', totalEarningsPaise: 6510000, earnings: 65100 },
-  { id: 'u4', name: 'Sourav Das', email: 'sourav@example.com', phone: '9876543213', packageId: 'A', status: 'pending', joinedAt: '2026-07-03', totalEarningsPaise: 0, earnings: 0 },
-  { id: 'u5', name: 'Meera Patel', email: 'meera@example.com', phone: '9876543214', packageId: 'A', status: 'inactive', joinedAt: '2026-06-28', totalEarningsPaise: 920000, earnings: 9200 },
-  { id: 'u6', name: 'Karan Singh', email: 'karan@example.com', phone: '9876543215', packageId: 'A', status: 'active', joinedAt: '2026-06-20', totalEarningsPaise: 2450000, earnings: 24500 },
+  { id: 'u1', name: 'Anita Sharma', email: 'anita@example.com', phone: '9876543210', packageId: 'B', status: 'active', level: 2, joinedAt: '2026-07-15', totalEarningsPaise: 4230000, earnings: 42300 },
+  { id: 'u2', name: 'Rahul Verma', email: 'rahul@example.com', phone: '9876543211', packageId: 'A', status: 'active', level: 1, joinedAt: '2026-07-12', totalEarningsPaise: 1870000, earnings: 18700 },
+  { id: 'u3', name: 'Priya Nayak', email: 'priya@example.com', phone: '9876543212', packageId: 'B', status: 'active', level: 3, joinedAt: '2026-07-08', totalEarningsPaise: 6510000, earnings: 65100 },
+  { id: 'u4', name: 'Sourav Das', email: 'sourav@example.com', phone: '9876543213', packageId: 'A', status: 'pending', level: 0, joinedAt: '2026-07-03', totalEarningsPaise: 0, earnings: 0 },
+  { id: 'u5', name: 'Meera Patel', email: 'meera@example.com', phone: '9876543214', packageId: 'A', status: 'inactive', level: 1, joinedAt: '2026-06-28', totalEarningsPaise: 920000, earnings: 9200 },
+  { id: 'u6', name: 'Karan Singh', email: 'karan@example.com', phone: '9876543215', packageId: 'A', status: 'active', level: 1, joinedAt: '2026-06-20', totalEarningsPaise: 2450000, earnings: 24500 },
 ];
 
 export const mockRewardClaims: RewardClaim[] = [

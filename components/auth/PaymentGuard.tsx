@@ -4,7 +4,6 @@ import { ReactNode, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Spinner } from '@/components/ui/Spinner';
 import { useAuth } from '@/hooks/useAuth';
-import { needsPayment, PAYMENT_PATH } from '@/lib/access';
 
 export function PaymentGuard({
   children,
@@ -18,13 +17,7 @@ export function PaymentGuard({
 
   useEffect(() => {
     if (loading) return;
-    if (!user) {
-      if (!allowGuest) router.replace('/login');
-      return;
-    }
-    if (needsPayment(user)) {
-      router.replace(`${PAYMENT_PATH}?reason=pending`);
-    }
+    if (!user && !allowGuest) router.replace('/login');
   }, [loading, user, allowGuest, router]);
 
   if (loading) {
@@ -36,16 +29,7 @@ export function PaymentGuard({
     );
   }
 
-  if (!user) {
-    if (allowGuest) return <>{children}</>;
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (needsPayment(user)) {
+  if (!user && !allowGuest) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <Spinner />

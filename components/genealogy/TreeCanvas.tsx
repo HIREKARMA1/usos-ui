@@ -2,10 +2,23 @@
 
 import { useCallback, useRef, useState, type PointerEvent, type WheelEvent, type ReactNode } from 'react';
 import { Minus, Plus, Maximize2 } from 'lucide-react';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 import type { TreeMember } from '@/types';
+
+function isActiveMember(status: TreeMember['status']) {
+  return status === 'active';
+}
+
+function MemberMark() {
+  return (
+    <img
+      src="/genealogy-mark.png"
+      alt=""
+      className="h-[78px] w-[78px] rounded-full bg-white object-cover shadow-[0_8px_18px_rgba(15,23,42,0.12)]"
+    />
+  );
+}
 
 function NodeCard({
   node,
@@ -17,20 +30,59 @@ function NodeCard({
   directLabel?: string;
 }) {
   const childCount = node.children?.length ?? 0;
+  const active = isActiveMember(node.status);
   return (
-    <div className="w-[148px] shrink-0 rounded-xl border border-line bg-surface-card px-3 py-2.5 text-center shadow-none touch-manipulation">
-      {label ? (
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-primary">{label}</p>
-      ) : null}
-      <p className="mt-0.5 truncate text-sm font-semibold text-ink">{node.name}</p>
-      <p className="truncate font-mono text-[11px] text-ink-muted">{node.referralCode}</p>
-      <div className="mt-1.5 flex flex-wrap items-center justify-center gap-1">
-        <Badge tone={node.status === 'active' ? 'success' : 'warning'}>{node.status}</Badge>
-        {childCount > 0 && directLabel ? (
-          <span className="rounded-md bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
-            {childCount} {directLabel}
-          </span>
-        ) : null}
+    <div className="relative z-[1] w-[210px] shrink-0 pt-9 touch-manipulation">
+      <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2">
+        <MemberMark />
+      </div>
+      <div
+        className="rounded-[22px] p-[2.5px]"
+        style={{
+          background: active
+            ? 'linear-gradient(90deg, #22c55e 0%, #2dd4bf 52%, #38bdf8 100%)'
+            : 'linear-gradient(90deg, #fda4af 0%, #fb7185 48%, #f43f5e 100%)',
+          boxShadow: active
+            ? '0 14px 32px rgba(18, 163, 120, 0.16), 0 2px 8px rgba(42, 168, 214, 0.08)'
+            : '0 14px 32px rgba(240, 68, 76, 0.14)',
+        }}
+      >
+        <div
+          className="rounded-[19px] px-5 pb-[18px] pt-11 text-center"
+          style={{
+            background: active
+              ? 'linear-gradient(180deg, #f3fbf7 0%, #ffffff 46%)'
+              : 'linear-gradient(180deg, #fff6f6 0%, #ffffff 48%)',
+          }}
+        >
+          {label ? (
+            <span className="inline-flex rounded-full bg-[#18a56a] px-3 py-[3px] text-[11px] font-bold uppercase tracking-[0.08em] text-white">
+              {label}
+            </span>
+          ) : null}
+          <p
+            className={cn(
+              'truncate font-display text-[20px] font-bold leading-tight text-[#1c2430]',
+              label ? 'mt-2.5' : 'mt-1'
+            )}
+          >
+            {node.name}
+          </p>
+          <p className="mt-1 truncate text-[14px] font-medium tracking-wide text-[#8b95a5]">{node.referralCode}</p>
+          <div className="mt-3.5 flex items-center justify-center gap-3">
+            <span
+              className="rounded-full px-3.5 py-1 text-[13px] font-semibold text-white"
+              style={{ background: active ? '#18a56a' : '#f04b52' }}
+            >
+              {active ? 'Active' : 'Inactive'}
+            </span>
+            {childCount > 0 && directLabel ? (
+              <span className="text-[15px] font-semibold text-[#2457c5]">
+                {childCount} {directLabel}
+              </span>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -53,18 +105,21 @@ function TreeBranch({
       <NodeCard node={node} label={isRoot ? youLabel : undefined} directLabel={directLabel} />
       {kids.length > 0 ? (
         <>
-          <div className="h-5 w-px bg-line" />
-          <div className="relative flex items-start justify-center gap-3 sm:gap-4">
-            {kids.length > 1 ? (
-              <div
-                className="absolute left-[74px] right-[74px] top-0 h-px bg-line"
-                style={{ width: `calc(100% - 148px)` }}
-                aria-hidden
-              />
-            ) : null}
-            {kids.map((child) => (
-              <div key={child.id} className="flex flex-col items-center">
-                <div className="h-5 w-px bg-line" />
+          <div className="h-8 w-px bg-[#d3dbe4]" />
+          <div className="flex items-start">
+            {kids.map((child, index) => (
+              <div key={child.id} className="relative flex flex-col items-center px-4 pt-7">
+                <span
+                  className="pointer-events-none absolute left-1/2 top-0 z-0 w-px -translate-x-1/2 bg-[#d3dbe4]"
+                  style={{ height: 'calc(1.75rem + 2.25rem)' }}
+                  aria-hidden
+                />
+                {index > 0 ? (
+                  <span className="pointer-events-none absolute left-0 top-0 z-0 h-px w-1/2 bg-[#d3dbe4]" aria-hidden />
+                ) : null}
+                {index < kids.length - 1 ? (
+                  <span className="pointer-events-none absolute right-0 top-0 z-0 h-px w-1/2 bg-[#d3dbe4]" aria-hidden />
+                ) : null}
                 <TreeBranch node={child} directLabel={directLabel} />
               </div>
             ))}
@@ -89,7 +144,7 @@ export function TreeCanvas({
   hintZoom?: string;
 }) {
   const viewportRef = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(0.9);
+  const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const drag = useRef<{
     active: boolean;
@@ -137,17 +192,27 @@ export function TreeCanvas({
   }, []);
 
   const resetView = () => {
-    setScale(0.9);
+    setScale(1);
     setOffset({ x: 0, y: 0 });
   };
 
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-ink-muted">
-          {hintDrag}
-          {hintZoom ? ` · ${hintZoom}` : ''}
-        </p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted">
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-green" aria-hidden />
+            Active
+          </span>
+          <span className="inline-flex items-center gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-red" aria-hidden />
+            Inactive
+          </span>
+          <span>
+            {hintDrag}
+            {hintZoom ? ` · ${hintZoom}` : ''}
+          </span>
+        </div>
         <div className="flex items-center gap-1">
           <Button type="button" size="sm" variant="outline" onClick={() => setScale((s) => Math.max(0.45, s - 0.1))} aria-label="zoom out">
             <Minus className="h-4 w-4" />
@@ -164,7 +229,7 @@ export function TreeCanvas({
       <div
         ref={viewportRef}
         className={cn(
-          'relative h-[min(70vh,560px)] w-full touch-none overflow-hidden rounded-xl border border-line bg-surface-soft select-none',
+          'relative h-[min(76vh,720px)] w-full touch-none overflow-hidden rounded-xl border border-line bg-[#f4f7fb] select-none',
           drag.current.active ? 'cursor-grabbing' : 'cursor-grab'
         )}
         onPointerDown={onPointerDown}
@@ -174,7 +239,7 @@ export function TreeCanvas({
         onWheel={onWheel}
       >
         <div
-          className="absolute left-1/2 top-6 origin-top"
+          className="absolute left-1/2 top-10 origin-top"
           style={{
             transform: `translate(calc(-50% + ${offset.x}px), ${offset.y}px) scale(${scale})`,
           }}
@@ -199,7 +264,7 @@ export function mapGenealogyNode(data: any): TreeMember {
     name: data.full_name || data.name || '',
     referralCode: data.referral_code || data.referralCode || '',
     packageId: 'A',
-    status: data.status === 'active' ? 'active' : 'pending',
+    status: data.status === 'active' ? 'active' : data.status === 'pending_payment' || data.status === 'pending' ? 'pending' : 'inactive',
     joinedAt: data.created_at || data.joinedAt || '',
     children,
   };

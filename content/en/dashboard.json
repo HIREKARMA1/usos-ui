@@ -191,6 +191,7 @@
       "name": "Full name",
       "email": "Email",
       "phone": "Phone",
+      "userId": "User ID",
       "referralCode": "Your referral code",
       "package": "Package",
       "sponsor": "Sponsor",

@@ -11,7 +11,6 @@ import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/lib/api';
-import { env } from '@/lib/constants';
 import { formatDate, getInitials } from '@/lib/format';
 import { cn } from '@/lib/cn';
 import type { AccountStatus, OverviewStats, Referral } from '@/types';
@@ -29,7 +28,13 @@ export default function ReferralsPage() {
   const [overview, setOverview] = useState<OverviewStats | null>(null);
   const [loading, setLoading] = useState(true);
   const code = user?.referralCode || '';
-  const link = `${env.appUrl}/register?ref=${code}`;
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  const link = origin ? `${origin}/register?ref=${code}` : '';
 
   useEffect(() => {
     Promise.all([api.getReferrals(), api.getOverview()])
@@ -112,13 +117,13 @@ export default function ReferralsPage() {
           <p className="text-sm font-semibold text-ink">{t.yourLinkLabel}</p>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center">
             <div className="min-w-0 flex-1 truncate rounded-lg border border-line bg-surface-card px-3 py-2.5 text-sm text-ink">
-              {link}
+              {link || '…'}
             </div>
             <div className="flex shrink-0 gap-2">
-              <Button size="sm" onClick={() => copy(link)} disabled={full}>
+              <Button size="sm" onClick={() => copy(link)} disabled={full || !link}>
                 <Copy className="h-4 w-4" /> {t.copy}
               </Button>
-              <Button size="sm" onClick={share} disabled={full}>
+              <Button size="sm" onClick={share} disabled={full || !link}>
                 <Share2 className="h-4 w-4" /> {t.share}
               </Button>
             </div>
@@ -141,7 +146,7 @@ export default function ReferralsPage() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-ink">{r.name}</p>
                     <p className="truncate font-mono text-xs text-ink-muted">
-                      {r.referralCode || '—'}
+                      {r.usosId || r.referralCode || '—'}
                     </p>
                     <p className="mt-0.5 text-xs text-ink-muted sm:hidden">{formatDate(r.joinedAt)}</p>
                   </div>

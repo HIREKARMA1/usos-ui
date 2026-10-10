@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { clearSession } from './auth';
-import { isPaymentRequiredError, PAYMENT_PATH } from './access';
 import { env, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
@@ -37,20 +36,23 @@ export function mapAuthUser(d: {
   user_id?: string;
   full_name?: string;
   name?: string;
-  email: string;
+  email?: string;
   phone?: string;
   role: string;
   referral_code?: string;
   referralCode?: string;
+  usos_id?: string;
+  usosId?: string;
   status?: string;
 }): AuthUser {
   return {
     id: d.id || d.user_id || '',
     name: d.full_name || d.name || '',
-    email: d.email,
+    email: d.email || '',
     phone: d.phone,
     role: mapRole(d.role),
     referralCode: d.referral_code || d.referralCode || '',
+    usosId: d.usos_id || d.usosId || '',
     status:
       d.status === 'active'
         ? 'active'
@@ -110,12 +112,6 @@ class ApiClient {
     this.client.interceptors.response.use(
       (res) => res,
       (error: AxiosError) => {
-        if (typeof window !== 'undefined' && isPaymentRequiredError(error)) {
-          if (!window.location.pathname.startsWith(PAYMENT_PATH)) {
-            window.location.href = `${PAYMENT_PATH}?reason=pending`;
-          }
-          return Promise.reject(error);
-        }
         if (error.response?.status === 401 && typeof window !== 'undefined') {
           // Clear token + user together so admin UI cannot stay "logged in" without auth.
           clearSession();
@@ -158,7 +154,7 @@ class ApiClient {
 
   async register(data: {
     full_name: string;
-    email: string;
+    email?: string;
     phone: string;
     password: string;
     package_code: string;
@@ -267,6 +263,7 @@ class ApiClient {
       packageId: 'A',
       status: r.status === 'active' ? 'active' : 'pending',
       referralCode: r.referral_code,
+      usosId: r.usos_id || '',
     }));
   }
 
@@ -331,21 +328,24 @@ class ApiClient {
   }
 
   async getAdminUsers(): Promise<AdminUserRow[]> {
-    const rows = await this.get<any[]>('/api/v1/admin/users');
+    const rows = await this.get<any[]>('/api/v1/admin/users', { limit: 200 });
     return (rows || []).map((u) => {
       const totalEarningsPaise = Number(u.total_earnings_paise ?? u.totalEarningsPaise ?? 0);
       const earnings =
         totalEarningsPaise > 0
           ? totalEarningsPaise / 100
           : Number(u.earnings ?? 0);
+      const level = Number(u.current_level ?? u.level ?? 0);
 
       return {
         id: u.id,
+        usosId: u.usos_id || '',
         name: u.full_name,
         email: u.email,
         phone: u.phone || '',
         packageId: (u.package_code || '') as PackageId,
         status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
+        level: Number.isFinite(level) ? level : 0,
         joinedAt: u.created_at,
         totalEarningsPaise,
         earnings: Number.isFinite(earnings) ? earnings : 0,

@@ -53,10 +53,13 @@
     "title": "User management",
     "subtitle": "Manage members, packages, and account status.",
     "searchPlaceholder": "Search by name or email…",
+    "levelAll": "Level: All",
     "table": {
+      "userId": "User ID",
       "name": "Name",
       "contact": "Contact",
       "package": "Package",
+      "level": "Level",
       "earnings": "Earnings",
       "joined": "Joined",
       "status": "Status",
