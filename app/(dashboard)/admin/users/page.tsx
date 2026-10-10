@@ -1,8 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import toast from 'react-hot-toast';
 import { ChevronDown, ChevronLeft, ChevronRight, Download, Search } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
@@ -138,6 +140,8 @@ export default function AdminUsersPage() {
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [pendingDelete, setPendingDelete] = useState<AdminUserRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -212,6 +216,22 @@ export default function AdminUsersPage() {
     await api.toggleUserStatus(userId, next);
     toast.success(t.statusUpdated);
     load();
+  }
+
+  async function confirmDelete() {
+    if (!pendingDelete) return;
+    setDeleting(true);
+    try {
+      await api.deleteAdminUser(pendingDelete.id);
+      toast.success(t.deleted);
+      setPendingDelete(null);
+      load();
+    } catch (err: unknown) {
+      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
+      toast.error(typeof detail === 'string' ? detail : t.deleteFailed);
+    } finally {
+      setDeleting(false);
+    }
   }
 
   return (
@@ -398,18 +418,27 @@ export default function AdminUsersPage() {
                             {formatDate(u.joinedAt)}
                           </td>
                           <td className="px-4 py-4">
-                            <button
-                              type="button"
-                              onClick={() => toggle(u.id, u.status)}
-                              className={cn(
-                                'rounded-full px-3.5 py-1.5 text-xs font-semibold transition duration-300',
-                                u.status === 'active'
-                                  ? 'bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:shadow-[0_0_16px_rgba(239,68,68,0.15)] dark:bg-[#EF4444]/15 dark:text-[#EF4444] dark:hover:bg-[#EF4444]/25 dark:hover:shadow-[0_0_16px_rgba(239,68,68,0.25)]'
-                                  : 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.15)] dark:bg-[#22C55E]/15 dark:text-[#22C55E] dark:hover:bg-[#22C55E]/25 dark:hover:shadow-[0_0_16px_rgba(34,197,94,0.25)]'
-                              )}
-                            >
-                              {u.status === 'active' ? t.deactivate : t.activate}
-                            </button>
+                            <div className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={() => toggle(u.id, u.status)}
+                                className={cn(
+                                  'rounded-full px-3.5 py-1.5 text-xs font-semibold transition duration-300',
+                                  u.status === 'active'
+                                    ? 'bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:shadow-[0_0_16px_rgba(239,68,68,0.15)] dark:bg-[#EF4444]/15 dark:text-[#EF4444] dark:hover:bg-[#EF4444]/25 dark:hover:shadow-[0_0_16px_rgba(239,68,68,0.25)]'
+                                    : 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.15)] dark:bg-[#22C55E]/15 dark:text-[#22C55E] dark:hover:bg-[#22C55E]/25 dark:hover:shadow-[0_0_16px_rgba(34,197,94,0.25)]'
+                                )}
+                              >
+                                {u.status === 'active' ? t.deactivate : t.activate}
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setPendingDelete(u)}
+                                className="rounded-full bg-accent-red/10 px-3.5 py-1.5 text-xs font-semibold text-accent-red transition duration-300 hover:bg-accent-red/20"
+                              >
+                                {t.delete}
+                              </button>
+                            </div>
                           </td>
                         </tr>
                       ))
@@ -470,6 +499,32 @@ export default function AdminUsersPage() {
           )}
         </div>
       </div>
+
+      {pendingDelete
+        ? createPortal(
+            <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4">
+              <div
+                role="dialog"
+                aria-modal="true"
+                className="w-full max-w-md rounded-xl border border-line bg-surface-card p-6 shadow-card"
+              >
+                <h3 className="text-lg font-semibold text-ink">{t.deleteTitle}</h3>
+                <p className="mt-2 text-sm text-ink-muted">
+                  {t.deleteBody.replace('{name}', pendingDelete.name)}
+                </p>
+                <div className="mt-5 flex justify-end gap-2">
+                  <Button type="button" variant="outline" size="sm" disabled={deleting} onClick={() => setPendingDelete(null)}>
+                    {t.cancel}
+                  </Button>
+                  <Button type="button" variant="danger" size="sm" loading={deleting} onClick={confirmDelete}>
+                    {t.deleteConfirm}
+                  </Button>
+                </div>
+              </div>
+            </div>,
+            document.body
+          )
+        : null}
     </div>
   );
 }

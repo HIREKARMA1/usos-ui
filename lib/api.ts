@@ -357,6 +357,10 @@ class ApiClient {
     return this.client.patch(`/api/v1/admin/users/${userId}/status`, { status });
   }
 
+  async deleteAdminUser(userId: string) {
+    return this.client.delete(`/api/v1/admin/users/${userId}`);
+  }
+
   async getRewardClaims(status?: RewardClaim['status']): Promise<RewardClaim[]> {
     const apiStatus =
       status === 'pending' ? 'pending_verification' : status;
