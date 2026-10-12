@@ -102,8 +102,18 @@ export function RegisterForm() {
   }
 
   async function finishRegistration(message: string) {
-    const tokens = await api.login(email.trim() || phone, password);
-    goToDashboard(tokens, message);
+    try {
+      const tokens = await api.login(email.trim() || phone, password);
+      goToDashboard(tokens, message);
+    } catch (err: any) {
+      const detail = err?.response?.data?.detail;
+      if (typeof detail === 'string' && detail.includes('Several accounts use this mobile number')) {
+        toast.error(detail);
+        router.push('/login');
+        return;
+      }
+      throw err;
+    }
   }
 
   function validateForGoogle(): boolean {

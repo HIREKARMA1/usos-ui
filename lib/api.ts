@@ -112,7 +112,10 @@ class ApiClient {
     this.client.interceptors.response.use(
       (res) => res,
       (error: AxiosError) => {
-        if (error.response?.status === 401 && typeof window !== 'undefined') {
+        const url = error.config?.url || '';
+        const isAuthAttempt =
+          url.includes('/auth/login') || url.includes('/auth/register') || url.includes('/auth/google');
+        if (error.response?.status === 401 && typeof window !== 'undefined' && !isAuthAttempt) {
           // Clear token + user together so admin UI cannot stay "logged in" without auth.
           clearSession();
           if (!window.location.pathname.startsWith('/login')) {
@@ -261,7 +264,12 @@ class ApiClient {
       name: r.full_name,
       joinedAt: r.created_at,
       packageId: 'A',
-      status: r.status === 'active' ? 'active' : 'pending',
+      status:
+        r.status === 'active'
+          ? 'active'
+          : r.status === 'pending_payment' || r.status === 'pending'
+            ? 'pending'
+            : 'inactive',
       referralCode: r.referral_code,
       usosId: r.usos_id || '',
     }));
