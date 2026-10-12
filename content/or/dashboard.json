@@ -110,8 +110,16 @@
     "bankHint": "ଉଠାଣ ଆପଣଙ୍କ ସାଇତା ବ୍ୟାଙ୍କ ଖାତାକୁ ଯିବ।",
     "bankLink": "ବ୍ୟାଙ୍କ ବିବରଣୀ ଯୋଡ଼ନ୍ତୁ",
     "requestsTitle": "ଉଠାଣ ଅନୁରୋଧ",
-    "requestsSubtitle": "ଆଡମିନ୍ ଅନୁମୋଦନ ପରେ ଟଙ୍କା ସ୍ୱଚାଳିତ ଭାବରେ ବ୍ୟାଙ୍କକୁ ଯାଇଥାଏ।",
+    "requestsSubtitle": "ଟ୍ରାନ୍ସଫର ନିଶ୍ଚିତ ନହେବା ପର୍ଯ୍ୟନ୍ତ ଅନୁରୋଧ ପେମେଣ୍ଟ ବିଚାରାଧୀନ ରହେ।",
     "noRequests": "ଏପର୍ଯ୍ୟନ୍ତ କୌଣସି ଉଠାଣ ଅନୁରୋଧ ନାହିଁ।",
+    "statuses": {
+      "pending": "ବିଚାରାଧୀନ",
+      "processing": "ପେମେଣ୍ଟ ବିଚାରାଧୀନ",
+      "payment_pending": "ପେମେଣ୍ଟ ବିଚାରାଧୀନ",
+      "paid": "ପେମେଣ୍ଟ ହୋଇଛି",
+      "rejected": "ପ୍ରତ୍ୟାଖ୍ୟାତ",
+      "failed": "ବିଫଳ"
+    },
     "totalEarned": "ମୋଟ ଆୟ",
     "totalWithdrawn": "ମୋଟ ଉଠାଯାଇଥିବା",
     "pendingWithdrawals": "ବିଚାରାଧୀନ ଉଠାଣ",
@@ -208,7 +216,9 @@
       "accountName": "ଖାତାଧାରୀ ନାମ",
       "accountNumber": "ଖାତା ନମ୍ବର",
       "ifsc": "IFSC କୋଡ୍",
-      "bankName": "ବ୍ୟାଙ୍କ ନାମ"
+      "bankName": "ବ୍ୟାଙ୍କ ନାମ",
+      "upiId": "UPI ID (ଇଚ୍ଛାଧୀନ)",
+      "upiHint": "ଉଦାହରଣ: name@okhdfcbank। ଏଠାରେ ଖାତା ନମ୍ବର କିମ୍ବା IFSC ଲେଖନ୍ତୁ ନାହିଁ।"
     },
     "noSponsor": "କୌଣସି ସ୍ପନ୍ସର ନାହିଁ (ରୁଟ୍ ଖାତା)",
     "useCurrentLocation": "ବର୍ତ୍ତମାନ ଅବସ୍ଥାନ ବ୍ୟବହାର",

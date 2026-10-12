@@ -44,6 +44,7 @@ type Profile = {
   bank_account_number?: string | null;
   bank_ifsc?: string | null;
   bank_name?: string | null;
+  upi_id?: string | null;
   address_line?: string | null;
   address_locality?: string | null;
   address_state?: string | null;
@@ -72,6 +73,7 @@ export default function ProfilePage() {
   const [accountName, setAccountName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [ifsc, setIfsc] = useState('');
+  const [upiId, setUpiId] = useState('');
 
   const [addressLine, setAddressLine] = useState('');
   const [locality, setLocality] = useState('');
@@ -98,6 +100,7 @@ export default function ProfilePage() {
     setAccountName(p.bank_account_name || '');
     setAccountNumber(p.bank_account_number || '');
     setIfsc(p.bank_ifsc || '');
+    setUpiId(p.upi_id || '');
     setAddressLine(p.address_line || '');
     setLocality(p.address_locality || '');
     setStateName(p.address_state || '');
@@ -282,6 +285,7 @@ export default function ProfilePage() {
         bank_account_number: accountNumber,
         bank_ifsc: ifsc,
         bank_name: bankName,
+        upi_id: upiId.trim() || null,
       });
       applyProfile(p as Profile);
       toast.success(t.saved);
@@ -521,6 +525,17 @@ export default function ProfilePage() {
             onChange={(e) => setAccountNumber(e.target.value)}
           />
           <Input id="ifsc" label={t.fields.ifsc} value={ifsc} onChange={(e) => setIfsc(e.target.value)} />
+          <div className="sm:col-span-2">
+            <Input
+              id="upiId"
+              label={t.fields.upiId}
+              hint={t.fields.upiHint}
+              value={upiId}
+              onChange={(e) => setUpiId(e.target.value)}
+              placeholder="name@okhdfcbank"
+              autoCapitalize="none"
+            />
+          </div>
           <div className="sm:col-span-2">
             <Button type="submit" loading={saving}>
               {t.save}

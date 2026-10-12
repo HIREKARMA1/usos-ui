@@ -187,7 +187,7 @@
   },
   "withdrawals": {
     "title": "Withdrawal queue",
-    "subtitle": "Approve to send money to the member’s bank account automatically.",
+    "subtitle": "Review the member’s payout details, transfer the exact amount, then confirm with the UTR. Opening a UPI app does not mark the withdrawal paid.",
     "providerLabel": "Payout provider",
     "table": {
       "user": "Member",
@@ -197,14 +197,48 @@
       "status": "Status",
       "actions": "Actions"
     },
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Payment pending",
+      "payment_pending": "Payment pending",
+      "paid": "Paid",
+      "rejected": "Rejected",
+      "failed": "Failed"
+    },
     "approve": "Approve & pay",
+    "continuePay": "Continue payment",
     "retry": "Retry payout",
     "reject": "Reject",
-    "approved": "Payout sent",
+    "approved": "Withdrawal marked paid",
+    "started": "Payment pending until you confirm the transfer",
     "rejected": "Withdrawal rejected — wallet restored",
-    "approveFailed": "Payout failed",
+    "approveFailed": "Payment could not be started",
+    "cancelled": "Payment cancelled. The withdrawal is pending again.",
     "emptyTitle": "No pending withdrawals",
-    "emptyDescription": "When members request a withdrawal, they appear here for approval."
+    "emptyDescription": "When members request a withdrawal, they appear here for approval.",
+    "modal": {
+      "title": "Confirm payout",
+      "member": "Member",
+      "accountName": "Account holder",
+      "accountNumber": "Account number",
+      "ifsc": "IFSC",
+      "bank": "Bank",
+      "amount": "Amount to pay",
+      "upi": "UPI ID",
+      "noUpi": "No UPI ID on file. Pay this member by bank transfer. An account number or IFSC is not a UPI ID.",
+      "payUpi": "Pay via UPI",
+      "payBank": "Bank transfer",
+      "payApi": "Send via payout API",
+      "copy": "Copy",
+      "copied": "Copied",
+      "utr": "UPI transaction ID / UTR",
+      "utrHint": "Enter the reference only after the transfer has succeeded.",
+      "confirm": "Confirm payment received",
+      "notCompleted": "Payment was not completed",
+      "waiting": "Payment pending. This stays unpaid until the bank confirms the transfer.",
+      "refresh": "Check bank status",
+      "close": "Close"
+    }
   },
   "genealogy": {
     "title": "Global genealogy",

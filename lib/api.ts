@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { clearSession } from './auth';
-import { env, TOKEN_KEY, type PackageId } from './constants';
+import { resolveApiUrl, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
   AdminUserRow,
@@ -99,8 +99,9 @@ class ApiClient {
 
   constructor() {
     this.client = axios.create({
-      baseURL: env.apiUrl,
+      baseURL: resolveApiUrl(),
       headers: { 'Content-Type': 'application/json' },
+      timeout: 20000,
     });
 
     this.client.interceptors.request.use((cfg) => {
@@ -557,11 +558,39 @@ class ApiClient {
 
   async getAdminWithdrawals(status?: string) {
     const q = status ? `?status=${encodeURIComponent(status)}` : '';
-    return this.get<{ payout_provider: string; items: any[] }>(`/api/v1/wallet/admin/withdrawals${q}`);
+    return this.get<{ payout_provider: string; automatic_payout: boolean; items: any[] }>(
+      `/api/v1/wallet/admin/withdrawals${q}`
+    );
   }
 
-  async approveWithdrawal(id: string, note?: string) {
-    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/approve`, { note: note || null });
+  async startWithdrawalUpi(id: string) {
+    return this.post<{ withdrawal: any; upi_intent_url: string | null; payment_method: string }>(
+      `/api/v1/wallet/admin/withdrawals/${id}/pay/upi`,
+      {}
+    );
+  }
+
+  async startWithdrawalBank(id: string) {
+    return this.post<{ withdrawal: any; upi_intent_url: string | null; payment_method: string }>(
+      `/api/v1/wallet/admin/withdrawals/${id}/pay/bank`,
+      {}
+    );
+  }
+
+  async startWithdrawalPayout(id: string, note?: string) {
+    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/pay/payout`, { note: note || null });
+  }
+
+  async confirmWithdrawalPayment(id: string, utr: string) {
+    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/confirm`, { utr });
+  }
+
+  async cancelWithdrawalPayment(id: string) {
+    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/cancel-payment`, {});
+  }
+
+  async syncWithdrawalPayout(id: string) {
+    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/sync`, {});
   }
 
   async rejectWithdrawal(id: string, note?: string) {

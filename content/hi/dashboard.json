@@ -75,8 +75,16 @@
     "bankHint": "निकासी आपके सेव्ड बैंक खाते में जाएगी।",
     "bankLink": "बैंक विवरण जोड़ें",
     "requestsTitle": "निकासी अनुरोध",
-    "requestsSubtitle": "एडमिन स्वीकृति के बाद राशि आपके बैंक में स्वतः भेजी जाएगी।",
+    "requestsSubtitle": "ट्रांसफर की पुष्टि होने तक अनुरोध भुगतान लंबित रहता है।",
     "noRequests": "अभी कोई निकासी अनुरोध नहीं।",
+    "statuses": {
+      "pending": "लंबित",
+      "processing": "भुगतान लंबित",
+      "payment_pending": "भुगतान लंबित",
+      "paid": "भुगतान हो गया",
+      "rejected": "अस्वीकृत",
+      "failed": "विफल"
+    },
     "totalEarned": "कुल कमाई",
     "totalWithdrawn": "कुल निकाला गया",
     "pendingWithdrawals": "लंबित निकासी",
@@ -172,7 +180,9 @@
       "accountName": "खाताधारक का नाम",
       "accountNumber": "खाता संख्या",
       "ifsc": "IFSC कोड",
-      "bankName": "बैंक का नाम"
+      "bankName": "बैंक का नाम",
+      "upiId": "UPI ID (वैकल्पिक)",
+      "upiHint": "उदाहरण: name@okhdfcbank। यहाँ खाता संख्या या IFSC न लिखें।"
     },
     "noSponsor": "कोई स्पॉन्सर नहीं (रूट खाता)",
     "useCurrentLocation": "वर्तमान लोकेशन उपयोग करें",

@@ -110,8 +110,16 @@
     "bankHint": "Withdrawals go to your saved bank account.",
     "bankLink": "Add bank details",
     "requestsTitle": "Withdrawal requests",
-    "requestsSubtitle": "After admin approval, money is sent to your bank automatically.",
+    "requestsSubtitle": "A request stays payment pending until the transfer is confirmed.",
     "noRequests": "No withdrawal requests yet.",
+    "statuses": {
+      "pending": "Pending",
+      "processing": "Payment pending",
+      "payment_pending": "Payment pending",
+      "paid": "Paid",
+      "rejected": "Rejected",
+      "failed": "Failed"
+    },
     "totalEarned": "Total Earnings",
     "totalWithdrawn": "Total Withdrawn",
     "pendingWithdrawals": "Pending Withdrawals",
@@ -208,7 +216,9 @@
       "accountName": "Account holder name",
       "accountNumber": "Account number",
       "ifsc": "IFSC code",
-      "bankName": "Bank name"
+      "bankName": "Bank name",
+      "upiId": "UPI ID (optional)",
+      "upiHint": "Example: name@okhdfcbank. Do not enter your account number or IFSC here."
     },
     "noSponsor": "No sponsor (root account)",
     "useCurrentLocation": "Use current location",

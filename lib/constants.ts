@@ -1,5 +1,24 @@
+/** Use the page host when the app is opened from a phone via the PC's LAN IP. */
+export function resolveApiUrl(): string {
+  const configured = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000';
+  if (typeof window === 'undefined') return configured;
+  try {
+    const url = new URL(configured);
+    const pageHost = window.location.hostname;
+    const apiIsLocal = url.hostname === 'localhost' || url.hostname === '127.0.0.1';
+    const pageIsLocal = pageHost === 'localhost' || pageHost === '127.0.0.1';
+    if (apiIsLocal && !pageIsLocal) {
+      url.hostname = pageHost;
+      return url.origin;
+    }
+  } catch {
+    return configured;
+  }
+  return configured;
+}
+
 export const env = {
-  apiUrl: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000',
+  apiUrl: resolveApiUrl(),
   appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
   defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',
   googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '',

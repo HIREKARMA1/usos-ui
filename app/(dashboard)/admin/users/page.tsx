@@ -29,7 +29,7 @@ const controlClass =
 const iconBtnClass =
   'flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface-muted text-ink-muted transition duration-300 hover:bg-surface-soft hover:text-ink disabled:pointer-events-none disabled:opacity-30 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60 dark:hover:bg-white/[0.08] dark:hover:text-white';
 
-type StatusFilter = 'all' | 'active' | 'inactive';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'pending';
 type PackageFilter = 'all' | string;
 type LevelFilter = 'all' | number;
 
@@ -276,6 +276,7 @@ export default function AdminUsersPage() {
                     <option value="all">Status: All</option>
                     <option value="active">Status: {common.status.active}</option>
                     <option value="inactive">Status: {common.status.inactive}</option>
+                    <option value="pending">Status: {common.status.pending}</option>
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/50" />
                 </label>

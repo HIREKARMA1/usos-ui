@@ -112,7 +112,7 @@ export default function WalletPage() {
       .filter((w) => w.status === 'paid')
       .reduce((sum, w) => sum + w.amount_inr, 0);
     const pendingWithdrawals = withdrawals
-      .filter((w) => w.status === 'pending' || w.status === 'processing')
+      .filter((w) => w.status === 'pending' || w.status === 'processing' || w.status === 'payment_pending')
       .reduce((sum, w) => sum + w.amount_inr, 0);
     return { totalEarnings, totalWithdrawn, pendingWithdrawals };
   }, [rows, withdrawals]);
@@ -345,12 +345,12 @@ export default function WalletPage() {
                       tone={
                         w.status === 'paid'
                           ? 'success'
-                          : w.status === 'pending' || w.status === 'processing'
+                          : w.status === 'pending' || w.status === 'processing' || w.status === 'payment_pending'
                             ? 'warning'
                             : 'danger'
                       }
                     >
-                      {w.status}
+                      {t.statuses?.[w.status] || w.status}
                     </Badge>
                   </Td>
                 </Tr>
