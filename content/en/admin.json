@@ -4,6 +4,7 @@
     "users": "Users",
     "kyc": "KYC Verification",
     "payments": "Payments",
+    "shopping": "Shopping",
     "products": "Products",
     "packages": "Packages",
     "rewards": "Rewards",
@@ -275,6 +276,74 @@
     "emptyTitle": "No KYC requests",
     "emptyDescription": "When members submit PAN and Aadhaar, they appear here."
   },
+  "shopping": {
+    "breadcrumb": "Admin",
+    "title": "Shopping",
+    "subtitle": "See what members bought and approve or reject those shop payments.",
+    "loadError": "Could not load shop orders.",
+    "empty": "No shop orders yet",
+    "emptyHint": "Purchases appear here after a member submits a shop payment.",
+    "stats": {
+      "total": "Shop orders",
+      "pending": "Pending approval",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "filters": {
+      "all": "All",
+      "pending_approval": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "search": "Search name, email, or UTR"
+    },
+    "table": {
+      "user": "Member",
+      "items": "Items purchased",
+      "qty": "Qty",
+      "email": "Email",
+      "order": "Order",
+      "amount": "Amount",
+      "utr": "UTR",
+      "submitted": "Submitted",
+      "status": "Status",
+      "action": "Payment"
+    },
+    "orderDetails": "Order Details",
+    "verifiedBuyer": "Verified Buyer",
+    "itemsHeading": "Items",
+    "itemsCount": "{count} items",
+    "dateTime": "Date & Time",
+    "totalAmount": "Total Amount",
+    "buyer": {
+      "title": "Buyer details",
+      "memberId": "Member ID",
+      "phone": "Phone",
+      "email": "Email",
+      "referral": "Referral code",
+      "deliveryName": "Delivery name",
+      "address": "Delivery address"
+    },
+    "status": {
+      "pending_approval": "Pending verification",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "approve": "Approve",
+    "reject": "Reject",
+    "approveTitle": "Approve shop payment",
+    "rejectTitle": "Reject shop payment",
+    "approveConfirm": "Approve this shop payment for {name}?",
+    "approveBankHint": "Approve only after this UTR and amount appear in the bank statement.",
+    "rejectConfirm": "Reject this shop payment for {name}?",
+    "rejectReasonLabel": "Rejection reason",
+    "rejectReasonPlaceholder": "Tell the member why this payment was rejected",
+    "rejectReasonRequired": "Enter a rejection reason.",
+    "approvedToast": "Shop payment approved.",
+    "rejectedToast": "Shop payment rejected.",
+    "cancel": "Cancel",
+    "confirmApprove": "Approve payment",
+    "confirmReject": "Reject payment"
+  },
   "payments": {
     "breadcrumb": "Admin",
     "title": "Payments",
@@ -297,11 +366,14 @@
     },
     "table": {
       "user": "User Name",
+      "items": "Items",
       "type": "Type",
       "email": "Email",
       "application": "Application/Order ID",
       "amount": "Amount",
-      "utr": "UPI Transaction ID",
+      "utr": "UTR",
+      "upiId": "UPI ID",
+      "reference": "Payment reference",
       "submitted": "Submitted Date",
       "status": "Status",
       "action": "Action"
@@ -311,15 +383,19 @@
       "shop": "Shop"
     },
     "status": {
-      "pending_approval": "Pending approval",
+      "pending_approval": "Pending Verification",
       "approved": "Approved",
-      "rejected": "Rejected"
+      "rejected": "Rejected",
+      "created": "Awaiting payment",
+      "failed": "Failed",
+      "paid": "Paid"
     },
     "approve": "Approve",
     "reject": "Reject",
     "approveTitle": "Approve Payment",
     "rejectTitle": "Reject Payment",
     "approveConfirm": "Approve this payment for {name}?",
+    "approveBankHint": "Approve only after this UTR and amount appear in the bank statement. Opening a UPI app or submitting a UTR does not activate the package.",
     "rejectConfirm": "Reject this payment for {name}?",
     "rejectReasonLabel": "Rejection reason",
     "rejectReasonPlaceholder": "Tell the member why this payment was rejected",
@@ -330,12 +406,12 @@
     "confirmApprove": "Approve Payment",
     "confirmReject": "Reject Payment",
     "settingsTitle": "UPI checkout",
-    "settingsHint": "Members pay to this UPI ID. Amount is filled automatically from each package.",
+    "settingsHint": "Members pay by scanning this QR. Upload the scanner and save.",
     "configureUpi": "UPI settings",
     "upiId": "UPI ID",
     "displayName": "Merchant name",
-    "qrUrl": "Optional static QR",
-    "qrOptionalHint": "Not required — checkout builds a dynamic QR with the correct amount.",
+    "qrUrl": "Payment scanner",
+    "qrOptionalHint": "This is the only payment code members see. Upload the scanner from your UPI app.",
     "instructions": "Member instructions",
     "instructionsHint": "One step per line. Shown as guidance on the payment page.",
     "uploadQr": "Upload image",
@@ -347,7 +423,9 @@
     "settingsSaved": "UPI settings saved.",
     "settingsError": "Could not save UPI settings.",
     "merchantSection": "Merchant details",
-    "qrSection": "Static QR (optional)",
-    "upiConfigured": "Paying to {upi}"
+    "qrSection": "Payment scanner",
+    "upiConfigured": "Paying to {upi}",
+    "scannerConfigured": "Payment scanner is ready",
+    "scannerRequired": "Upload a payment scanner before saving."
   }
 }

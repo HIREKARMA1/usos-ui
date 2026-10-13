@@ -39,17 +39,21 @@ export function generateUpiPaymentUrl(params: UpiPaymentParams): string {
   }
 
   const am = formatUpiAmount(params.amount);
-  const search = new URLSearchParams();
-  search.set('pa', params.upiId.trim());
-  search.set('pn', params.merchantName.trim());
-  search.set('am', am);
-  search.set('cu', 'INR');
+  const fields = [
+    ['pa', params.upiId.trim()],
+    ['pn', params.merchantName.trim()],
+    ['am', am],
+    ['cu', 'INR'],
+  ];
   if (params.note?.trim()) {
-    search.set('tn', params.note.trim());
+    fields.push(['tn', params.note.trim()]);
   }
 
-  // URLSearchParams encodes spaces as +, which some UPI apps mishandle; use %20.
-  return `upi://pay?${search.toString().replace(/\+/g, '%20')}`;
+  // UPI apps reject a QR whose payload contains %20. Keep spaces as + .
+  const query = fields
+    .map(([key, value]) => `${key}=${encodeURIComponent(value).replace(/%20/g, '+')}`)
+    .join('&');
+  return `upi://pay?${query}`;
 }
 
 /** App-specific schemes where supported; always fall back to upi://pay. */

@@ -4,6 +4,7 @@
     "users": "उपयोगकर्ता",
     "kyc": "KYC सत्यापन",
     "payments": "भुगतान",
+    "shopping": "शॉपिंग",
     "products": "उत्पाद",
     "packages": "पैकेज",
     "rewards": "रिवॉर्ड",
@@ -275,6 +276,74 @@
     "emptyTitle": "कोई KYC अनुरोध नहीं",
     "emptyDescription": "जब सदस्य PAN और आधार जमा करेंगे, वे यहाँ दिखेंगे।"
   },
+  "shopping": {
+    "breadcrumb": "एडमिन",
+    "title": "शॉपिंग",
+    "subtitle": "सदस्य ने क्या खरीदा, उसे देखें और शॉप भुगतान स्वीकार या अस्वीकार करें।",
+    "loadError": "शॉप ऑर्डर लोड नहीं हो सके।",
+    "empty": "अभी कोई शॉप ऑर्डर नहीं",
+    "emptyHint": "सदस्य शॉप भुगतान जमा करने के बाद खरीदारी यहाँ दिखेगी।",
+    "stats": {
+      "total": "शॉप ऑर्डर",
+      "pending": "स्वीकृति बाकी",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
+    "filters": {
+      "all": "सभी",
+      "pending_approval": "बाकी",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत",
+      "search": "नाम, ईमेल या UTR खोजें"
+    },
+    "table": {
+      "user": "सदस्य",
+      "items": "खरीदी गई वस्तुएँ",
+      "qty": "मात्रा",
+      "email": "ईमेल",
+      "order": "ऑर्डर",
+      "amount": "राशि",
+      "utr": "UTR",
+      "submitted": "जमा किया",
+      "status": "स्थिति",
+      "action": "भुगतान"
+    },
+    "orderDetails": "ऑर्डर विवरण",
+    "verifiedBuyer": "सत्यापित खरीदार",
+    "itemsHeading": "वस्तुएँ",
+    "itemsCount": "{count} वस्तुएँ",
+    "dateTime": "तारीख और समय",
+    "totalAmount": "कुल राशि",
+    "buyer": {
+      "title": "खरीदार विवरण",
+      "memberId": "सदस्य आईडी",
+      "phone": "फोन",
+      "email": "ईमेल",
+      "referral": "रेफरल कोड",
+      "deliveryName": "डिलीवरी नाम",
+      "address": "डिलीवरी पता"
+    },
+    "status": {
+      "pending_approval": "सत्यापन बाकी",
+      "approved": "स्वीकृत",
+      "rejected": "अस्वीकृत"
+    },
+    "approve": "स्वीकार करें",
+    "reject": "अस्वीकार करें",
+    "approveTitle": "शॉप भुगतान स्वीकार करें",
+    "rejectTitle": "शॉप भुगतान अस्वीकार करें",
+    "approveConfirm": "{name} के इस शॉप भुगतान को स्वीकार करें?",
+    "approveBankHint": "UTR और राशि बैंक स्टेटमेंट में दिखने के बाद ही स्वीकार करें।",
+    "rejectConfirm": "{name} के इस शॉप भुगतान को अस्वीकार करें?",
+    "rejectReasonLabel": "अस्वीकृति का कारण",
+    "rejectReasonPlaceholder": "सदस्य को बताएं कि भुगतान क्यों अस्वीकार हुआ",
+    "rejectReasonRequired": "अस्वीकृति का कारण लिखें।",
+    "approvedToast": "शॉप भुगतान स्वीकार हो गया।",
+    "rejectedToast": "शॉप भुगतान अस्वीकार हो गया।",
+    "cancel": "रद्द करें",
+    "confirmApprove": "भुगतान स्वीकार करें",
+    "confirmReject": "भुगतान अस्वीकार करें"
+  },
   "payments": {
     "breadcrumb": "एडमिन",
     "title": "भुगतान",
@@ -301,7 +370,9 @@
       "email": "ईमेल",
       "application": "आवेदन/ऑर्डर ID",
       "amount": "राशि",
-      "utr": "UPI ट्रांजैक्शन ID",
+      "utr": "UTR",
+      "upiId": "UPI ID",
+      "reference": "भुगतान संदर्भ",
       "submitted": "जमा तिथि",
       "status": "स्थिति",
       "action": "कार्रवाई"
@@ -311,15 +382,19 @@
       "shop": "दुकान"
     },
     "status": {
-      "pending_approval": "स्वीकृति लंबित",
+      "pending_approval": "सत्यापन लंबित",
       "approved": "स्वीकृत",
-      "rejected": "अस्वीकृत"
+      "rejected": "अस्वीकृत",
+      "created": "भुगतान की प्रतीक्षा",
+      "failed": "असफल",
+      "paid": "भुगतान हुआ"
     },
     "approve": "स्वीकृत करें",
     "reject": "अस्वीकार करें",
     "approveTitle": "भुगतान स्वीकृत करें",
     "rejectTitle": "भुगतान अस्वीकार करें",
     "approveConfirm": "{name} का यह भुगतान स्वीकृत करें?",
+    "approveBankHint": "UTR और राशि बैंक स्टेटमेंट में दिखने के बाद ही स्वीकृत करें। UPI ऐप खुलना या UTR जमा करना पैकेज सक्रिय नहीं करता।",
     "rejectConfirm": "{name} का यह भुगतान अस्वीकार करें?",
     "rejectReasonLabel": "अस्वीकृति का कारण",
     "rejectReasonPlaceholder": "सदस्य को बताएं कि यह भुगतान क्यों अस्वीकृत हुआ",
@@ -330,13 +405,15 @@
     "confirmApprove": "भुगतान स्वीकृत करें",
     "confirmReject": "भुगतान अस्वीकार करें",
     "settingsTitle": "UPI चेकआउट",
-    "settingsHint": "सदस्य इस UPI ID पर भुगतान करते हैं। राशि पैकेज से अपने आप भरती है।",
+    "settingsHint": "सदस्य इस QR को स्कैन करके भुगतान करते हैं। स्कैनर अपलोड करके सेव करें।",
     "configureUpi": "UPI सेटिंग्स",
     "upiConfigured": "{upi} पर भुगतान",
+    "scannerConfigured": "भुगतान स्कैनर तैयार है",
+    "scannerRequired": "सेव करने से पहले भुगतान स्कैनर अपलोड करें।",
     "upiId": "UPI ID",
     "displayName": "व्यापारी नाम",
     "qrUrl": "वैकल्पिक स्थिर QR",
-    "qrOptionalHint": "आवश्यक नहीं — चेकआउट सही राशि के साथ डायनामिक QR बनाता है।",
+    "qrOptionalHint": "सदस्यों को यही स्कैनर दिखता है। अपने UPI ऐप का स्कैनर अपलोड करें।",
     "instructions": "सदस्य निर्देश",
     "instructionsHint": "हर पंक्ति में एक चरण। भुगतान पेज पर दिखाए जाते हैं।",
     "uploadQr": "छवि अपलोड करें",
@@ -348,6 +425,6 @@
     "settingsSaved": "UPI सेटिंग्स सहेजी गईं।",
     "settingsError": "UPI सेटिंग्स सहेजी नहीं जा सकीं।",
     "merchantSection": "व्यापारी विवरण",
-    "qrSection": "स्थिर QR (वैकल्पिक)"
+    "qrSection": "भुगतान स्कैनर"
   }
 }
