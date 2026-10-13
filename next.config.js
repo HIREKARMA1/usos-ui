@@ -1,5 +1,18 @@
 /** @type {import('next').NextConfig} */
-const apiOrigin = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+function readEnv(...names) {
+  for (const name of names) {
+    const value = process.env[name];
+    if (value) return value;
+  }
+  return '';
+}
+
+// Names have no NEXT_PUBLIC_ prefix so Vercel can store them.
+// The env block below still inlines them into the browser bundle.
+const apiOrigin = readEnv('API_URL', 'NEXT_PUBLIC_API_URL') || 'http://127.0.0.1:8000';
+const appUrl = readEnv('APP_URL', 'NEXT_PUBLIC_APP_URL') || 'http://localhost:3000';
+const defaultLocale = readEnv('DEFAULT_LOCALE', 'NEXT_PUBLIC_DEFAULT_LOCALE') || 'en';
+const googleClientId = readEnv('GOOGLE_CLIENT_ID', 'NEXT_PUBLIC_GOOGLE_CLIENT_ID');
 
 function uploadProxyOrigin() {
   try {
@@ -13,6 +26,12 @@ function uploadProxyOrigin() {
 }
 
 const nextConfig = {
+  env: {
+    API_URL: apiOrigin,
+    APP_URL: appUrl,
+    DEFAULT_LOCALE: defaultLocale,
+    GOOGLE_CLIENT_ID: googleClientId,
+  },
   reactStrictMode: true,
   images: {
     unoptimized: false,

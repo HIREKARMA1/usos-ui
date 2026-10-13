@@ -1,4 +1,4 @@
-const configuredApiUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:8000';
+const configuredApiUrl = process.env.API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
 function isLoopback(host: string): boolean {
   return host === 'localhost' || host === '127.0.0.1' || host === '::1';
@@ -26,23 +26,29 @@ export function resolveApiUrl(): string {
     return localApi;
   }
   if (configured.hostname === 'localhost') configured.hostname = '127.0.0.1';
-  const port = configured.port || '8000';
+  // A public https URL with no port is 443. Forcing :8000 makes production
+  // call a port that is not open on the internet.
+  const isLocalApi = isLoopback(configured.hostname) || isPrivateLan(configured.hostname);
+  const port = configured.port || (isLocalApi ? '8000' : '');
+  const origin = port
+    ? `${configured.protocol}//${configured.hostname}:${port}`
+    : configured.origin;
 
-  if (typeof window === 'undefined') return `${configured.protocol}//${configured.hostname}:${port}`;
+  if (typeof window === 'undefined') return origin;
 
   const pageHost = window.location.hostname;
-  if (isLoopback(pageHost)) return `http://127.0.0.1:${port}`;
-  if (isPrivateLan(pageHost)) return `http://${pageHost}:${port}`;
-  return `${configured.protocol}//${configured.hostname}:${port}`;
+  if (isLoopback(pageHost)) return `http://127.0.0.1:${port || '8000'}`;
+  if (isPrivateLan(pageHost)) return `http://${pageHost}:${port || '8000'}`;
+  return origin;
 }
 
 export const env = {
   get apiUrl() {
     return resolveApiUrl();
   },
-  appUrl: process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
-  defaultLocale: process.env.NEXT_PUBLIC_DEFAULT_LOCALE ?? 'en',
-  googleClientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? '',
+  appUrl: process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+  defaultLocale: process.env.DEFAULT_LOCALE || process.env.NEXT_PUBLIC_DEFAULT_LOCALE || 'en',
+  googleClientId: process.env.GOOGLE_CLIENT_ID || process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
 } as const;
 
 export const TOKEN_KEY = 'usos_access_token';
