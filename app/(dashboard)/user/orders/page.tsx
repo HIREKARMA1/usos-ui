@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Package } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -9,9 +10,11 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Spinner } from '@/components/ui/Spinner';
 import { Button } from '@/components/ui/Button';
 import { api } from '@/lib/api';
-import { formatCurrency, formatDate } from '@/lib/format';
+import { formatCurrency, formatDate, orderStatusLabel } from '@/lib/format';
 
 export default function UserOrdersPage() {
+  const params = useSearchParams();
+  const justSubmitted = params.get('payment') === 'submitted';
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,6 +46,15 @@ export default function UserOrdersPage() {
         </Link>
       </div>
 
+      {justSubmitted ? (
+        <div className="rounded-xl border border-amber-400/40 bg-amber-500/10 px-4 py-3" role="status">
+          <p className="font-semibold text-ink">Payment approval pending</p>
+          <p className="mt-1 text-sm text-ink-secondary">
+            Your payment was submitted. The order stays unpaid until an admin approves it.
+          </p>
+        </div>
+      ) : null}
+
       {orders.length === 0 ? (
         <Card>
           <EmptyState
@@ -65,10 +77,14 @@ export default function UserOrdersPage() {
                 <div className="flex items-center gap-3">
                   <Badge
                     tone={
-                      o.status === 'paid' || o.status === 'fulfilled' ? 'success' : 'warning'
+                      o.status === 'paid' || o.status === 'fulfilled'
+                        ? 'success'
+                        : o.status === 'rejected'
+                          ? 'danger'
+                          : 'warning'
                     }
                   >
-                    {o.status}
+                    {orderStatusLabel(o.status)}
                   </Badge>
                   <Link href={`/shop/orders/${o.id}`} className="text-sm font-semibold text-primary">
                     View

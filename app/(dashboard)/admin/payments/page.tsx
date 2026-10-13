@@ -90,6 +90,14 @@ function StatusBadge({ status, labels }: { status: string; labels: Record<string
       badge: 'bg-red-500/10 text-red-600 dark:bg-[#EF4444]/15 dark:text-[#EF4444]',
       dot: 'bg-red-500 dark:bg-[#EF4444]',
     },
+    created: {
+      badge: 'bg-sky-500/10 text-sky-700 dark:bg-sky-400/15 dark:text-sky-300',
+      dot: 'bg-sky-500',
+    },
+    failed: {
+      badge: 'bg-surface-muted text-ink-muted dark:bg-white/[0.06] dark:text-white/55',
+      dot: 'bg-ink-muted',
+    },
   };
   const style = styles[status] || {
     badge: 'bg-surface-muted text-ink-muted',
@@ -136,6 +144,7 @@ export default function AdminPaymentsPage() {
       const data = await api.getAdminPayments({
         q: debouncedQ || undefined,
         status: statusFilter === 'all' ? undefined : statusFilter,
+        kind: 'membership',
         page,
         page_size: PAGE_SIZE,
       });
@@ -200,10 +209,14 @@ export default function AdminPaymentsPage() {
   async function saveSettings(event: FormEvent) {
     event.preventDefault();
     if (!settings) return;
+    if (!settings.qr_code_url) {
+      toast.error(t.scannerRequired || 'Upload a payment scanner before saving.');
+      return;
+    }
     setSavingSettings(true);
     try {
       const saved = await api.updatePaymentSettings({
-        upi_id: settings.upi_id.trim(),
+        upi_id: '',
         display_name: settings.display_name.trim(),
         qr_code_url: settings.qr_code_url || null,
         instructions: settings.instructions.trim(),
@@ -242,14 +255,12 @@ export default function AdminPaymentsPage() {
             </p>
             <h1 className="mt-1 text-lg font-semibold tracking-tight text-ink sm:text-xl dark:text-white">{t.title}</h1>
             <p className="mt-0.5 max-w-xl text-sm text-ink-muted dark:text-white/50">{t.subtitle}</p>
-            {settings?.upi_id ? (
+            {settings?.qr_code_url ? (
               <div className="mt-3 inline-flex max-w-full items-center gap-2 rounded-xl border border-[#F5821F]/20 bg-[#F5821F]/8 px-3 py-1.5 text-xs font-medium text-ink-secondary dark:border-[#F5821F]/25 dark:bg-[#F5821F]/10 dark:text-white/70">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-[#F5821F]/15 text-[#F5821F]">
                   <QrCode className="h-3 w-3" />
                 </span>
-                <span className="truncate">
-                  {(t.upiConfigured || 'Paying to {upi}').replace('{upi}', settings.upi_id)}
-                </span>
+                <span className="truncate">{t.scannerConfigured || 'Payment scanner is ready'}</span>
               </div>
             ) : null}
           </div>
@@ -332,7 +343,7 @@ export default function AdminPaymentsPage() {
           ) : (
             <>
               <div className="overflow-x-auto">
-                <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
+                <table className="w-full min-w-[1280px] border-collapse text-left text-sm">
                   <thead>
                     <tr className="border-b border-line bg-surface-muted/80 dark:border-white/[0.06] dark:bg-white/[0.04]">
                       {[
@@ -341,7 +352,9 @@ export default function AdminPaymentsPage() {
                         t.table.email,
                         t.table.application,
                         t.table.amount,
+                        t.table.upiId || 'UPI ID',
                         t.table.utr,
+                        t.table.reference || 'Payment reference',
                         t.table.submitted,
                         t.table.status,
                         t.table.action,
@@ -358,7 +371,7 @@ export default function AdminPaymentsPage() {
                   <tbody>
                     {rows.length === 0 ? (
                       <tr>
-                        <td colSpan={9} className="px-4 py-16 text-center text-sm text-ink-muted dark:text-white/40">
+                        <td colSpan={11} className="px-4 py-16 text-center text-sm text-ink-muted dark:text-white/40">
                           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-surface-muted dark:bg-white/[0.04]">
                             <IndianRupee className="h-5 w-5 opacity-50" />
                           </div>
@@ -382,12 +395,17 @@ export default function AdminPaymentsPage() {
                               >
                                 {getInitials(row.user_name)}
                               </div>
-                              <p className="truncate font-medium text-ink dark:text-white">{row.user_name}</p>
+                              <div className="min-w-0">
+                                <p className="truncate font-medium text-ink dark:text-white">{row.user_name}</p>
+                                {row.package_name ? (
+                                  <p className="truncate text-[11px] text-ink-muted dark:text-white/40">{row.package_name}</p>
+                                ) : null}
+                              </div>
                             </div>
                           </td>
                           <td className="px-4 py-3.5">
                             <span className="inline-flex rounded-md bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-ink-secondary dark:bg-white/[0.06] dark:text-white/65">
-                              {row.kind === 'shop' ? t.kinds?.shop || 'Shop' : t.kinds?.membership || 'Membership'}
+                              {t.kinds?.membership || 'Membership'}
                             </span>
                           </td>
                           <td className="px-4 py-3.5 text-ink-secondary dark:text-white/65">{row.email}</td>
@@ -397,8 +415,14 @@ export default function AdminPaymentsPage() {
                           <td className="px-4 py-3.5 font-semibold tabular-nums text-ink dark:text-white">
                             {formatCurrency((row.amount_paise || 0) / 100)}
                           </td>
+                          <td className="px-4 py-3.5 font-mono text-xs text-ink-secondary dark:text-white/70">
+                            {row.upi_id || '—'}
+                          </td>
                           <td className="px-4 py-3.5 font-mono text-xs text-ink-secondary dark:text-white/60">
                             {row.transaction_id || '—'}
+                          </td>
+                          <td className="px-4 py-3.5 font-mono text-[11px] tracking-wide text-ink-muted dark:text-white/45">
+                            {row.payment_reference || '—'}
                           </td>
                           <td className="px-4 py-3.5 whitespace-nowrap text-ink-secondary dark:text-white/65">
                             {row.submitted_at ? formatDateTime(row.submitted_at) : '—'}
@@ -535,17 +559,7 @@ export default function AdminPaymentsPage() {
                     <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-ink-muted">
                       {t.merchantSection || 'Merchant details'}
                     </p>
-                    <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                      <label className="block space-y-1.5">
-                        <span className="text-sm font-medium text-ink dark:text-white/90">{t.upiId}</span>
-                        <input
-                          className={cn(controlClass, 'w-full px-3 font-mono text-[13px]')}
-                          value={settings.upi_id}
-                          onChange={(event) => setSettings({ ...settings, upi_id: event.target.value })}
-                          placeholder="name@upi"
-                          required
-                        />
-                      </label>
+                    <div className="mt-3">
                       <label className="block space-y-1.5">
                         <span className="text-sm font-medium text-ink dark:text-white/90">{t.displayName}</span>
                         <input
@@ -683,14 +697,42 @@ export default function AdminPaymentsPage() {
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-ink dark:text-white">{dialog.row.user_name}</p>
                     <p className="mt-0.5 font-mono text-xs text-ink-muted dark:text-white/45">
-                      {dialog.row.transaction_id || shortId(dialog.row.application_id)}
+                      {t.table.utr}: {dialog.row.transaction_id || '—'}
+                    </p>
+                    <p className="mt-0.5 font-mono text-[11px] text-ink-muted dark:text-white/45">
+                      {t.table.upiId || 'UPI ID'}: {dialog.row.upi_id || '—'}
+                    </p>
+                    <p className="mt-0.5 font-mono text-[10px] text-ink-muted dark:text-white/40">
+                      {t.table.reference || 'Payment reference'}: {dialog.row.payment_reference || '—'}
                     </p>
                   </div>
                   <p className="shrink-0 text-sm font-bold tabular-nums text-ink dark:text-white">
                     {formatCurrency((dialog.row.amount_paise || 0) / 100)}
                   </p>
                 </div>
+                {dialog.row.items && dialog.row.items.length > 0 ? (
+                  <ul className="mt-3 space-y-1.5 border-t border-line pt-3 dark:border-white/[0.06]">
+                    {dialog.row.items.map((item) => (
+                      <li key={item.product_id} className="flex items-center justify-between gap-3 text-xs">
+                        <span className="text-ink dark:text-white">
+                          {item.product_name}
+                          <span className="text-ink-muted"> × {item.quantity}</span>
+                        </span>
+                        <span className="shrink-0 tabular-nums text-ink-secondary dark:text-white/65">
+                          {formatCurrency((item.line_total_paise || 0) / 100)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </div>
+
+              {dialog.type === 'approve' ? (
+                <p className="text-sm leading-relaxed text-ink-secondary dark:text-white/60">
+                  {t.approveBankHint ||
+                    'Approve only after this UTR and amount appear in the bank statement. Opening a UPI app or submitting a UTR does not activate the package.'}
+                </p>
+              ) : null}
 
               {dialog.type === 'reject' ? (
                 <label className="block space-y-1.5">

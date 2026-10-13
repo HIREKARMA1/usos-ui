@@ -76,6 +76,7 @@ export function DashboardShell({
     { href: '/admin/users', label: admin.nav.users, icon: Users },
     { href: '/admin/kyc', label: admin.nav.kyc || 'KYC Verification', icon: ShieldCheck },
     { href: '/admin/payments', label: admin.nav.payments || 'Payments', icon: QrCode },
+    { href: '/admin/shopping', label: admin.nav.shopping || 'Shopping', icon: ShoppingBag },
     { href: '/admin/products', label: admin.nav.products || 'Products', icon: Package },
     { href: '/admin/packages', label: admin.nav.packages, icon: Boxes },
     { href: '/admin/rewards', label: admin.nav.rewards, icon: Gift },

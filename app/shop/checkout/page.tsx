@@ -9,20 +9,13 @@ import { Card } from '@/components/ui/Card';
 import { Spinner } from '@/components/ui/Spinner';
 import { api } from '@/lib/api';
 import { formatCurrency } from '@/lib/format';
-import {
-  generateUpiAppUrl,
-  generateUpiPaymentUrl,
-  openUpiDeepLink,
-  qrCodeImageUrl,
-  type UpiAppId,
-  type UpiPaymentParams,
-  validateUpiPaymentParams,
-} from '@/lib/upi';
+import { resolveUploadUrl } from '@/lib/media';
+import { PaymentQr } from '@/components/payment/PaymentQr';
+import { ManualUpiPay } from '@/components/payment/ManualUpiPay';
+import { useDirectUpi } from '@/components/payment/UpiIntentPay';
 import { useAuth } from '@/hooks/useAuth';
 import { useContent } from '@/hooks/useContent';
 import styles from '@/app/payment/payment.module.css';
-
-type PayTab = 'qr' | 'upi';
 
 type ShopUpiCheckout = {
   mode?: string;
@@ -33,14 +26,10 @@ type ShopUpiCheckout = {
   amount_paise?: number;
   amount_inr?: number;
   note?: string;
+  payment_reference?: string | null;
+  upi_intent_url?: string | null;
+  intent_ready?: boolean;
 };
-
-const UPI_APPS: { id: UpiAppId; labelKey: 'googlePay' | 'phonePe' | 'paytm' | 'otherUpiApp' }[] = [
-  { id: 'gpay', labelKey: 'googlePay' },
-  { id: 'phonepe', labelKey: 'phonePe' },
-  { id: 'paytm', labelKey: 'paytm' },
-  { id: 'other', labelKey: 'otherUpiApp' },
-];
 
 function errorDetail(err: unknown, fallback: string) {
   const detail = (err as { response?: { data?: { detail?: unknown } } })?.response?.data?.detail;
@@ -66,12 +55,13 @@ export default function CheckoutPage() {
   const [submittedUtr, setSubmittedUtr] = useState<string | null>(null);
   const [upi, setUpi] = useState<ShopUpiCheckout | null>(null);
   const [txn, setTxn] = useState('');
-  const [tab, setTab] = useState<PayTab>('qr');
-  const [copied, setCopied] = useState(false);
-  const [appSheetOpen, setAppSheetOpen] = useState(false);
-  const [openingApp, setOpeningApp] = useState<UpiAppId | null>(null);
-  const [awaitingUtr, setAwaitingUtr] = useState(false);
   const [continuing, setContinuing] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const directUpi = useDirectUpi();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [form, setForm] = useState({
     shipping_name: '',
     shipping_phone: '',
@@ -135,34 +125,18 @@ export default function CheckoutPage() {
       : (upi.amount_paise || 0) / 100
     : 0;
   const amountLabel = upi ? formatCurrency(amountInr) : '';
-  const merchantName = (upi?.display_name || '').trim() || 'USOS';
-
-  const upiParams = useMemo<UpiPaymentParams | null>(() => {
-    if (!upi) return null;
-    return {
-      upiId: upi.upi_id || '',
-      merchantName,
-      amount: amountInr,
-      note: upi.note || 'Shop order',
-    };
-  }, [upi, merchantName, amountInr]);
-
-  const upiValid = upiParams ? validateUpiPaymentParams(upiParams) === null : false;
-
-  const upiLink = useMemo(() => {
-    if (!upiParams || !upiValid) return '';
-    try {
-      return generateUpiPaymentUrl(upiParams);
-    } catch {
-      return '';
-    }
-  }, [upiParams, upiValid]);
-
-  const qrSrc = useMemo(() => (upiLink ? qrCodeImageUrl(upiLink) : ''), [upiLink]);
 
   const pending = orderStatus === 'pending_approval';
   const paid = orderStatus === 'paid' || orderStatus === 'fulfilled';
   const rejected = orderStatus === 'rejected';
+
+  const qrSrc = useMemo(() => resolveUploadUrl(upi?.qr_code_url), [upi?.qr_code_url]);
+  const scannerReady = Boolean(qrSrc);
+  const intentReady = Boolean(upi?.intent_ready && upi?.upi_intent_url);
+  const manualUpiReady = Boolean(upi?.upi_id);
+  const showMobileManual = mounted && directUpi && !pending && !paid;
+  const showDesktopQr = !showMobileManual;
+  const payReady = showMobileManual ? manualUpiReady : scannerReady || intentReady;
   const canSubmit = !!orderId && !!upi && !pending && !paid;
   const utrLen = txn.length;
   const utrReady = utrLen === 12;
@@ -194,7 +168,6 @@ export default function CheckoutPage() {
         setOrderStatus('created');
         setUpi(checkout);
         setTxn('');
-        setAwaitingUtr(false);
         toast.success('Order created. Pay the exact amount shown, then submit your UTR.');
       } else {
         toast.error('UPI checkout is unavailable');
@@ -216,66 +189,14 @@ export default function CheckoutPage() {
     }
     setPaying(true);
     try {
-      const next = await api.submitShopUpiPayment(orderId, value);
-      setOrderStatus(next.status);
-      setSubmittedUtr(next.transaction_id || value);
-      setAwaitingUtr(false);
-      setTxn('');
+      await api.submitShopUpiPayment(orderId, value);
       toast.success(t.submittedTitle);
+      router.replace('/user/orders?payment=submitted');
     } catch (err: unknown) {
       toast.error(errorDetail(err, 'Could not submit payment'));
     } finally {
       setPaying(false);
     }
-  }
-
-  async function copyUpi() {
-    if (!upi?.upi_id) return;
-    try {
-      await navigator.clipboard.writeText(upi.upi_id);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    }
-  }
-
-  async function openSelectedApp(app: UpiAppId) {
-    if (!upiParams || !upiValid) {
-      toast.error(t.notConfigured);
-      return;
-    }
-    setOpeningApp(app);
-    let url = '';
-    try {
-      url = generateUpiAppUrl(app, upiParams);
-    } catch {
-      setOpeningApp(null);
-      toast.error(t.notConfigured);
-      return;
-    }
-
-    const opened = await openUpiDeepLink(url);
-    setOpeningApp(null);
-    setAppSheetOpen(false);
-    if (opened) {
-      setAwaitingUtr(true);
-      return;
-    }
-
-    if (app !== 'other') {
-      try {
-        const fallbackOpened = await openUpiDeepLink(generateUpiPaymentUrl(upiParams));
-        if (fallbackOpened) {
-          setAwaitingUtr(true);
-          return;
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-    toast.error(t.appNotAvailable || 'This UPI app is not available on your device. Please choose another UPI app.');
   }
 
   async function onContinue() {
@@ -309,12 +230,6 @@ export default function CheckoutPage() {
 
     const utrSection = canSubmit ? (
       <section className={styles.verify} id="utr-section">
-        {awaitingUtr ? (
-          <p className={styles.returnPrompt}>
-            {t.completedPaymentPrompt ||
-              'Have you completed the payment? Enter your UPI Transaction ID / UTR number below.'}
-          </p>
-        ) : null}
         <label htmlFor="shop-utr">{t.transactionLabel}</label>
         <p className={styles.hint}>{t.utrHint || 'After paying, copy the 12-digit ID from your payment receipt.'}</p>
         <input
@@ -325,7 +240,7 @@ export default function CheckoutPage() {
           maxLength={12}
           placeholder={t.utrPlaceholder || 'Enter 12-digit ID'}
           value={txn}
-          disabled={paying || !upiValid}
+          disabled={paying || !payReady}
           onChange={(event) => setTxn(event.target.value.replace(/\D/g, '').slice(0, 12))}
         />
         <p className={styles.msg} aria-live="polite">
@@ -338,7 +253,7 @@ export default function CheckoutPage() {
         <button
           className={styles.go}
           type="button"
-          disabled={paying || !upiValid || !utrReady}
+          disabled={paying || !payReady || !utrReady}
           onClick={() => void onSubmitPayment()}
         >
           {paying ? '…' : rejected ? t.resubmit : t.submit}
@@ -363,6 +278,7 @@ export default function CheckoutPage() {
 
                 {rejected ? (
                   <div className={`${styles.alert} ${styles.alertError}`} role="status">
+                    <span className={`${styles.statusPill} ${styles.statusRejected}`}>{t.statusRejected || 'Rejected'}</span>
                     <p>
                       <strong>{t.rejectedTitle}</strong>
                     </p>
@@ -378,93 +294,48 @@ export default function CheckoutPage() {
                   </div>
                 ) : null}
 
-                {/* Desktop / tablet: dynamic QR with amount baked into UPI URI */}
-                <section className={`${styles.pay} ${styles.desktopPay}`}>
-                  <div className={styles.tabs} role="tablist">
-                    <button
-                      role="tab"
-                      type="button"
-                      className={styles.tab}
-                      aria-selected={tab === 'qr'}
-                      onClick={() => setTab('qr')}
-                    >
-                      {t.scanTab || 'Scan QR'}
-                    </button>
-                    <button
-                      role="tab"
-                      type="button"
-                      className={styles.tab}
-                      aria-selected={tab === 'upi'}
-                      onClick={() => setTab('upi')}
-                    >
-                      {t.upiTab || 'UPI ID'}
-                    </button>
-                  </div>
+                {showDesktopQr ? (
+                <div className={styles.desktopQr}>
+                <PaymentQr
+                  qrSrc={qrSrc}
+                  qrAlt={t.qrAlt}
+                  qrMissing={t.qrMissing}
+                  scanNote={t.scanNote}
+                  notConfigured={intentReady ? undefined : t.notConfigured}
+                  upiValid={scannerReady || intentReady}
+                />
+                </div>
+                ) : null}
 
-                  <div className={styles.panel} hidden={tab !== 'qr'}>
-                    <div className={styles.frame}>
-                      <b className={styles.corner} />
-                      <b className={styles.corner} />
-                      <b className={styles.corner} />
-                      <b className={styles.corner} />
-                      {qrSrc ? (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img className={styles.frameImg} src={qrSrc} alt={t.qrAlt} width={148} height={148} />
-                      ) : (
-                        <p className={styles.qrMissing}>{t.qrMissing}</p>
-                      )}
-                    </div>
-                    {upi.upi_id ? (
-                      <p className={styles.upiIdLine}>
-                        {t.upiIdLabel || 'UPI ID'}: <strong>{upi.upi_id}</strong>
-                      </p>
-                    ) : null}
+                {showMobileManual ? (
+                  <div className={styles.mobileIntent}>
+                    <ManualUpiPay
+                      upiId={upi.upi_id || ''}
+                      upiIdLabel={t.upiIdLabel}
+                      copyLabel={t.copyUpi}
+                      copiedLabel={t.copiedShort || t.copied}
+                      amountLabel={amountLabel}
+                      amountCaption={t.amountLabel || 'Total to pay'}
+                      reference={upi.payment_reference || ''}
+                      referenceLabel={t.referenceLabel || 'Payment reference'}
+                      referenceHint={t.referenceHint}
+                      stepsTitle={t.manualTitle || 'How to pay'}
+                      steps={[
+                        t.manualStep1 || 'Open PhonePe, Google Pay, Paytm, or any other UPI app.',
+                        (t.manualStep2 || 'Paste the UPI ID and pay exactly {amount}.').replace('{amount}', amountLabel),
+                        t.manualStep3 ||
+                          'If the app asks for a note, enter the payment reference. Then come back and submit the 12-digit UTR.',
+                      ]}
+                      missingLabel={t.notConfigured}
+                    />
                   </div>
+                ) : null}
 
-                  <div className={styles.panel} hidden={tab !== 'upi'}>
-                    <div className={styles.idbox}>
-                      <span>{t.payToUpi || 'Pay to this UPI ID'}</span>
-                      <div className={styles.idRow}>
-                        <strong>{upi.upi_id || '—'}</strong>
-                        {upi.upi_id ? (
-                          <button
-                            className={`${styles.btn2} ${copied ? styles.btn2Done : ''}`}
-                            type="button"
-                            onClick={() => void copyUpi()}
-                          >
-                            {copied ? t.copiedShort || 'Copied' : t.copyUpi}
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-                    <p className={styles.note}>
-                      {t.amountAutoFilled || 'Amount is automatically populated in your UPI app.'}
-                    </p>
-                    {!upiValid ? <p className={`${styles.note} ${styles.msgBad}`}>{t.notConfigured}</p> : null}
-                  </div>
-                </section>
-
-                {/* Mobile: Google Pay / PhonePe / Paytm / Other */}
-                <section className={`${styles.pay} ${styles.mobilePay}`}>
-                  <p className={styles.mobileLead}>{t.paySecurely || 'Pay securely using UPI'}</p>
-                  <p className={styles.note}>
-                    {t.amountAutoFilled || 'Amount is automatically populated in your UPI app.'}
+                {showDesktopQr && upi.payment_reference && canSubmit ? (
+                  <p className={styles.referenceLine}>
+                    {t.referenceLabel || 'Payment reference'}: <b>{upi.payment_reference}</b>
                   </p>
-                  {upi.upi_id ? (
-                    <p className={styles.upiIdLine}>
-                      {t.upiIdLabel || 'UPI ID'}: <strong>{upi.upi_id}</strong>
-                    </p>
-                  ) : null}
-                  <button
-                    type="button"
-                    className={styles.payNow}
-                    disabled={!upiValid || pending || paid}
-                    onClick={() => setAppSheetOpen(true)}
-                  >
-                    {t.payNow || 'Pay Now'}
-                  </button>
-                  {!upiValid ? <p className={`${styles.note} ${styles.msgBad}`}>{t.notConfigured}</p> : null}
-                </section>
+                ) : null}
 
                 {utrSection}
               </div>
@@ -472,6 +343,7 @@ export default function CheckoutPage() {
               <div className={styles.okView}>
                 {paid ? (
                   <>
+                    <span className={`${styles.statusPill} ${styles.statusApproved}`}>{t.statusApproved || 'Approved'}</span>
                     <div className={styles.tick}>✓</div>
                     <h2>{t.approvedTitle}</h2>
                     <p>{t.approvedBody}</p>
@@ -491,6 +363,7 @@ export default function CheckoutPage() {
                   </>
                 ) : (
                   <>
+                    <span className={`${styles.statusPill} ${styles.statusPending}`}>{t.statusPending || 'Pending'}</span>
                     <div className={styles.tick}>✓</div>
                     <h2>{t.paymentSubmittedTitle || 'Payment submitted'}</h2>
                     <p>
@@ -507,50 +380,6 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        {appSheetOpen ? (
-          <div className={styles.sheetRoot} role="presentation">
-            <button
-              type="button"
-              className={styles.sheetBackdrop}
-              aria-label={t.cancel || 'Cancel'}
-              disabled={!!openingApp}
-              onClick={() => !openingApp && setAppSheetOpen(false)}
-            />
-            <div className={styles.sheet} role="dialog" aria-modal="true" aria-labelledby="shop-upi-app-title">
-              <div className={styles.sheetHandle} aria-hidden="true" />
-              <h2 id="shop-upi-app-title" className={styles.sheetTitle}>
-                {t.chooseUpiApp || 'Choose UPI App'}
-              </h2>
-              <p className={styles.sheetSub}>{t.paySecurely || 'Pay securely using UPI'}</p>
-              <div className={styles.sheetAmount}>
-                <span>{t.amountLabel || 'Amount'}</span>
-                <strong>{amountLabel}</strong>
-              </div>
-              <ul className={styles.appList}>
-                {UPI_APPS.map((app) => (
-                  <li key={app.id}>
-                    <button
-                      type="button"
-                      className={styles.appBtn}
-                      disabled={!!openingApp || !upiValid}
-                      onClick={() => void openSelectedApp(app.id)}
-                    >
-                      {openingApp === app.id ? '…' : t[app.labelKey] || app.id}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              <button
-                type="button"
-                className={styles.sheetCancel}
-                disabled={!!openingApp}
-                onClick={() => setAppSheetOpen(false)}
-              >
-                {t.cancel || 'Cancel'}
-              </button>
-            </div>
-          </div>
-        ) : null}
       </div>
     );
   }
@@ -576,13 +405,13 @@ export default function CheckoutPage() {
                 <span className="font-medium text-ink">{label}</span>
                 <input
                   required
-                  className="mt-1 w-full rounded-lg border border-line bg-surface-card px-3 py-2 text-sm text-ink placeholder:text-ink-muted"
+                  className="mt-1 min-h-12 w-full rounded-lg border border-line bg-surface-card px-3 py-2.5 text-base text-ink placeholder:text-ink-muted"
                   value={form[key]}
                   onChange={(e) => setForm({ ...form, [key]: e.target.value })}
                 />
               </label>
             ))}
-            <Button type="submit" className="w-full" loading={submitting} variant="accent">
+            <Button type="submit" className="h-auto min-h-12 w-full whitespace-normal px-4 py-3 text-center leading-snug" loading={submitting} variant="accent">
               Continue to UPI payment · {formatCurrency((cart?.total_paise || 0) / 100)}
             </Button>
           </form>

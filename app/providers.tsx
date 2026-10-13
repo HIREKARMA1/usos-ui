@@ -2,6 +2,7 @@
 
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { SwipeableToast } from '@/components/ui/SwipeableToast';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { LocaleContext } from '@/hooks/useLocale';
 import { ThemeProvider } from '@/hooks/useTheme';
@@ -30,7 +31,9 @@ export function AppProviders({ children }: { children: ReactNode }) {
       <LocaleContext.Provider value={localeValue}>
         <div className="min-h-screen bg-surface-page text-ink">
           {children}
-          <Toaster position="top-right" toastOptions={{ duration: 3500 }} />
+          <Toaster position="top-right" toastOptions={{ duration: 3500 }}>
+            {(item) => <SwipeableToast toast={item} />}
+          </Toaster>
         </div>
       </LocaleContext.Provider>
     </ThemeProvider>
