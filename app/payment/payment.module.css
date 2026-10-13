@@ -1,4 +1,5 @@
-.page {
+.page,
+.payTheme {
   --pay-bg: #f2f3f7;
   --pay-card: #fff;
   --pay-ink: #101322;
@@ -10,22 +11,23 @@
   --pay-ok: #0e8a5f;
   --pay-bad: #c9372c;
   --pay-shadow: 0 24px 60px -30px rgba(16, 19, 34, 0.35);
+  --pay-pad: 16px;
   box-sizing: border-box;
-  height: 100dvh;
-  min-height: 100dvh;
-  max-height: 100dvh;
-  margin: 0;
-  overflow: hidden;
-  background: var(--pay-bg);
   color: var(--pay-ink);
+}
+
+.page {
+  min-height: 100dvh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--pay-bg);
   font-family: var(--font-display), var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   line-height: 1.4;
   transition: background 0.25s, color 0.25s;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-:global(html.dark) .page {
+:global(html.dark) .page,
+:global(html.dark) .payTheme {
   --pay-bg: #08090f;
   --pay-card: #12141f;
   --pay-ink: #f1f2fa;
@@ -38,18 +40,22 @@
 }
 
 .wrap {
-  height: 100%;
+  box-sizing: border-box;
+  min-height: 100dvh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 12px 16px;
-  overflow: hidden;
+  padding:
+    max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
 }
 
 .col {
-  width: 100%;
-  max-width: 420px;
-  max-height: 100%;
+  width: min(100%, 440px);
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .bar {
@@ -108,11 +114,10 @@
   box-shadow: var(--pay-shadow);
   overflow: hidden;
   transition: background 0.25s, border-color 0.25s;
-  max-height: 100%;
 }
 
 .sum {
-  padding: 16px 20px 14px;
+  padding: 16px var(--pay-pad) 14px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -128,20 +133,25 @@
 
 .amt {
   margin: 2px 0 0;
-  font-size: 36px;
+  font-size: clamp(1.75rem, 8vw, 2.25rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 .tag {
+  flex: 0 1 auto;
+  max-width: 46%;
   font-size: 13px;
   font-weight: 700;
   padding: 6px 12px;
   border-radius: 99px;
   background: var(--pay-soft);
   border: 1px solid var(--pay-line);
-  white-space: nowrap;
+  line-height: 1.3;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .tear {
@@ -172,7 +182,7 @@
 }
 
 .pay {
-  padding: 14px 20px 4px;
+  padding: 14px var(--pay-pad) 4px;
 }
 
 .tabs {
@@ -213,20 +223,22 @@
 
 .frame {
   position: relative;
-  width: 168px;
-  height: 168px;
+  width: min(240px, 72vw);
+  aspect-ratio: 1;
   margin: 0 auto;
   display: grid;
   place-items: center;
   background: #fff;
   border-radius: 18px;
-  padding: 10px;
+  padding: 16px;
 }
 
 .frameImg {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
   display: block;
+  background: #fff;
 }
 
 .corner {
@@ -295,15 +307,19 @@
 
 .idRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .idRow strong {
-  font-size: 20px;
+  flex: 1 1 10rem;
+  min-width: 0;
+  font-size: clamp(1rem, 4.6vw, 1.25rem);
   font-weight: 800;
+  line-height: 1.25;
   word-break: break-all;
 }
 
@@ -314,10 +330,12 @@
   font: inherit;
   font-weight: 700;
   font-size: 13px;
-  padding: 9px 14px;
+  min-height: 44px;
+  padding: 10px 14px;
   border-radius: 10px;
   cursor: pointer;
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 .btn2Done {
@@ -361,13 +379,23 @@
   text-align: left;
 }
 
-/* Desktop & tablet: QR payment. Mobile: UPI app chooser. */
-.desktopPay {
-  display: block;
+/* One QR layout on every screen size. */
+
+.mobilePay .idbox {
+  margin-top: 16px;
 }
 
-.mobilePay {
-  display: none;
+.phoneNotice {
+  margin: 0 0 14px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 130, 31, 0.4);
+  background: rgba(245, 130, 31, 0.1);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--pay-ink);
+  text-align: left;
 }
 
 .mobileLead {
@@ -537,18 +565,8 @@
   }
 }
 
-@media (max-width: 767px) {
-  .desktopPay {
-    display: none;
-  }
-
-  .mobilePay {
-    display: block;
-  }
-}
-
 .verify {
-  padding: 12px 20px 16px;
+  padding: 12px var(--pay-pad) 16px;
 }
 
 .verify label {
@@ -569,6 +587,7 @@
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0.08em;
+  min-height: 48px;
   padding: 12px 14px;
   border-radius: 14px;
   border: 1.5px solid var(--pay-line);
@@ -612,6 +631,7 @@
   width: 100%;
   border: 0;
   border-radius: 14px;
+  min-height: 48px;
   padding: 13px;
   font: inherit;
   font-weight: 800;
@@ -663,7 +683,7 @@
 
 .okView {
   display: none;
-  padding: 34px 24px;
+  padding: 28px var(--pay-pad) 24px;
   text-align: center;
 }
 
@@ -705,7 +725,7 @@
 }
 
 .alert {
-  margin: 0 24px 8px;
+  margin: 0 var(--pay-pad) 8px;
   border-radius: 14px;
   padding: 12px 14px;
   font-size: 13px;
@@ -767,6 +787,192 @@
   height: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.manualPay {
+  margin: 0 var(--pay-pad) 8px;
+  text-align: left;
+}
+
+.manualFacts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.manualFacts div {
+  border: 1px solid var(--pay-line);
+  border-radius: 14px;
+  padding: 12px 14px;
+  background: var(--pay-card);
+}
+
+.manualFacts span {
+  display: block;
+  font-size: 12px;
+  color: var(--pay-muted);
+}
+
+.manualFacts strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.manualRef {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px !important;
+  letter-spacing: 0.03em;
+  word-break: break-all;
+}
+
+.manualSteps {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--pay-soft);
+  border: 1px solid var(--pay-line);
+}
+
+.manualSteps p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.manualSteps ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.manualSteps li {
+  margin: 0 0 6px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--pay-ink);
+}
+
+.manualSteps li:last-child {
+  margin-bottom: 0;
+}
+
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.statusPending {
+  background: rgba(245, 130, 31, 0.14);
+  color: #9a4d00;
+}
+
+.statusApproved {
+  background: rgba(22, 163, 74, 0.14);
+  color: #166534;
+}
+
+.statusRejected {
+  background: rgba(220, 38, 38, 0.12);
+  color: #991b1b;
+}
+
+:global(html.dark) .statusPending {
+  color: #fdba74;
+}
+
+:global(html.dark) .statusApproved {
+  color: #86efac;
+}
+
+:global(html.dark) .statusRejected {
+  color: #fca5a5;
+}
+
+.desktopQr {
+  display: block;
+}
+
+.mobileIntent {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .desktopQr {
+    display: none;
+  }
+}
+
+.reference,
+.referenceLine {
+  margin: 8px var(--pay-pad) 0;
+  font-size: 12px;
+  color: var(--pay-muted);
+  text-align: center;
+  word-break: break-all;
+}
+
+.reference {
+  margin: 10px 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.04em;
+}
+
+.textBtn {
+  display: block;
+  width: calc(100% - 40px);
+  margin: 4px 20px 12px;
+  border: 0;
+  background: none;
+  color: var(--pay-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.textBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (min-width: 480px) {
+  .page,
+  .payTheme {
+    --pay-pad: 20px;
+  }
+
+  .manualFacts {
+    grid-template-columns: 1fr 1.15fr;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 768px) {
+  .frame {
+    width: min(260px, 100%);
+  }
+}
+
+@media (min-width: 1024px) {
+  .frame {
+    width: min(280px, 100%);
+  }
+}
+
+@media (max-height: 760px) {
+  .frame {
+    width: min(200px, 70vw);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

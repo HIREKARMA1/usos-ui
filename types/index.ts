@@ -204,6 +204,7 @@ export interface UpiPayment {
   currency: string;
   payment_method: string;
   transaction_id?: string | null;
+  payment_reference?: string | null;
   status: string;
   submitted_at?: string | null;
   rejection_reason?: string | null;
@@ -220,6 +221,11 @@ export interface UpiCheckout {
   amount_inr: number;
   currency: string;
   package_name?: string | null;
+  order_id?: string | null;
+  payment_reference?: string | null;
+  upi_intent_url?: string | null;
+  intent_ready?: boolean;
+  previous_rejection_reason?: string | null;
   payment?: UpiPayment | null;
 }
 
@@ -231,19 +237,41 @@ export interface PaymentSettings {
   updated_at?: string | null;
 }
 
+export interface AdminPaymentItem {
+  product_id: string;
+  product_name: string;
+  quantity: number;
+  unit_price_paise: number;
+  line_total_paise: number;
+  image_url?: string | null;
+}
+
 export interface AdminPaymentRow {
   id: string;
   kind?: string;
   user_id: string;
   user_name: string;
   email: string;
+  phone?: string | null;
+  member_id?: string | null;
+  referral_code?: string | null;
+  kyc_status?: string | null;
+  shipping_name?: string | null;
+  shipping_phone?: string | null;
+  shipping_address?: string | null;
+  shipping_city?: string | null;
+  shipping_state?: string | null;
+  shipping_pincode?: string | null;
   application_id: string;
   package_name?: string | null;
+  items?: AdminPaymentItem[];
   amount_paise: number;
   amount_inr: number;
   currency: string;
   payment_method: string;
   transaction_id?: string | null;
+  payment_reference?: string | null;
+  upi_id?: string | null;
   status: string;
   submitted_at?: string | null;
   reviewed_at?: string | null;

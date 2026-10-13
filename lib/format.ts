@@ -35,6 +35,23 @@ export function formatDateTime(value: string | Date, locale = 'en-IN'): string {
   }).format(date);
 }
 
+export function orderStatusLabel(status: string): string {
+  switch (status) {
+    case 'pending_approval':
+      return 'Payment approval pending';
+    case 'paid':
+      return 'Paid';
+    case 'fulfilled':
+      return 'Fulfilled';
+    case 'rejected':
+      return 'Payment rejected';
+    case 'created':
+      return 'Awaiting payment';
+    default:
+      return status.replaceAll('_', ' ');
+  }
+}
+
 export function getInitials(name: string): string {
   return name
     .split(' ')

@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { clearSession } from './auth';
-import { env, TOKEN_KEY, type PackageId } from './constants';
+import { env, resolveApiUrl, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
   AdminUserRow,
@@ -104,6 +104,7 @@ class ApiClient {
     });
 
     this.client.interceptors.request.use((cfg) => {
+      cfg.baseURL = resolveApiUrl();
       const token = getToken();
       if (token) cfg.headers.Authorization = `Bearer ${token}`;
       return cfg;
@@ -179,8 +180,18 @@ class ApiClient {
     return this.get<UpiCheckout>('/api/v1/payments/upi');
   }
 
-  async submitUpiPayment(transactionId: string): Promise<UpiPayment> {
-    return this.post<UpiPayment>('/api/v1/payments/submit', { transaction_id: transactionId });
+  async submitUpiPayment(transactionId: string, orderId?: string): Promise<UpiPayment> {
+    return this.post<UpiPayment>('/api/v1/payments/submit', {
+      transaction_id: transactionId,
+      order_id: orderId || undefined,
+    });
+  }
+
+  async cancelUpiOrder(
+    orderId: string,
+    reason: 'cancelled' | 'app_unsupported' | 'browser_error'
+  ): Promise<UpiPayment> {
+    return this.post<UpiPayment>(`/api/v1/payments/${orderId}/cancel`, { reason });
   }
 
   async getUpiPaymentStatus(id: string): Promise<UpiPayment> {
@@ -555,17 +566,26 @@ class ApiClient {
     return this.get<any[]>('/api/v1/wallet/withdrawals');
   }
 
-  async getAdminWithdrawals(status?: string) {
-    const q = status ? `?status=${encodeURIComponent(status)}` : '';
-    return this.get<{ payout_provider: string; items: any[] }>(`/api/v1/wallet/admin/withdrawals${q}`);
+  async getAdminWithdrawals(status?: string, scope?: 'queue' | 'history') {
+    return this.get<{ payout_mode?: string; payout_provider: string; items: any[] }>(
+      '/api/v1/wallet/admin/withdrawals',
+      {
+        ...(status ? { status } : {}),
+        ...(scope && scope !== 'queue' ? { scope } : {}),
+      }
+    );
   }
 
-  async approveWithdrawal(id: string, note?: string) {
-    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/approve`, { note: note || null });
+  async confirmWithdrawalPayment(id: string, utr?: string) {
+    return this.post<{ status: string }>(`/api/v1/wallet/admin/withdrawals/${id}/confirm-payment`, {
+      utr: utr?.trim() || null,
+    });
   }
 
   async rejectWithdrawal(id: string, note?: string) {
-    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/reject`, { note: note || null });
+    return this.post<{ status: string }>(`/api/v1/wallet/admin/withdrawals/${id}/reject`, {
+      note: note || null,
+    });
   }
 
   async getKycStatus() {
@@ -593,7 +613,13 @@ class ApiClient {
     return this.put<PaymentSettings>('/api/v1/admin/payment-settings', data);
   }
 
-  async getAdminPayments(params?: { q?: string; status?: string; page?: number; page_size?: number }) {
+  async getAdminPayments(params?: {
+    q?: string;
+    status?: string;
+    kind?: 'membership' | 'shop' | 'all';
+    page?: number;
+    page_size?: number;
+  }) {
     return this.get<AdminPaymentList>('/api/v1/admin/payments', params);
   }
 
