@@ -37,6 +37,7 @@ type Withdrawal = {
   bank_account_number: string;
   payout_utr?: string | null;
   failure_reason?: string | null;
+  rejection_reason?: string | null;
   created_at: string;
 };
 
@@ -338,7 +339,9 @@ export default function WalletPage() {
                   <Td>
                     ****{String(w.bank_account_number).slice(-4)} · {w.bank_ifsc}
                     {w.payout_utr ? <div className="text-xs text-ink-muted">UTR: {w.payout_utr}</div> : null}
-                    {w.failure_reason ? <div className="text-xs text-danger">{w.failure_reason}</div> : null}
+                    {w.failure_reason || w.rejection_reason ? (
+                      <div className="text-xs text-danger">{w.failure_reason || w.rejection_reason}</div>
+                    ) : null}
                   </Td>
                   <Td>
                     <Badge

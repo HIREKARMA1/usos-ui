@@ -111,15 +111,27 @@ const ITEM_TONES = [
   'bg-[#FBF4F8] dark:bg-pink-400/10',
 ];
 
-function DetailField({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
+function DetailField({
+  icon: Icon,
+  label,
+  value,
+  span,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  span?: boolean;
+}) {
   return (
-    <div className="flex min-w-0 items-start gap-2.5">
+    <div className={cn('flex min-w-0 items-start gap-2.5', span && 'col-span-2')}>
       <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-500 dark:bg-white/[0.06] dark:text-white/50">
         <Icon className="h-3.5 w-3.5" />
       </span>
       <div className="min-w-0">
         <p className="text-[11px] text-ink-muted dark:text-white/40">{label}</p>
-        <p className="break-words text-sm font-semibold text-ink dark:text-white">{value || '—'}</p>
+        <p className={cn('text-sm font-semibold leading-5 text-ink dark:text-white', span && '[overflow-wrap:anywhere]')}>
+          {value || '—'}
+        </p>
       </div>
     </div>
   );
@@ -128,6 +140,7 @@ function DetailField({ icon: Icon, label, value }: { icon: LucideIcon; label: st
 function BuyerDetails({
   row,
   labels,
+  compact = false,
 }: {
   row: AdminPaymentRow;
   labels: {
@@ -138,13 +151,14 @@ function BuyerDetails({
     deliveryName: string;
     address: string;
   };
+  compact?: boolean;
 }) {
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className={compact ? 'grid grid-cols-2 gap-x-4 gap-y-3' : 'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4'}>
       <DetailField icon={CreditCard} label={labels.memberId} value={row.member_id || '—'} />
       <DetailField icon={Phone} label={labels.phone} value={row.shipping_phone || row.phone || '—'} />
-      <DetailField icon={Mail} label={labels.email} value={row.email || '—'} />
-      <DetailField icon={MapPin} label={labels.address} value={deliveryAddress(row) || '—'} />
+      <DetailField icon={Mail} label={labels.email} value={row.email || '—'} span={compact} />
+      <DetailField icon={MapPin} label={labels.address} value={deliveryAddress(row) || '—'} span={compact} />
       <DetailField icon={Users} label={labels.referral} value={row.referral_code || '—'} />
       <DetailField icon={UserRound} label={labels.deliveryName} value={row.shipping_name || row.user_name || '—'} />
     </div>
@@ -561,7 +575,7 @@ export default function AdminShoppingPage() {
             className="absolute inset-0 bg-ink/40 backdrop-blur-[2px]"
             onClick={() => !busy && setDialog(null)}
           />
-          <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-line bg-surface-card shadow-xl dark:border-white/[0.08] dark:bg-[#0B1220]">
+          <div className="relative flex max-h-[min(85vh,760px)] w-full max-w-xl flex-col overflow-hidden rounded-2xl border border-line bg-surface-card shadow-xl dark:border-white/[0.08] dark:bg-[#0B1220]">
             <div className="flex items-start gap-3 border-b border-line px-5 py-4 dark:border-white/[0.06]">
               <span
                 className={cn(
@@ -590,24 +604,24 @@ export default function AdminShoppingPage() {
               </button>
             </div>
 
-            <div className="space-y-4 px-5 py-4">
-              <div className="rounded-xl border border-line bg-surface-muted/50 px-3.5 py-3 dark:border-white/[0.06] dark:bg-white/[0.03]">
-                <div className="flex items-center justify-between gap-3">
+            <div className="space-y-4 overflow-y-auto px-5 py-4">
+              <div className="rounded-xl border border-line bg-surface-muted/50 px-4 py-3.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
+                <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium text-ink dark:text-white">{dialog.row.user_name}</p>
+                    <p className="truncate text-sm font-semibold text-ink dark:text-white">{dialog.row.user_name}</p>
                     <p className="mt-0.5 font-mono text-xs text-ink-muted dark:text-white/45">
                       {t.table.utr}: {dialog.row.transaction_id || '—'}
                     </p>
                   </div>
-                  <p className="shrink-0 text-sm font-bold tabular-nums text-ink dark:text-white">
+                  <p className="shrink-0 text-base font-bold tabular-nums text-ink dark:text-white">
                     {formatCurrency((dialog.row.amount_paise || 0) / 100)}
                   </p>
                 </div>
-                <div className="mt-3">
-                  <BuyerDetails row={dialog.row} labels={t.buyer} />
+                <div className="mt-4 border-t border-line pt-4 dark:border-white/[0.06]">
+                  <BuyerDetails row={dialog.row} labels={t.buyer} compact />
                 </div>
                 {dialog.row.items && dialog.row.items.length > 0 ? (
-                  <ul className="mt-3 space-y-2 border-t border-line pt-3 dark:border-white/[0.06]">
+                  <ul className="mt-4 space-y-2 border-t border-line pt-4 dark:border-white/[0.06]">
                     {dialog.row.items.map((item, index) => (
                       <li key={`${item.product_id}-${index}`} className="flex items-center gap-3">
                         <ItemThumb name={item.product_name} imageUrl={item.image_url} />
@@ -640,21 +654,21 @@ export default function AdminShoppingPage() {
                   />
                 </label>
               )}
+            </div>
 
-              <div className="flex justify-end gap-2 pt-1">
-                <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => setDialog(null)}>
-                  {t.cancel}
-                </Button>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant={dialog.type === 'approve' ? 'primary' : 'danger'}
-                  loading={busy}
-                  onClick={() => void confirmAction()}
-                >
-                  {dialog.type === 'approve' ? t.confirmApprove : t.confirmReject}
-                </Button>
-              </div>
+            <div className="flex justify-end gap-2 border-t border-line px-5 py-3.5 dark:border-white/[0.06]">
+              <Button type="button" variant="outline" size="sm" disabled={busy} onClick={() => setDialog(null)}>
+                {t.cancel}
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant={dialog.type === 'approve' ? 'primary' : 'danger'}
+                loading={busy}
+                onClick={() => void confirmAction()}
+              >
+                {dialog.type === 'approve' ? t.confirmApprove : t.confirmReject}
+              </Button>
             </div>
           </div>
         </div>

@@ -566,17 +566,26 @@ class ApiClient {
     return this.get<any[]>('/api/v1/wallet/withdrawals');
   }
 
-  async getAdminWithdrawals(status?: string) {
-    const q = status ? `?status=${encodeURIComponent(status)}` : '';
-    return this.get<{ payout_provider: string; items: any[] }>(`/api/v1/wallet/admin/withdrawals${q}`);
+  async getAdminWithdrawals(status?: string, scope?: 'queue' | 'history') {
+    return this.get<{ payout_mode?: string; payout_provider: string; items: any[] }>(
+      '/api/v1/wallet/admin/withdrawals',
+      {
+        ...(status ? { status } : {}),
+        ...(scope && scope !== 'queue' ? { scope } : {}),
+      }
+    );
   }
 
-  async approveWithdrawal(id: string, note?: string) {
-    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/approve`, { note: note || null });
+  async confirmWithdrawalPayment(id: string, utr?: string) {
+    return this.post<{ status: string }>(`/api/v1/wallet/admin/withdrawals/${id}/confirm-payment`, {
+      utr: utr?.trim() || null,
+    });
   }
 
   async rejectWithdrawal(id: string, note?: string) {
-    return this.post(`/api/v1/wallet/admin/withdrawals/${id}/reject`, { note: note || null });
+    return this.post<{ status: string }>(`/api/v1/wallet/admin/withdrawals/${id}/reject`, {
+      note: note || null,
+    });
   }
 
   async getKycStatus() {
