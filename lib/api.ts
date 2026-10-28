@@ -215,9 +215,7 @@ class ApiClient {
     const used = d.referral_slots_used ?? d.direct_referral_count ?? 0;
     const treeSlotsUsed =
       typeof d.tree_slots_used === 'number' ? d.tree_slots_used : Math.min(used, max);
-    const rank =
-      d.current_rank ||
-      (d.current_level ? `Level ${d.current_level}` : `${used}/${max} directs`);
+    const rank = typeof d.current_rank === 'string' ? d.current_rank.trim() : '';
     return {
       totalEarnings: (d.wallet_balance_paise || 0) / 100,
       walletBalance: (d.wallet_balance_paise || 0) / 100,
@@ -348,6 +346,18 @@ class ApiClient {
       kycPending: d.kyc_pending || 0,
       kycApproved: d.kyc_approved || 0,
       kycRejected: d.kyc_rejected || 0,
+      memberGrowth: Array.isArray(d.member_growth)
+        ? d.member_growth.map((point: { label?: string; members?: number }) => ({
+            label: String(point.label || ''),
+            members: Number(point.members) || 0,
+          }))
+        : [],
+      revenueMonths: Array.isArray(d.revenue_months)
+        ? d.revenue_months.map((point: { month?: string; value?: number }) => ({
+            month: String(point.month || ''),
+            value: Number(point.value) || 0,
+          }))
+        : [],
     };
   }
 

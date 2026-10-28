@@ -25,6 +25,8 @@ const EMPTY_STATS: AdminStats = {
   kycPending: 0,
   kycApproved: 0,
   kycRejected: 0,
+  memberGrowth: [],
+  revenueMonths: [],
 };
 
 export default function AdminAnalyticsPage() {
@@ -64,46 +66,72 @@ export default function AdminAnalyticsPage() {
           value={formatCurrency(data.totalRevenue)}
           icon={TrendingUp}
           change={indicators.revenue}
+          href="/admin/payments?status=approved"
         />
         <KpiCard
           label={t.stats.clearedPayouts}
           value={formatCurrency(data.totalPayouts)}
           icon={IndianRupee}
           change={indicators.clearedPayouts}
+          href="/admin/withdrawals?tab=history"
         />
         <KpiCard
           label={t.stats.pendingPayouts}
           value={formatCurrency(data.pendingPayouts)}
           icon={Clock}
           change={indicators.pendingPayouts}
+          href="/admin/withdrawals?tab=queue"
         />
         <KpiCard
           label={t.stats.totalMembers}
           value={formatNumber(data.totalUsers)}
           icon={Users}
           badge={indicators.totalMembers}
+          href="/admin/users"
         />
         <KpiCard
           label={t.stats.activeMembers}
           value={formatNumber(data.activeUsers)}
           icon={UserCheck}
           change={indicators.activeMembers}
+          href="/admin/users?status=active"
         />
         <KpiCard
           label={t.stats.pendingRewards}
           value={formatNumber(data.pendingRewards)}
           icon={Gift}
           change={indicators.pendingRewards}
+          href="/admin/rewards?status=pending"
         />
-        <KpiCard label={t.stats.kycTotal || 'Total KYC Requests'} value={formatNumber(data.kycTotal || 0)} icon={ShieldCheck} />
-        <KpiCard label={t.stats.kycPending || 'Pending KYC'} value={formatNumber(data.kycPending || 0)} icon={Clock} />
-        <KpiCard label={t.stats.kycApproved || 'Approved KYC'} value={formatNumber(data.kycApproved || 0)} icon={CheckCircle2} />
-        <KpiCard label={t.stats.kycRejected || 'Rejected KYC'} value={formatNumber(data.kycRejected || 0)} icon={XCircle} />
+        <KpiCard
+          label={t.stats.kycTotal || 'Total KYC Requests'}
+          value={formatNumber(data.kycTotal || 0)}
+          icon={ShieldCheck}
+          href="/admin/kyc"
+        />
+        <KpiCard
+          label={t.stats.kycPending || 'Pending KYC'}
+          value={formatNumber(data.kycPending || 0)}
+          icon={Clock}
+          href="/admin/kyc?status=pending"
+        />
+        <KpiCard
+          label={t.stats.kycApproved || 'Approved KYC'}
+          value={formatNumber(data.kycApproved || 0)}
+          icon={CheckCircle2}
+          href="/admin/kyc?status=approved"
+        />
+        <KpiCard
+          label={t.stats.kycRejected || 'Rejected KYC'}
+          value={formatNumber(data.kycRejected || 0)}
+          icon={XCircle}
+          href="/admin/kyc?status=rejected"
+        />
       </div>
 
       <div className="grid grid-cols-1 gap-2.5 lg:grid-cols-2">
-        <MemberGrowthChart title={t.memberGrowthTitle} />
-        <RevenueOverviewChart title={t.revenueOverviewTitle} subtitle={t.revenueSubtitle} />
+        <MemberGrowthChart title={t.memberGrowthTitle} data={data.memberGrowth} />
+        <RevenueOverviewChart title={t.revenueOverviewTitle} subtitle={t.revenueSubtitle} data={data.revenueMonths} />
       </div>
 
       <div>

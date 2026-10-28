@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import {
   CheckCircle2,
@@ -91,11 +92,16 @@ function getPageNumbers(current: number, total: number): (number | 'ellipsis')[]
   return pages;
 }
 
+function initialKycStatus(value: string | null): StatusFilter {
+  return value === 'pending' || value === 'approved' || value === 'rejected' ? value : 'all';
+}
+
 export default function AdminKycPage() {
   const t = useContent('admin').kyc;
+  const search = useSearchParams();
   const [q, setQ] = useState('');
   const [debouncedQ, setDebouncedQ] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => initialKycStatus(search.get('status')));
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<KycRow[]>([]);

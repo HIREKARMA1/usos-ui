@@ -175,7 +175,7 @@ export default function UserOverviewPage() {
   const max = stats?.maxDirectReferrals || 4;
   const used = stats?.directReferrals || referrals.length;
   const treeUsed = stats?.treeSlotsUsed ?? Math.min(used, max);
-  const rankLabel = stats?.rank || '—';
+  const rankLabel = stats?.rank || t.stats.noRank || 'Member';
   const greeting = getGreeting(new Date().getHours(), {
     morning: t.greeting?.morning || 'Good Morning',
     afternoon: t.greeting?.afternoon || 'Good Afternoon',

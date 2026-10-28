@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import {
   CheckCircle2,
@@ -111,11 +112,16 @@ function StatusBadge({ status, labels }: { status: string; labels: Record<string
   );
 }
 
+function initialPaymentStatus(value: string | null): StatusFilter {
+  return value === 'pending_approval' || value === 'approved' || value === 'rejected' ? value : 'all';
+}
+
 export default function AdminPaymentsPage() {
   const t = useContent('admin').payments;
+  const search = useSearchParams();
   const [q, setQ] = useState('');
   const [debouncedQ, setDebouncedQ] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => initialPaymentStatus(search.get('status')));
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [rows, setRows] = useState<AdminPaymentRow[]>([]);

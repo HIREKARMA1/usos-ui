@@ -107,18 +107,8 @@ export function RegisterForm() {
   }
 
   async function finishRegistration(message: string) {
-    try {
-      const tokens = await api.login(email.trim() || phone, password);
-      goToDashboard(tokens, message);
-    } catch (err: any) {
-      const detail = err?.response?.data?.detail;
-      if (typeof detail === 'string' && detail.includes('Several accounts use this mobile number')) {
-        toast.error(detail);
-        router.push('/login');
-        return;
-      }
-      throw err;
-    }
+    const tokens = await api.login(email.trim() || phone, password);
+    goToDashboard(tokens, message);
   }
 
   function validateForGoogle(): boolean {
@@ -348,6 +338,7 @@ export function RegisterForm() {
             <PasswordInput
               id="password"
               label={t.passwordLabel}
+              hint={t.passwordHint}
               placeholder={t.passwordPlaceholder}
               value={password}
               onChange={(e) => setPassword(e.target.value)}

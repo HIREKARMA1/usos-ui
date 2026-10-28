@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ChevronDown, ChevronLeft, ChevronRight, Download, Search } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -29,7 +30,7 @@ const controlClass =
 const iconBtnClass =
   'flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface-muted text-ink-muted transition duration-300 hover:bg-surface-soft hover:text-ink disabled:pointer-events-none disabled:opacity-30 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60 dark:hover:bg-white/[0.08] dark:hover:text-white';
 
-type StatusFilter = 'all' | 'active' | 'inactive';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'pending';
 type PackageFilter = 'all' | string;
 type LevelFilter = 'all' | number;
 
@@ -128,14 +129,19 @@ function exportUsers(
   URL.revokeObjectURL(url);
 }
 
+function initialStatus(value: string | null): StatusFilter {
+  return value === 'active' || value === 'inactive' || value === 'pending' ? value : 'all';
+}
+
 export default function AdminUsersPage() {
   const t = useContent('admin').users;
   const common = useContent('common');
+  const search = useSearchParams();
   const [rows, setRows] = useState<AdminUserRow[]>([]);
   const [packages, setPackages] = useState<PackagePlan[]>([]);
   const [levelOptions, setLevelOptions] = useState<number[]>(FALLBACK_LEVELS);
   const [q, setQ] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => initialStatus(search.get('status')));
   const [packageFilter, setPackageFilter] = useState<PackageFilter>('all');
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [page, setPage] = useState(1);
@@ -278,6 +284,7 @@ export default function AdminUsersPage() {
                     <option value="all">Status: All</option>
                     <option value="active">Status: {common.status.active}</option>
                     <option value="inactive">Status: {common.status.inactive}</option>
+                    <option value="pending">Status: {common.status.pending}</option>
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/50" />
                 </label>

@@ -136,6 +136,16 @@ export interface RewardClaim {
   status: RewardClaimStatus;
 }
 
+export interface MemberGrowthPoint {
+  label: string;
+  members: number;
+}
+
+export interface RevenueMonthPoint {
+  month: string;
+  value: number;
+}
+
 export interface AdminStats {
   totalRevenue: number;
   totalUsers: number;
@@ -148,6 +158,8 @@ export interface AdminStats {
   kycPending: any;
   kycApproved: any;
   kycRejected: any;
+  memberGrowth: MemberGrowthPoint[];
+  revenueMonths: RevenueMonthPoint[];
 }
 
 export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected';

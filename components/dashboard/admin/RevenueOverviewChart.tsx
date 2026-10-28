@@ -9,8 +9,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { mockRevenueSeries } from '@/lib/mock';
 import { formatCurrency } from '@/lib/format';
+import type { RevenueMonthPoint } from '@/types';
 
 const CHART_BLUE = '#3b82f6';
 
@@ -32,7 +32,15 @@ function ChartTooltip({
   );
 }
 
-export function RevenueOverviewChart({ title, subtitle }: { title: string; subtitle: string }) {
+export function RevenueOverviewChart({
+  title,
+  subtitle,
+  data,
+}: {
+  title: string;
+  subtitle: string;
+  data: RevenueMonthPoint[];
+}) {
   return (
     <div className="rounded-xl border border-line bg-surface-card p-3.5 shadow-none transition hover:shadow-none sm:p-4">
       <div>
@@ -41,7 +49,7 @@ export function RevenueOverviewChart({ title, subtitle }: { title: string; subti
       </div>
       <div className="mt-3 h-[180px] w-full sm:h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={mockRevenueSeries} margin={{ top: 4, right: 4, left: -12, bottom: 0 }}>
+          <BarChart data={data} margin={{ top: 4, right: 4, left: -12, bottom: 0 }}>
             <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
             <XAxis
               dataKey="month"

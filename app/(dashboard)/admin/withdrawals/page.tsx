@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Banknote, X } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
@@ -56,7 +57,8 @@ function Detail({ label, value, mono }: { label: string; value: string; mono?: b
 
 export default function AdminWithdrawalsPage() {
   const t = useContent('admin').withdrawals;
-  const [tab, setTab] = useState<TabKey>('queue');
+  const search = useSearchParams();
+  const [tab, setTab] = useState<TabKey>(() => (search.get('tab') === 'history' ? 'history' : 'queue'));
   const [rows, setRows] = useState<WithdrawalRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialog, setDialog] = useState<DialogState>(null);
