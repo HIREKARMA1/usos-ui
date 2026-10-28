@@ -59,12 +59,11 @@ export default function ReferralsPage() {
   }
 
   const max = overview?.maxDirectReferrals || 4;
-  const used = overview?.directReferrals || rows.length;
-  const full = overview?.referralSlotsFull || used >= max;
-  const pct = Math.min(100, Math.round((used / max) * 100));
+  const used = rows.length;
+  const shown = Math.min(used, max);
+  const pct = max > 0 ? Math.min(100, Math.round((shown / max) * 100)) : 0;
 
   async function share() {
-    if (full) return;
     try {
       if (typeof navigator !== 'undefined' && navigator.share) {
         await navigator.share({
@@ -97,7 +96,7 @@ export default function ReferralsPage() {
           <h2 className="font-display text-lg font-bold text-ink">{t.myReferralsTitle}</h2>
           <p className="mt-1 text-sm text-ink-muted">
             {(t.slotsUsed || '{used} / {max} Slots Used')
-              .replace('{used}', String(used))
+              .replace('{used}', String(shown))
               .replace('{max}', String(max))}
           </p>
           <div className="mt-3 flex items-center gap-3">
@@ -109,7 +108,6 @@ export default function ReferralsPage() {
             </div>
             <span className="shrink-0 text-sm font-semibold text-ink-muted">{pct}%</span>
           </div>
-          {full ? <p className="mt-2 text-sm text-ink-muted">{t.slotsFull}</p> : null}
         </div>
 
         {/* Referral link */}
@@ -120,10 +118,10 @@ export default function ReferralsPage() {
               {link || '…'}
             </div>
             <div className="flex shrink-0 gap-2">
-              <Button size="sm" onClick={() => copy(link)} disabled={full || !link}>
+              <Button size="sm" onClick={() => copy(link)} disabled={!link}>
                 <Copy className="h-4 w-4" /> {t.copy}
               </Button>
-              <Button size="sm" onClick={share} disabled={full || !link}>
+              <Button size="sm" onClick={share} disabled={!link}>
                 <Share2 className="h-4 w-4" /> {t.share}
               </Button>
             </div>

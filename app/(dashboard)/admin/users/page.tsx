@@ -36,7 +36,7 @@ type LevelFilter = 'all' | number;
 const FALLBACK_LEVELS = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function avatarGradient(name: string) {
-  const index = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const index = (name || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   return AVATAR_COLORS[index % AVATAR_COLORS.length];
 }
 
@@ -195,7 +195,9 @@ export default function AdminUsersPage() {
     () =>
       rows.filter((r) => {
         const query = q.trim().toLowerCase();
-        if (query && !r.name.toLowerCase().includes(query) && !r.email.toLowerCase().includes(query)) {
+        const name = (r.name || '').toLowerCase();
+        const email = (r.email || '').toLowerCase();
+        if (query && !name.includes(query) && !email.includes(query)) {
           return false;
         }
         if (statusFilter !== 'all' && r.status !== statusFilter) return false;

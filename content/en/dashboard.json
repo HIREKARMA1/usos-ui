@@ -145,7 +145,7 @@
   },
   "referrals": {
     "title": "Referrals",
-    "subtitle": "You can refer a maximum of 4 members. Complete all 4 within 7 days of joining to unlock SMART.",
+    "subtitle": "Refer as many members as you like. The first 4 who activate within 7 days of joining unlock SMART.",
     "myReferralsTitle": "My Referrals",
     "slotsUsed": "{used} / {max} Slots Used",
     "yourCodeLabel": "Your referral code",
@@ -160,7 +160,7 @@
     "slotsLabel": "Referral slots",
     "slotsFull": "All 4 slots filled — your direct referral work is done.",
     "windowLabel": "Qualification window",
-    "directTeamTitle": "Your direct team (max 4)",
+    "directTeamTitle": "Your direct team",
     "listTitle": "Referrals List",
     "table": {
       "name": "Name",
@@ -179,14 +179,26 @@
   },
   "profile": {
     "title": "Profile",
-    "subtitle": "Your signup details, address, KYC, and bank information.",
+    "subtitle": "Your profile, KYC and bank details at one place.",
+    "quote": "Small steps today, big goals tomorrow",
     "accountTitle": "Account details",
     "accountSubtitle": "Details captured when you joined U.S.O.S.",
-    "personalTitle": "Personal information",
+    "personalTitle": "Personal Information",
+    "personalSubtitle": "Your basic details and contact information.",
     "locationTitle": "Location",
     "locationSubtitle": "Search an address or use your current GPS location.",
-    "kycTitle": "KYC verification",
+    "kycTitle": "KYC Verification",
     "bankTitle": "Bank account",
+    "bankSubtitle": "Your bank account details for transactions and payouts.",
+    "placeholders": {
+      "pan": "Enter your PAN number",
+      "aadhaar": "Enter your Aadhaar number",
+      "phone": "Enter your mobile number",
+      "accountName": "Enter account holder name",
+      "bankName": "Enter bank name",
+      "accountNumber": "Enter account number",
+      "ifsc": "Enter IFSC code"
+    },
     "fields": {
       "name": "Full name",
       "email": "Email",
@@ -239,8 +251,10 @@
     "saved": "Your profile has been updated",
     "saveFailed": "Could not save changes",
     "loadError": "Could not load profile",
-    "phoneInvalid": "Enter a valid 10-digit phone number",
-    "phoneTooLong": "Phone number cannot exceed 10 digits"
+    "phoneInvalid": "Enter a valid 10 to 15 digit phone number",
+    "phoneTooLong": "Phone number cannot exceed 15 digits",
+    "emailLocked": "Email from registration cannot be changed here.",
+    "phoneLocked": "Mobile number from registration cannot be changed here."
   },
   "rewards": {
     "title": "Rewards / Mission Plan",

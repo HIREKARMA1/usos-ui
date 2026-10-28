@@ -144,6 +144,7 @@ class ApiClient {
     phone?: string;
     package_code?: string;
     sponsor_referral_code?: string;
+    placement_user_id?: string;
     full_name?: string;
   }): Promise<TokenResponse> {
     const res = await this.client.post('/api/v1/auth/google', body);
@@ -163,6 +164,7 @@ class ApiClient {
     password: string;
     package_code: string;
     sponsor_referral_code?: string;
+    placement_user_id?: string;
     preferred_binary_side?: string;
   }) {
     const res = await this.client.post<{
@@ -211,6 +213,8 @@ class ApiClient {
     const d = await this.get<any>('/api/v1/users/overview');
     const max = d.max_direct_referrals || 4;
     const used = d.referral_slots_used ?? d.direct_referral_count ?? 0;
+    const treeSlotsUsed =
+      typeof d.tree_slots_used === 'number' ? d.tree_slots_used : Math.min(used, max);
     const rank =
       d.current_rank ||
       (d.current_level ? `Level ${d.current_level}` : `${used}/${max} directs`);
@@ -220,6 +224,7 @@ class ApiClient {
       directReferrals: used,
       maxDirectReferrals: max,
       referralSlotsFull: Boolean(d.referral_slots_full),
+      treeSlotsUsed,
       qualifiedDirects: d.qualified_directs || 0,
       daysLeftInWindow: d.days_left_in_window,
       isSmart: Boolean(d.is_smart),
@@ -359,8 +364,8 @@ class ApiClient {
       return {
         id: u.id,
         usosId: u.usos_id || '',
-        name: u.full_name,
-        email: u.email,
+        name: u.full_name || '',
+        email: u.email || '',
         phone: u.phone || '',
         packageId: (u.package_code || '') as PackageId,
         status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',

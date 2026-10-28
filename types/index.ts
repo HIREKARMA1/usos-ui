@@ -39,6 +39,7 @@ export interface OverviewStats {
   directReferrals: number;
   maxDirectReferrals?: number;
   referralSlotsFull?: boolean;
+  treeSlotsUsed?: number;
   qualifiedDirects?: number;
   daysLeftInWindow?: number | null;
   isSmart?: boolean;

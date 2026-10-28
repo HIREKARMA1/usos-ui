@@ -174,6 +174,7 @@ export default function UserOverviewPage() {
 
   const max = stats?.maxDirectReferrals || 4;
   const used = stats?.directReferrals || referrals.length;
+  const treeUsed = stats?.treeSlotsUsed ?? Math.min(used, max);
   const rankLabel = stats?.rank || '—';
   const greeting = getGreeting(new Date().getHours(), {
     morning: t.greeting?.morning || 'Good Morning',
@@ -224,7 +225,10 @@ export default function UserOverviewPage() {
           label={t.stats.totalEarnings}
           value={formatWalletAmount(totalEarnings)}
         />
-        <OverviewStatCard label={t.stats.directEarning || t.stats.directReferrals} value={`${used} / ${max}`} />
+        <OverviewStatCard
+          label={t.stats.directEarning || t.stats.directReferrals}
+          value={used > max ? String(used) : `${used} / ${max}`}
+        />
         <OverviewStatCard label={t.stats.rank} value={rankLabel.toUpperCase()} />
       </div>
 
@@ -278,11 +282,11 @@ export default function UserOverviewPage() {
                 <NetworkSlot
                   key={index}
                   index={index + 1}
-                  filled={index < used}
+                  filled={index < treeUsed}
                   activeLabel={t.networkSlots?.active || 'Active'}
                   openLabel={t.networkSlots?.open || 'Open Slot'}
                   inviteLabel={t.networkSlots?.invite || t.quickActions.invite}
-                  inviteDisabled={stats?.referralSlotsFull}
+                  inviteDisabled={false}
                 />
               ))}
             </div>
@@ -395,7 +399,7 @@ export default function UserOverviewPage() {
           <h2 className="font-display text-base font-bold text-ink sm:text-lg">{t.quickActionsTitle}</h2>
           <div className="mt-3 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 lg:grid-cols-1">
             <Link href="/user/referrals">
-              <Button className="w-full" variant="outline" disabled={stats?.referralSlotsFull}>
+              <Button className="w-full" variant="outline">
                 {t.quickActions.invite}
               </Button>
             </Link>

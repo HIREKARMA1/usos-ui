@@ -40,7 +40,7 @@ type DialogState = { type: 'pay' | 'reject'; row: WithdrawalRow } | null;
 
 function statusTone(status: string): 'warning' | 'success' | 'danger' | 'default' {
   if (status === 'paid') return 'success';
-  if (status === 'pending' || status === 'processing') return 'warning';
+  if (status === 'pending' || status === 'processing' || status === 'payment_pending') return 'warning';
   if (status === 'failed' || status === 'rejected') return 'danger';
   return 'default';
 }

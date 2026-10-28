@@ -37,6 +37,7 @@ export function RegisterForm() {
     () => (search.get('package') || packagesContent.items[0]?.id || '').toString()
   );
   const [sponsor, setSponsor] = useState(refFromLink);
+  const [placementUserId, setPlacementUserId] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiPackages, setApiPackages] = useState<PackagePlan[]>([]);
@@ -95,6 +96,10 @@ export function RegisterForm() {
     return (sponsorLocked ? refFromLink : sponsor.trim().toUpperCase()) || undefined;
   }
 
+  function placementCode() {
+    return placementUserId.trim().toUpperCase() || undefined;
+  }
+
   function goToDashboard(res: TokenResponse, message: string) {
     loginSuccess(res.access_token, res.user);
     toast.success(message);
@@ -141,6 +146,7 @@ export function RegisterForm() {
         phone,
         package_code: packageCode,
         sponsor_referral_code: sponsorCode(),
+        placement_user_id: placementCode(),
         full_name: fullName.trim() || undefined,
       });
       goToDashboard(res, t.success);
@@ -172,6 +178,7 @@ export function RegisterForm() {
         password: string;
         package_code: string;
         sponsor_referral_code?: string;
+        placement_user_id?: string;
       } = {
         full_name: fullName.trim(),
         phone,
@@ -181,6 +188,8 @@ export function RegisterForm() {
       if (email.trim()) payload.email = email.trim();
       const code = sponsorCode();
       if (code) payload.sponsor_referral_code = code;
+      const placement = placementCode();
+      if (placement) payload.placement_user_id = placement;
       const registered = await api.register(payload);
       const resumed = Boolean((registered as { resumed?: boolean })?.resumed);
       await finishRegistration(resumed ? t.resumePayment || t.success : t.success);
@@ -282,6 +291,18 @@ export function RegisterForm() {
               }}
               readOnly={sponsorLocked}
               error={errors.sponsor}
+            />
+          </div>
+
+          <div className={styles.field}>
+            <Input
+              id="placement-user-id"
+              label={t.placementLabel}
+              placeholder={t.placementPlaceholder}
+              hint={t.placementHint}
+              value={placementUserId}
+              onChange={(e) => setPlacementUserId(e.target.value)}
+              error={errors.placement}
             />
           </div>
 
