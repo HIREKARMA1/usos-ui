@@ -359,8 +359,8 @@ class ApiClient {
       return {
         id: u.id,
         usosId: u.usos_id || '',
-        name: u.full_name,
-        email: u.email,
+        name: u.full_name || '',
+        email: u.email || '',
         phone: u.phone || '',
         packageId: (u.package_code || '') as PackageId,
         status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
