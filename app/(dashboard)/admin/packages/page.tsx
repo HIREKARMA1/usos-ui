@@ -20,6 +20,7 @@ import {
   X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
@@ -945,27 +946,28 @@ export default function AdminPackagesPage() {
         </div>
       ) : null}
 
-      {dialog?.type === 'delete' ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <button type="button" className="absolute inset-0 bg-ink/40" onClick={() => setDialog(null)} />
-          <div
-            role="dialog"
-            aria-modal="true"
-            className="relative w-full max-w-md rounded-2xl border border-line bg-surface-card p-6 shadow-xl"
-          >
-            <h3 className="font-display text-lg font-bold text-ink">{t.deleteTitle}</h3>
-            <p className="mt-2 text-sm text-ink-muted">{interpolate(t.deleteConfirm, { name: dialog.pkg.name })}</p>
-            <div className="mt-5 flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setDialog(null)}>
-                {t.cancel}
-              </Button>
-              <Button type="button" variant="danger" loading={busyId === dialog.pkg.id} onClick={confirmDelete}>
-                {t.delete}
-              </Button>
-            </div>
+      <ConfirmDialog
+        open={dialog?.type === 'delete'}
+        icon={Trash2}
+        title={t.deleteTitle}
+        description={
+          dialog?.type === 'delete' ? interpolate(t.deleteConfirm, { name: dialog.pkg.name }) : ''
+        }
+        confirmLabel={t.delete}
+        cancelLabel={t.cancel}
+        loading={dialog?.type === 'delete' && busyId === dialog.pkg.id}
+        onConfirm={confirmDelete}
+        onClose={() => {
+          if (!busyId) setDialog(null);
+        }}
+      >
+        {dialog?.type === 'delete' ? (
+          <div className="rounded-xl border border-line bg-surface-muted/70 px-3 py-2.5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="truncate font-semibold text-ink">{dialog.pkg.name}</p>
+            <p className="mt-0.5 font-mono text-xs text-ink-muted">{dialog.pkg.code}</p>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </ConfirmDialog>
 
       {menuPkg && menuPos && typeof document !== 'undefined'
         ? createPortal(

@@ -1,13 +1,20 @@
 'use client';
 
-import { useCallback, useRef, useState, type PointerEvent, type WheelEvent, type ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState, type PointerEvent, type WheelEvent, type ReactNode } from 'react';
 import { Minus, Plus, Maximize2 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/cn';
 import type { TreeMember } from '@/types';
 
 function isActiveMember(status: TreeMember['status']) {
   return status === 'active';
+}
+
+function firstTwoPoints(points: Map<number, { x: number; y: number }>) {
+  const iter = points.values();
+  const first = iter.next().value;
+  const second = iter.next().value;
+  if (!first || !second) return null;
+  return [first, second] as const;
 }
 
 function MemberMark() {
@@ -130,6 +137,54 @@ function TreeBranch({
   );
 }
 
+const MIN_SCALE = 0.35;
+const MAX_SCALE = 1.8;
+
+function clampScale(value: number) {
+  return Math.min(MAX_SCALE, Math.max(MIN_SCALE, Number(value.toFixed(3))));
+}
+
+function ZoomBar({
+  scale,
+  onZoomOut,
+  onZoomIn,
+  onReset,
+  className,
+}: {
+  scale: number;
+  onZoomOut: () => void;
+  onZoomIn: () => void;
+  onReset: () => void;
+  className?: string;
+}) {
+  const zoomBtn =
+    'flex h-11 w-11 items-center justify-center rounded-full text-ink transition active:scale-95 hover:bg-surface-muted disabled:opacity-40';
+  return (
+    <div
+      data-zoom-controls
+      className={cn(
+        'flex items-center gap-0.5 rounded-full border border-line bg-surface-card/95 p-1 shadow-[0_8px_24px_rgba(15,23,42,0.16)] backdrop-blur-sm',
+        className
+      )}
+      onPointerDown={(e) => e.stopPropagation()}
+    >
+      <button type="button" className={zoomBtn} onClick={onZoomOut} disabled={scale <= MIN_SCALE} aria-label="zoom out">
+        <Minus className="h-5 w-5" />
+      </button>
+      <span className="min-w-[3.25rem] select-none text-center text-sm font-semibold tabular-nums text-ink">
+        {Math.round(scale * 100)}%
+      </span>
+      <button type="button" className={zoomBtn} onClick={onZoomIn} disabled={scale >= MAX_SCALE} aria-label="zoom in">
+        <Plus className="h-5 w-5" />
+      </button>
+      <span className="mx-0.5 h-6 w-px bg-line" aria-hidden />
+      <button type="button" className={zoomBtn} onClick={onReset} aria-label="reset">
+        <Maximize2 className="h-4 w-4" />
+      </button>
+    </div>
+  );
+}
+
 export function TreeCanvas({
   root,
   youLabel,
@@ -146,6 +201,10 @@ export function TreeCanvas({
   const viewportRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
+  const pointers = useRef(new Map<number, { x: number; y: number }>());
+  const pinch = useRef<{ startDist: number; startScale: number } | null>(null);
   const drag = useRef<{
     active: boolean;
     pointerId: number | null;
@@ -155,11 +214,27 @@ export function TreeCanvas({
     originY: number;
   }>({ active: false, pointerId: null, startX: 0, startY: 0, originX: 0, originY: 0 });
 
+  useEffect(() => {
+    if (window.matchMedia('(max-width: 639px)').matches) setScale(0.7);
+  }, []);
+
   const onPointerDown = useCallback((e: PointerEvent<HTMLDivElement>) => {
-    if (e.button !== 0) return;
+    if ((e.target as HTMLElement).closest('[data-zoom-controls]')) return;
     const el = viewportRef.current;
     if (!el) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     el.setPointerCapture(e.pointerId);
+    if (pointers.current.size >= 2) {
+      const pts = firstTwoPoints(pointers.current);
+      if (!pts) return;
+      drag.current.active = false;
+      pinch.current = {
+        startDist: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y),
+        startScale: scaleRef.current,
+      };
+      return;
+    }
+    if (e.button !== 0) return;
     drag.current = {
       active: true,
       pointerId: e.pointerId,
@@ -171,6 +246,15 @@ export function TreeCanvas({
   }, [offset.x, offset.y]);
 
   const onPointerMove = useCallback((e: PointerEvent<HTMLDivElement>) => {
+    if (!pointers.current.has(e.pointerId)) return;
+    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pointers.current.size >= 2 && pinch.current && pinch.current.startDist > 0) {
+      const pts = firstTwoPoints(pointers.current);
+      if (!pts) return;
+      const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      setScale(clampScale(pinch.current.startScale * (dist / pinch.current.startDist)));
+      return;
+    }
     if (!drag.current.active || drag.current.pointerId !== e.pointerId) return;
     setOffset({
       x: drag.current.originX + (e.clientX - drag.current.startX),
@@ -179,6 +263,8 @@ export function TreeCanvas({
   }, []);
 
   const endDrag = useCallback((e: PointerEvent<HTMLDivElement>) => {
+    pointers.current.delete(e.pointerId);
+    if (pointers.current.size < 2) pinch.current = null;
     if (drag.current.pointerId === e.pointerId) {
       drag.current.active = false;
       drag.current.pointerId = null;
@@ -188,13 +274,17 @@ export function TreeCanvas({
   const onWheel = useCallback((e: WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
     const delta = e.deltaY > 0 ? -0.08 : 0.08;
-    setScale((s) => Math.min(1.8, Math.max(0.45, s + delta)));
+    setScale((s) => clampScale(s + delta));
   }, []);
 
   const resetView = () => {
-    setScale(1);
+    const mobile = window.matchMedia('(max-width: 639px)').matches;
+    setScale(mobile ? 0.7 : 1);
     setOffset({ x: 0, y: 0 });
   };
+
+  const zoomOut = () => setScale((s) => clampScale(s - 0.15));
+  const zoomIn = () => setScale((s) => clampScale(s + 0.15));
 
   return (
     <div className="space-y-3">
@@ -208,28 +298,18 @@ export function TreeCanvas({
             <span className="h-2.5 w-2.5 rounded-full bg-red" aria-hidden />
             Inactive
           </span>
-          <span>
+          <span className="hidden sm:inline">
             {hintDrag}
             {hintZoom ? ` · ${hintZoom}` : ''}
           </span>
         </div>
-        <div className="flex items-center gap-1">
-          <Button type="button" size="sm" variant="outline" onClick={() => setScale((s) => Math.max(0.45, s - 0.1))} aria-label="zoom out">
-            <Minus className="h-4 w-4" />
-          </Button>
-          <Button type="button" size="sm" variant="outline" onClick={() => setScale((s) => Math.min(1.8, s + 0.1))} aria-label="zoom in">
-            <Plus className="h-4 w-4" />
-          </Button>
-          <Button type="button" size="sm" variant="outline" onClick={resetView} aria-label="reset">
-            <Maximize2 className="h-4 w-4" />
-          </Button>
-        </div>
+        <ZoomBar className="hidden sm:flex" scale={scale} onZoomOut={zoomOut} onZoomIn={zoomIn} onReset={resetView} />
       </div>
 
       <div
         ref={viewportRef}
         className={cn(
-          'relative h-[min(76vh,720px)] w-full touch-none overflow-hidden rounded-xl border border-line bg-[#f4f7fb] select-none',
+          'relative h-[min(68svh,720px)] w-full touch-none overflow-hidden rounded-xl border border-line bg-[#f4f7fb] select-none sm:h-[min(76vh,720px)]',
           drag.current.active ? 'cursor-grabbing' : 'cursor-grab'
         )}
         onPointerDown={onPointerDown}
@@ -245,6 +325,15 @@ export function TreeCanvas({
           }}
         >
           <TreeBranch node={root} youLabel={youLabel} isRoot directLabel={directLabel} />
+        </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-3 z-30 flex justify-center px-3 sm:hidden">
+          <ZoomBar
+            className="pointer-events-auto"
+            scale={scale}
+            onZoomOut={zoomOut}
+            onZoomIn={zoomIn}
+            onReset={resetView}
+          />
         </div>
       </div>
     </div>

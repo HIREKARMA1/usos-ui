@@ -272,5 +272,16 @@
     "planTitle": "Mission Levels",
     "emptyTitle": "No ranks unlocked yet",
     "emptyDescription": "Refer 4 members within 7 days to unlock SMART (level 1)."
+  },
+  "activation": {
+    "statusInactive": "Account Status: Inactive",
+    "statusPending": "Account Status: Pending",
+    "joiningMessage": "Your joining payment is not verified yet. Complete it to activate your account.",
+    "repurchaseMessage": "Your joining payment is already complete. Purchase {amount} more of eligible products this month to activate your account.",
+    "repurchaseMet": "Your eligible purchases already meet this month's requirement. Your account activates when that payment is verified.",
+    "repurchaseProgress": "Verified this month: {current} of {required}.",
+    "action": "Activate Account",
+    "shopBannerTitle": "Repurchase to activate your account",
+    "shopBannerBody": "Add eligible products worth at least {amount}. Your account activates after that shop payment is verified."
   }
 }
