@@ -131,6 +131,21 @@ function getPageNumbers(current: number, total: number): (number | 'ellipsis')[]
   return pages;
 }
 
+function matchesUserSearch(row: AdminUserRow, query: string): boolean {
+  const term = query.trim().toLowerCase();
+  if (!term) return true;
+
+  const fields = [row.name, row.email, row.phone, row.usosId, row.referralCode];
+  if (fields.some((value) => (value || '').toLowerCase().includes(term))) return true;
+
+  const digits = term.replace(/\D/g, '');
+  if (digits.length < 4) return false;
+
+  const phoneDigits = (row.phone || '').replace(/\D/g, '');
+  const idDigits = (row.usosId || '').replace(/\D/g, '');
+  return phoneDigits.includes(digits) || idDigits.includes(digits);
+}
+
 function getUserEarnings(row: AdminUserRow): number {
   const paise = Number(row.totalEarningsPaise);
   if (Number.isFinite(paise) && paise > 0) return paise / 100;
@@ -299,18 +314,13 @@ export default function AdminUsersPage() {
   const filtered = useMemo(
     () =>
       rows.filter((r) => {
-        const query = q.trim().toLowerCase();
-        const name = (r.name || '').toLowerCase();
-        const email = (r.email || '').toLowerCase();
-        if (query && !name.includes(query) && !email.includes(query)) {
-          return false;
-        }
+        if (!matchesUserSearch(r, q)) return false;
         if (statusFilter !== 'all' && r.status !== statusFilter) return false;
         if (packageFilter !== 'all' && r.packageId !== packageFilter) return false;
         if (levelFilter !== 'all' && r.level !== levelFilter) return false;
         return true;
       }),
-    [rows, statusFilter, packageFilter, levelFilter]
+    [rows, q, statusFilter, packageFilter, levelFilter]
   );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
