@@ -299,6 +299,12 @@ export default function AdminUsersPage() {
   const filtered = useMemo(
     () =>
       rows.filter((r) => {
+        const query = q.trim().toLowerCase();
+        const name = (r.name || '').toLowerCase();
+        const email = (r.email || '').toLowerCase();
+        if (query && !name.includes(query) && !email.includes(query)) {
+          return false;
+        }
         if (statusFilter !== 'all' && r.status !== statusFilter) return false;
         if (packageFilter !== 'all' && r.packageId !== packageFilter) return false;
         if (levelFilter !== 'all' && r.level !== levelFilter) return false;
@@ -497,10 +503,10 @@ export default function AdminUsersPage() {
                               <div
                                 className={cn(
                                   'flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-xs font-semibold text-white shadow-md',
-                                  avatarGradient(u.name)
+                                  avatarGradient(u.name || '')
                                 )}
                               >
-                                {getInitials(u.name)}
+                                {getInitials(u.name || '')}
                               </div>
                               <div className="min-w-0">
                                 <p className="truncate font-medium text-ink dark:text-white">{u.name}</p>
