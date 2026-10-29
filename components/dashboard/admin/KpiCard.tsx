@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -19,6 +20,7 @@ export function KpiCard({
   change,
   badge,
   tone = 'default',
+  href,
 }: {
   label: string;
   value: string | number;
@@ -26,6 +28,7 @@ export function KpiCard({
   change?: { text: string; trend: Trend };
   badge?: string;
   tone?: Tone;
+  href?: string;
 }) {
   const trendStyles: Record<Trend, string> = {
     up: 'text-green',
@@ -33,15 +36,16 @@ export function KpiCard({
     neutral: 'text-ink-muted',
   };
 
-  return (
-    <div
-      className={cn(
-        'group flex h-full min-h-[88px] flex-col justify-between rounded-xl border border-line bg-surface-card p-3.5',
-        'shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition duration-200',
-        'hover:border-line-strong hover:bg-surface-muted/80',
-        'dark:border-white/[0.08] dark:bg-white/[0.03] dark:shadow-none dark:hover:bg-white/[0.05]'
-      )}
-    >
+  const className = cn(
+    'group flex h-full min-h-[88px] flex-col justify-between rounded-xl border border-line bg-surface-card p-3.5',
+    'shadow-[0_1px_2px_rgba(15,23,42,0.04)] transition duration-200',
+    'hover:border-line-strong hover:bg-surface-muted/80',
+    'dark:border-white/[0.08] dark:bg-white/[0.03] dark:shadow-none dark:hover:bg-white/[0.05]',
+    href && 'cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary'
+  );
+
+  const body = (
+    <>
       <div className="flex items-start justify-between gap-2">
         <p className="text-[11px] font-medium uppercase tracking-wide text-ink-muted dark:text-white/45">{label}</p>
         <div
@@ -68,6 +72,16 @@ export function KpiCard({
           ) : null}
         </div>
       </div>
-    </div>
+    </>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {body}
+      </Link>
+    );
+  }
+
+  return <div className={className}>{body}</div>;
 }

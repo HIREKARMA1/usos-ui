@@ -137,7 +137,7 @@
   }
 
   .focus-ring {
-    @apply outline-none ring-2 ring-offset-2;
+    @apply outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card;
     --tw-ring-color: var(--color-brand-sky);
   }
 

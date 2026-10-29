@@ -114,6 +114,8 @@ export const mockAdminStats: AdminStats = {
   kycPending: 120,
   kycApproved: 250,
   kycRejected: 50,
+  memberGrowth: [],
+  revenueMonths: [],
 };
 
 export const mockAdminUsers: AdminUserRow[] = [

@@ -53,12 +53,14 @@
   "users": {
     "title": "User management",
     "subtitle": "Manage members, packages, and account status.",
-    "searchPlaceholder": "Search by name or email…",
+    "searchPlaceholder": "Search by name, email, user ID, or phone…",
     "levelAll": "Level: All",
     "table": {
       "userId": "User ID",
       "name": "Name",
       "contact": "Contact",
+      "referralId": "Referral ID",
+      "sponsor": "Sponsor",
       "package": "Package",
       "level": "Level",
       "earnings": "Earnings",
@@ -77,7 +79,45 @@
     "deleteFailed": "Could not delete user",
     "statusUpdated": "User status updated",
     "emptyTitle": "No users found",
-    "emptyDescription": "Try adjusting your search."
+    "emptyDescription": "Try adjusting your search.",
+    "activation": {
+      "view": "View",
+      "column": "Activation",
+      "viewTitle": "Account details",
+      "accountStatus": "Account status",
+      "inactiveReason": "Reason for inactive or pending status",
+      "noSponsor": "No sponsor",
+      "noReason": "No reason has been recorded.",
+      "activeNote": "This account is active.",
+      "reason": "Reason",
+      "initialPayment": "Initial payment",
+      "monthlyTotal": "This month",
+      "history": "History",
+      "historyTitle": "Activation history",
+      "months": "Monthly repurchase",
+      "period": "Month",
+      "eligible": "Eligible purchases",
+      "outcome": "Result",
+      "events": "Status history",
+      "noEvents": "No activation events yet.",
+      "loadFailed": "Could not load activation history",
+      "updateFailed": "Could not update user status",
+      "payment": {
+        "verified": "Verified",
+        "pending": "Pending",
+        "failed": "Failed",
+        "rejected": "Rejected",
+        "refunded": "Refunded",
+        "none": "None"
+      },
+      "outcomes": {
+        "exempt": "Exempt",
+        "met": "Met",
+        "missed": "Missed",
+        "open": "Open",
+        "not_applicable": "Not applicable"
+      }
+    }
   },
   "packages": {
     "title": "Packages",

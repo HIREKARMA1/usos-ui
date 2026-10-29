@@ -1,5 +1,4 @@
-import { mockMemberGrowthSeries, mockRevenueSeries } from '@/lib/mock';
-import type { AdminStats } from '@/types';
+import type { AdminStats, MemberGrowthPoint, RevenueMonthPoint } from '@/types';
 
 function percentChange(current: number, previous: number): number | null {
   if (previous <= 0) return null;
@@ -11,11 +10,15 @@ function formatDelta(value: number, suffix = '%'): string {
   return `${sign}${value.toFixed(1)}${suffix}`;
 }
 
-export function buildKpiIndicators(stats: AdminStats) {
-  const rev = mockRevenueSeries;
+export function buildKpiIndicators(
+  stats: AdminStats,
+  memberGrowth: MemberGrowthPoint[] = stats.memberGrowth || [],
+  revenueMonths: RevenueMonthPoint[] = stats.revenueMonths || []
+) {
+  const rev = revenueMonths;
   const revenueDelta = percentChange(rev[rev.length - 1]?.value ?? 0, rev[rev.length - 2]?.value ?? 0);
 
-  const members = mockMemberGrowthSeries;
+  const members = memberGrowth;
   const memberDelta = (members[members.length - 1]?.members ?? 0) - (members[members.length - 2]?.members ?? 0);
 
   const inactiveMembers = Math.max(0, stats.totalUsers - stats.activeUsers);
@@ -25,17 +28,12 @@ export function buildKpiIndicators(stats: AdminStats) {
       ? (stats.pendingPayouts / (stats.totalPayouts + stats.pendingPayouts)) * 100
       : 0;
 
-  const clearedDelta = revenueDelta !== null ? revenueDelta * 0.67 : null;
-
   return {
     revenue:
       revenueDelta !== null
         ? { text: formatDelta(revenueDelta), trend: revenueDelta >= 0 ? ('up' as const) : ('down' as const) }
         : undefined,
-    clearedPayouts:
-      clearedDelta !== null
-        ? { text: formatDelta(clearedDelta), trend: clearedDelta >= 0 ? ('up' as const) : ('down' as const) }
-        : undefined,
+    clearedPayouts: undefined,
     pendingPayouts:
       stats.pendingPayouts > 0
         ? { text: formatDelta(-pendingShare), trend: 'down' as const }

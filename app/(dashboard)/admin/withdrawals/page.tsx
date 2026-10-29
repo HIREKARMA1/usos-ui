@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Banknote, X } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
@@ -40,7 +41,7 @@ type DialogState = { type: 'pay' | 'reject'; row: WithdrawalRow } | null;
 
 function statusTone(status: string): 'warning' | 'success' | 'danger' | 'default' {
   if (status === 'paid') return 'success';
-  if (status === 'pending' || status === 'processing') return 'warning';
+  if (status === 'pending' || status === 'processing' || status === 'payment_pending') return 'warning';
   if (status === 'failed' || status === 'rejected') return 'danger';
   return 'default';
 }
@@ -56,7 +57,8 @@ function Detail({ label, value, mono }: { label: string; value: string; mono?: b
 
 export default function AdminWithdrawalsPage() {
   const t = useContent('admin').withdrawals;
-  const [tab, setTab] = useState<TabKey>('queue');
+  const search = useSearchParams();
+  const [tab, setTab] = useState<TabKey>(() => (search.get('tab') === 'history' ? 'history' : 'queue'));
   const [rows, setRows] = useState<WithdrawalRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialog, setDialog] = useState<DialogState>(null);

@@ -3,9 +3,10 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import toast from 'react-hot-toast';
-import { Plus, Upload, X } from 'lucide-react';
+import { Check, EyeOff, Plus, Trash2, Upload, X } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Table, Td, Tr } from '@/components/ui/Table';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
@@ -21,6 +22,7 @@ const emptyForm = {
   image_urls: [] as string[],
   stock_count: '100',
   points_per_unit: '10',
+  repurchase_eligible: true,
 };
 
 type ProductAction = 'activate' | 'deactivate' | 'delete';
@@ -86,6 +88,7 @@ export default function AdminProductsPage() {
       image_urls: urls,
       stock_count: String(p.stock_count ?? 0),
       points_per_unit: String(p.points_per_unit ?? 0),
+      repurchase_eligible: p.repurchase_eligible !== false,
     });
     if (fileRef.current) fileRef.current.value = '';
     setFormOpen(true);
@@ -142,6 +145,7 @@ export default function AdminProductsPage() {
       image_urls: form.image_urls,
       stock_count: Number(form.stock_count),
       points_per_unit: Number(form.points_per_unit),
+      repurchase_eligible: form.repurchase_eligible,
     };
     try {
       if (editingId) {
@@ -360,6 +364,15 @@ export default function AdminProductsPage() {
                     </label>
                   ))}
 
+                  <label className="flex items-center gap-2 text-sm sm:col-span-2">
+                    <input
+                      type="checkbox"
+                      checked={form.repurchase_eligible}
+                      onChange={(e) => setForm({ ...form, repurchase_eligible: e.target.checked })}
+                    />
+                    <span>Counts toward the monthly ₹1,000 repurchase</span>
+                  </label>
+
                   <div className="text-sm sm:col-span-2">
                     <span className="font-medium">Product images</span>
                     <div className="mt-1 flex flex-wrap items-start gap-4">
@@ -454,46 +467,44 @@ export default function AdminProductsPage() {
         ) : null}
       </AnimatePresence>
 
-      {confirmAction ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4">
-          <div
-            role="dialog"
-            aria-modal="true"
-            className="w-full max-w-md rounded-xl border border-line bg-surface-card p-6 shadow-none"
-          >
-            <h3 className="font-display text-lg font-bold text-ink">
-              {confirmAction.action === 'activate'
-                ? 'Activate product?'
-                : confirmAction.action === 'deactivate'
-                  ? 'Deactivate product?'
-                  : 'Delete product permanently?'}
-            </h3>
-            <p className="mt-2 text-sm text-ink-muted">
-              {confirmAction.action === 'activate'
-                ? `Make “${confirmAction.name}” visible in the shop again?`
-                : confirmAction.action === 'deactivate'
-                  ? `Hide “${confirmAction.name}” from the shop? You can activate it later.`
-                  : `Permanently delete “${confirmAction.name}”? This cannot be undone.`}
-            </p>
-            <div className="mt-5 flex justify-end gap-2">
-              <Button type="button" variant="outline" onClick={() => setConfirmAction(null)}>
-                Cancel
-              </Button>
-              <Button
-                type="button"
-                variant={confirmAction.action === 'deactivate' || confirmAction.action === 'delete' ? 'danger' : 'primary'}
-                onClick={applyStatusChange}
-              >
-                {confirmAction.action === 'activate'
-                  ? 'Activate'
-                  : confirmAction.action === 'deactivate'
-                    ? 'Deactivate'
-                    : 'Delete'}
-              </Button>
-            </div>
+      <ConfirmDialog
+        open={Boolean(confirmAction)}
+        tone={confirmAction?.action === 'activate' ? 'primary' : 'danger'}
+        icon={
+          confirmAction?.action === 'activate' ? Check : confirmAction?.action === 'deactivate' ? EyeOff : Trash2
+        }
+        title={
+          confirmAction?.action === 'activate'
+            ? 'Activate product?'
+            : confirmAction?.action === 'deactivate'
+              ? 'Deactivate product?'
+              : 'Delete product permanently?'
+        }
+        description={
+          confirmAction?.action === 'activate'
+            ? `Make “${confirmAction.name}” visible in the shop again?`
+            : confirmAction?.action === 'deactivate'
+              ? `Hide “${confirmAction.name}” from the shop? You can activate it later.`
+              : `Permanently delete “${confirmAction?.name ?? ''}”? This cannot be undone.`
+        }
+        confirmLabel={
+          confirmAction?.action === 'activate'
+            ? 'Activate'
+            : confirmAction?.action === 'deactivate'
+              ? 'Deactivate'
+              : 'Delete'
+        }
+        cancelLabel="Cancel"
+        onConfirm={applyStatusChange}
+        onClose={() => setConfirmAction(null)}
+      >
+        {confirmAction ? (
+          <div className="rounded-xl border border-line bg-surface-muted/70 px-3 py-2.5 dark:border-white/10 dark:bg-white/[0.04]">
+            <p className="text-xs font-medium text-ink-muted">Product</p>
+            <p className="mt-0.5 truncate font-semibold text-ink">{confirmAction.name}</p>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </ConfirmDialog>
     </div>
   );
 }

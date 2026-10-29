@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { ChevronDown, Gift, X } from 'lucide-react';
 import { Spinner } from '@/components/ui/Spinner';
@@ -199,11 +200,16 @@ function ReviewModal({
   );
 }
 
+function initialRewardTab(value: string | null): RewardClaimStatus {
+  return STATUS_TABS.includes(value as RewardClaimStatus) ? (value as RewardClaimStatus) : 'pending';
+}
+
 export default function AdminRewardsPage() {
   const t = useContent('admin').rewards;
+  const search = useSearchParams();
   const [rows, setRows] = useState<RewardClaim[]>([]);
   const [planLevels, setPlanLevels] = useState<PlanLevel[]>([]);
-  const [activeTab, setActiveTab] = useState<RewardClaimStatus>('pending');
+  const [activeTab, setActiveTab] = useState<RewardClaimStatus>(() => initialRewardTab(search.get('status')));
   const [tabCounts, setTabCounts] = useState<Record<RewardClaimStatus, number>>({
     pending: 0,
     approved: 0,

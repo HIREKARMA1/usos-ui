@@ -11,6 +11,7 @@ import { Spinner } from '@/components/ui/Spinner';
 import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { api } from '@/lib/api';
 import { formatCurrency } from '@/lib/format';
+import { useContent } from '@/hooks/useContent';
 import { useAuth } from '@/hooks/useAuth';
 import toast from 'react-hot-toast';
 
@@ -25,6 +26,7 @@ type Product = {
   stock_count: number;
   points_per_unit: number;
   sort_order?: number;
+  repurchase_eligible?: boolean;
 };
 
 type SortOption = 'Popular' | 'Price: Low to High' | 'Price: High to Low' | 'Points';
@@ -72,6 +74,9 @@ function countCartUnits(cart: { items?: Array<{ quantity?: number }> } | null | 
 
 export default function ShopPage() {
   const { user, loading: authLoading } = useAuth();
+  const activationCopy = useContent('dashboard').activation;
+  const [needsRepurchase, setNeedsRepurchase] = useState(false);
+  const [remainingPaise, setRemainingPaise] = useState(0);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState('All');
@@ -89,6 +94,27 @@ export default function ShopPage() {
       .catch(() => setProducts([]))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (authLoading || !user || user.role === 'admin') {
+      setNeedsRepurchase(false);
+      return;
+    }
+    let active = true;
+    api
+      .getMemberActivation()
+      .then((status) => {
+        if (!active) return;
+        setNeedsRepurchase(Boolean(status.needs_repurchase));
+        setRemainingPaise(status.remaining_paise || 0);
+      })
+      .catch(() => {
+        if (active) setNeedsRepurchase(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [authLoading, user]);
 
   useEffect(() => {
     if (authLoading) return;
@@ -144,11 +170,14 @@ export default function ShopPage() {
   }, [activeCategory, productCategories]);
 
   const visibleProducts = useMemo(() => {
-    const filtered = products.filter(
+    const catalog = needsRepurchase
+      ? products.filter((p) => p.repurchase_eligible !== false)
+      : products;
+    const filtered = catalog.filter(
       (p) => matchesSearch(p, searchQuery) && matchesCategory(p, activeCategory)
     );
     return sortProducts(filtered, sortLabel);
-  }, [products, searchQuery, activeCategory, sortLabel]);
+  }, [products, searchQuery, activeCategory, sortLabel, needsRepurchase]);
 
   async function refreshCartCount() {
     const syncId = ++cartSyncRef.current;
@@ -273,6 +302,19 @@ export default function ShopPage() {
         />
 
         <div className="mx-auto w-full max-w-7xl px-4 pt-5 sm:px-6 sm:pt-6 lg:px-8">
+          {needsRepurchase ? (
+            <div className="mb-4 rounded-2xl border border-amber-300/80 bg-amber-50 px-4 py-3 text-amber-950">
+              <p className="text-sm font-semibold">{activationCopy.shopBannerTitle}</p>
+              <p className="mt-1 text-sm text-amber-900/90">
+                {remainingPaise > 0
+                  ? activationCopy.shopBannerBody.replaceAll(
+                      '{amount}',
+                      formatCurrency(remainingPaise / 100)
+                    )
+                  : activationCopy.repurchaseMet}
+              </p>
+            </div>
+          ) : null}
           <ShopPromoBanner />
         </div>
 
