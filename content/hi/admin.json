@@ -53,12 +53,14 @@
   "users": {
     "title": "उपयोगकर्ता प्रबंधन",
     "subtitle": "सदस्यों, पैकेजों और खाता स्थिति का प्रबंधन करें।",
-    "searchPlaceholder": "नाम या ईमेल से खोजें…",
+    "searchPlaceholder": "नाम, ईमेल, यूज़र ID या फ़ोन से खोजें…",
     "levelAll": "स्तर: सभी",
     "table": {
       "userId": "यूज़र आईडी",
       "name": "नाम",
       "contact": "संपर्क",
+      "referralId": "रेफ़रल आईडी",
+      "sponsor": "स्पॉन्सर",
       "package": "पैकेज",
       "level": "स्तर",
       "earnings": "कमाई",
@@ -77,7 +79,45 @@
     "deleteFailed": "उपयोगकर्ता को हटाया नहीं जा सका",
     "statusUpdated": "उपयोगकर्ता स्थिति अपडेट हुई",
     "emptyTitle": "कोई उपयोगकर्ता नहीं मिला",
-    "emptyDescription": "अपनी खोज समायोजित करने का प्रयास करें।"
+    "emptyDescription": "अपनी खोज समायोजित करने का प्रयास करें।",
+    "activation": {
+      "view": "देखें",
+      "column": "सक्रियता",
+      "viewTitle": "खाता विवरण",
+      "accountStatus": "खाता स्थिति",
+      "inactiveReason": "निष्क्रिय या लंबित स्थिति का कारण",
+      "noSponsor": "कोई स्पॉन्सर नहीं",
+      "noReason": "इस खाते के लिए कोई कारण दर्ज नहीं है।",
+      "activeNote": "यह खाता सक्रिय है।",
+      "reason": "कारण",
+      "initialPayment": "प्रारंभिक भुगतान",
+      "monthlyTotal": "इस महीने",
+      "history": "इतिहास",
+      "historyTitle": "सक्रियता इतिहास",
+      "months": "मासिक पुनर्खरीद",
+      "period": "महीना",
+      "eligible": "पात्र खरीदारी",
+      "outcome": "परिणाम",
+      "events": "स्थिति इतिहास",
+      "noEvents": "अभी कोई सक्रियता घटना नहीं है।",
+      "loadFailed": "सक्रियता इतिहास लोड नहीं हो सका",
+      "updateFailed": "उपयोगकर्ता स्थिति अपडेट नहीं हो सकी",
+      "payment": {
+        "verified": "सत्यापित",
+        "pending": "लंबित",
+        "failed": "विफल",
+        "rejected": "अस्वीकृत",
+        "refunded": "वापस",
+        "none": "कोई नहीं"
+      },
+      "outcomes": {
+        "exempt": "छूट",
+        "met": "पूरा",
+        "missed": "छूटा",
+        "open": "चालू",
+        "not_applicable": "लागू नहीं"
+      }
+    }
   },
   "packages": {
     "title": "पैकेज",

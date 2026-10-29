@@ -98,6 +98,8 @@ export default function WalletPage() {
       setBalance(overview.walletBalance);
       setHasBank(Boolean(profile?.bank_account_number && profile?.bank_ifsc && profile?.bank_account_name));
       setWithdrawals(wd || []);
+    }).catch((err) => {
+      toast.error(apiErrorMessage(err, 'Could not load wallet'));
     });
   }
 
@@ -113,7 +115,7 @@ export default function WalletPage() {
       .filter((w) => w.status === 'paid')
       .reduce((sum, w) => sum + w.amount_inr, 0);
     const pendingWithdrawals = withdrawals
-      .filter((w) => w.status === 'pending' || w.status === 'processing')
+      .filter((w) => w.status === 'pending' || w.status === 'processing' || w.status === 'payment_pending')
       .reduce((sum, w) => sum + w.amount_inr, 0);
     return { totalEarnings, totalWithdrawn, pendingWithdrawals };
   }, [rows, withdrawals]);
@@ -348,7 +350,7 @@ export default function WalletPage() {
                       tone={
                         w.status === 'paid'
                           ? 'success'
-                          : w.status === 'pending' || w.status === 'processing'
+                          : w.status === 'pending' || w.status === 'processing' || w.status === 'payment_pending'
                             ? 'warning'
                             : 'danger'
                       }

@@ -3,6 +3,7 @@ import { clearSession } from './auth';
 import { env, resolveApiUrl, TOKEN_KEY, type PackageId } from './constants';
 import type {
   AdminStats,
+  AdminActivationDetail,
   AdminUserRow,
   AuthUser,
   KycListResponse,
@@ -144,6 +145,7 @@ class ApiClient {
     phone?: string;
     package_code?: string;
     sponsor_referral_code?: string;
+    placement_user_id?: string;
     full_name?: string;
   }): Promise<TokenResponse> {
     const res = await this.client.post('/api/v1/auth/google', body);
@@ -163,6 +165,7 @@ class ApiClient {
     password: string;
     package_code: string;
     sponsor_referral_code?: string;
+    placement_user_id?: string;
     preferred_binary_side?: string;
   }) {
     const res = await this.client.post<{
@@ -211,15 +214,16 @@ class ApiClient {
     const d = await this.get<any>('/api/v1/users/overview');
     const max = d.max_direct_referrals || 4;
     const used = d.referral_slots_used ?? d.direct_referral_count ?? 0;
-    const rank =
-      d.current_rank ||
-      (d.current_level ? `Level ${d.current_level}` : `${used}/${max} directs`);
+    const treeSlotsUsed =
+      typeof d.tree_slots_used === 'number' ? d.tree_slots_used : Math.min(used, max);
+    const rank = typeof d.current_rank === 'string' ? d.current_rank.trim() : '';
     return {
       totalEarnings: (d.wallet_balance_paise || 0) / 100,
       walletBalance: (d.wallet_balance_paise || 0) / 100,
       directReferrals: used,
       maxDirectReferrals: max,
       referralSlotsFull: Boolean(d.referral_slots_full),
+      treeSlotsUsed,
       qualifiedDirects: d.qualified_directs || 0,
       daysLeftInWindow: d.days_left_in_window,
       isSmart: Boolean(d.is_smart),
@@ -343,11 +347,26 @@ class ApiClient {
       kycPending: d.kyc_pending || 0,
       kycApproved: d.kyc_approved || 0,
       kycRejected: d.kyc_rejected || 0,
+      memberGrowth: Array.isArray(d.member_growth)
+        ? d.member_growth.map((point: { label?: string; members?: number }) => ({
+            label: String(point.label || ''),
+            members: Number(point.members) || 0,
+          }))
+        : [],
+      revenueMonths: Array.isArray(d.revenue_months)
+        ? d.revenue_months.map((point: { month?: string; value?: number }) => ({
+            month: String(point.month || ''),
+            value: Number(point.value) || 0,
+          }))
+        : [],
     };
   }
 
-  async getAdminUsers(): Promise<AdminUserRow[]> {
-    const rows = await this.get<any[]>('/api/v1/admin/users', { limit: 200 });
+  async getAdminUsers(query?: string): Promise<AdminUserRow[]> {
+    const params: Record<string, unknown> = { limit: 200 };
+    const trimmed = query?.trim();
+    if (trimmed) params.q = trimmed;
+    const rows = await this.get<any[]>('/api/v1/admin/users', params);
     return (rows || []).map((u) => {
       const totalEarningsPaise = Number(u.total_earnings_paise ?? u.totalEarningsPaise ?? 0);
       const earnings =
@@ -356,20 +375,72 @@ class ApiClient {
           : Number(u.earnings ?? 0);
       const level = Number(u.current_level ?? u.level ?? 0);
 
+      const display = u.display_status || u.status;
+      const status =
+        display === 'active'
+          ? 'active'
+          : display === 'inactive' || display === 'suspended'
+            ? 'inactive'
+            : display === 'pending' || display === 'pending_payment'
+              ? 'pending'
+              : 'inactive';
+
       return {
         id: u.id,
         usosId: u.usos_id || '',
         name: u.full_name || '',
         email: u.email || '',
         phone: u.phone || '',
+        referralCode: u.referral_code || '',
+        sponsorName: u.sponsor_name || '',
+        sponsorUsosId: u.sponsor_usos_id || '',
         packageId: (u.package_code || '') as PackageId,
-        status: u.status === 'active' ? 'active' : u.status === 'suspended' ? 'inactive' : 'pending',
+        status,
+        rawStatus: u.status || '',
+        statusReason: u.status_reason || '',
+        initialPaymentStatus: u.initial_payment_status || 'none',
+        monthlyEligiblePaise: Number(u.monthly_eligible_paise || 0),
+        monthlyThresholdPaise: Number(u.monthly_threshold_paise || 100000),
+        monthlyPeriod: u.monthly_period || '',
         level: Number.isFinite(level) ? level : 0,
         joinedAt: u.created_at,
         totalEarningsPaise,
         earnings: Number.isFinite(earnings) ? earnings : 0,
       };
     });
+  }
+
+  async getAdminUserActivation(userId: string): Promise<AdminActivationDetail> {
+    const row = await this.get<any>(`/api/v1/admin/users/${userId}/activation`);
+    const display = row.display_status;
+    return {
+      displayStatus:
+        display === 'active' ? 'active' : display === 'pending' ? 'pending' : 'inactive',
+      statusReason: row.status_reason || '',
+      initialPaymentStatus: row.initial_payment_status || 'none',
+      monthlyEligiblePaise: Number(row.monthly_eligible_paise || 0),
+      monthlyThresholdPaise: Number(row.monthly_threshold_paise || 100000),
+      monthlyPeriod: row.monthly_period || '',
+      months: (row.months || []).map((month: any) => ({
+        period: month.period,
+        eligiblePaise: Number(month.eligible_paise || 0),
+        thresholdPaise: Number(month.threshold_paise || 0),
+        exempt: Boolean(month.exempt),
+        closed: Boolean(month.closed),
+        outcome: month.outcome || '',
+      })),
+      history: (row.history || []).map((event: any) => ({
+        id: event.id,
+        period: event.period,
+        previousStatus: event.previous_status,
+        newStatus: event.new_status,
+        reason: event.reason || '',
+        eligiblePaise: event.eligible_paise,
+        thresholdPaise: event.threshold_paise,
+        source: event.source || '',
+        createdAt: event.created_at,
+      })),
+    };
   }
 
   async toggleUserStatus(userId: string, status: string) {
@@ -422,6 +493,18 @@ class ApiClient {
       requestedAt: r.achieved_at,
       status: claimStatus,
     };
+  }
+
+  async getMemberActivation() {
+    return this.get<{
+      display_status: string;
+      joining_verified: boolean;
+      needs_repurchase: boolean;
+      status_reason: string;
+      monthly_eligible_paise: number;
+      monthly_threshold_paise: number;
+      remaining_paise: number;
+    }>('/api/v1/auth/activation');
   }
 
   async getMe() {

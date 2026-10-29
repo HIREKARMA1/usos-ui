@@ -74,8 +74,24 @@ function PaymentContent() {
 
   useEffect(() => {
     if (loading || !user || !needsPayment(user)) return;
-    void loadCheckout();
-  }, [loading, user, loadCheckout]);
+    let active = true;
+    api
+      .getMemberActivation()
+      .then((status) => {
+        if (!active) return;
+        if (status.needs_repurchase) {
+          router.replace('/shop?reactivate=1');
+          return;
+        }
+        void loadCheckout();
+      })
+      .catch(() => {
+        if (active) void loadCheckout();
+      });
+    return () => {
+      active = false;
+    };
+  }, [loading, user, loadCheckout, router]);
 
   const orderId = checkout?.order_id || payment?.id || '';
 

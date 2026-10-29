@@ -1,10 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { ChevronDown, ChevronLeft, ChevronRight, Download, Search } from 'lucide-react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { ChevronDown, ChevronLeft, ChevronRight, Download, Search, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Spinner } from '@/components/ui/Spinner';
 import { useContent } from '@/hooks/useContent';
 import { api } from '@/lib/api';
@@ -29,14 +32,31 @@ const controlClass =
 const iconBtnClass =
   'flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface-muted text-ink-muted transition duration-300 hover:bg-surface-soft hover:text-ink disabled:pointer-events-none disabled:opacity-30 dark:border-white/[0.08] dark:bg-white/[0.04] dark:text-white/60 dark:hover:bg-white/[0.08] dark:hover:text-white';
 
-type StatusFilter = 'all' | 'active' | 'inactive';
+type StatusFilter = 'all' | 'active' | 'inactive' | 'pending';
 type PackageFilter = 'all' | string;
 type LevelFilter = 'all' | number;
 
 const FALLBACK_LEVELS = [1, 2, 3, 4, 5, 6, 7, 8];
 
+function BackspaceKeyIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 36 28" className={className} aria-hidden="true">
+      <path
+        fill="#2C3A6B"
+        d="M12.4 2.2c-.9 0-1.7.4-2.3 1.1L3.1 12.1c-.7.9-.7 2.2 0 3.1l7 8.8c.6.7 1.4 1.1 2.3 1.1h15.6c3.2 0 5.8-2.6 5.8-5.8V8c0-3.2-2.6-5.8-5.8-5.8H12.4z"
+      />
+      <path
+        d="M18.4 9.3l7.6 9M26 9.3l-7.6 9"
+        stroke="#111"
+        strokeWidth="2.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 function avatarGradient(name: string) {
-  const index = name.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  const index = (name || '').split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   return AVATAR_COLORS[index % AVATAR_COLORS.length];
 }
 
@@ -57,6 +77,39 @@ function StatusBadge({ status, label }: { status: AccountStatus; label: string }
     >
       {label}
     </span>
+  );
+}
+
+function MemberIdentity({
+  user,
+  packageName,
+  statusLabel,
+}: {
+  user: AdminUserRow;
+  packageName: string;
+  statusLabel: string;
+}) {
+  const meta = [user.phone, packageName, user.usosId].filter(Boolean).join(' · ');
+
+  return (
+    <div className="flex items-center gap-3 rounded-xl border border-line bg-surface-muted/70 px-3 py-3 dark:border-white/10 dark:bg-white/[0.04]">
+      <div
+        className={cn(
+          'flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-xs font-semibold text-white',
+          avatarGradient(user.name)
+        )}
+      >
+        {getInitials(user.name)}
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center justify-between gap-2">
+          <p className="truncate font-semibold text-ink">{user.name}</p>
+          <StatusBadge status={user.status} label={statusLabel} />
+        </div>
+        <p className="truncate text-xs text-ink-muted">{user.email || '—'}</p>
+        {meta ? <p className="mt-1 truncate text-xs text-ink-secondary">{meta}</p> : null}
+      </div>
+    </div>
   );
 }
 
@@ -90,7 +143,22 @@ function exportUsers(
   rows: AdminUserRow[],
   statusLabels: Record<string, string>
 ) {
-  const headers = ['Name', 'Email', 'Contact', 'Package', 'Level', 'Earnings', 'Status', 'Joined'];
+  const headers = [
+    'Name',
+    'Email',
+    'Contact',
+    'Referral ID',
+    'Sponsor',
+    'Package',
+    'Level',
+    'Earnings',
+    'Status',
+    'Reason',
+    'Initial payment',
+    'Monthly eligible',
+    'Threshold',
+    'Joined',
+  ];
   const escape = (value: string | number) => `"${String(value).replace(/"/g, '""')}"`;
   const lines = [
     headers.join(','),
@@ -108,10 +176,16 @@ function exportUsers(
         u.name,
         u.email,
         u.phone,
+        u.referralCode || '',
+        u.sponsorName || '',
         `Package ${u.packageId}`,
         u.level > 0 ? `Level ${u.level}` : '',
         earnings,
         statusLabels[u.status] || u.status,
+        u.statusReason || '',
+        u.initialPaymentStatus || '',
+        (u.monthlyEligiblePaise || 0) / 100,
+        (u.monthlyThresholdPaise || 0) / 100,
         formatDate(u.joinedAt),
       ]
         .map(escape)
@@ -128,25 +202,36 @@ function exportUsers(
   URL.revokeObjectURL(url);
 }
 
+function initialStatus(value: string | null): StatusFilter {
+  return value === 'active' || value === 'inactive' || value === 'pending' ? value : 'all';
+}
+
 export default function AdminUsersPage() {
   const t = useContent('admin').users;
   const common = useContent('common');
+  const reduceMotion = useReducedMotion();
+  const search = useSearchParams();
   const [rows, setRows] = useState<AdminUserRow[]>([]);
   const [packages, setPackages] = useState<PackagePlan[]>([]);
   const [levelOptions, setLevelOptions] = useState<number[]>(FALLBACK_LEVELS);
   const [q, setQ] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(() => initialStatus(search.get('status')));
   const [packageFilter, setPackageFilter] = useState<PackageFilter>('all');
   const [levelFilter, setLevelFilter] = useState<LevelFilter>('all');
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [pendingDelete, setPendingDelete] = useState<AdminUserRow | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [viewUser, setViewUser] = useState<AdminUserRow | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const searchRequest = useRef(0);
 
-  async function load() {
+  const loadUsers = useCallback(async (query: string) => {
+    const requestId = ++searchRequest.current;
     setLoading(true);
     try {
-      const data = await api.getAdminUsers();
+      const data = await api.getAdminUsers(query);
+      if (requestId !== searchRequest.current) return;
       if (process.env.NODE_ENV === 'development' && data.length > 0) {
         const sample = data[0];
         console.debug('[admin/users] api earnings', {
@@ -158,22 +243,42 @@ export default function AdminUsersPage() {
         });
       }
       setRows(data);
-      const pkgs = await api.getPackages({ activeOnly: false }).catch(() => [] as PackagePlan[]);
-      setPackages(pkgs);
-      const plan = await api.getRewardPlan().catch(() => ({ levels: [] as { level: number }[] }));
-      const levels = (plan.levels || [])
-        .map((level) => Number(level.level))
-        .filter((level) => Number.isFinite(level) && level > 0)
-        .sort((a, b) => a - b);
-      if (levels.length) setLevelOptions(levels);
     } finally {
-      setLoading(false);
+      if (requestId === searchRequest.current) setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
-    load();
+    setMounted(true);
+    let cancelled = false;
+    api
+      .getPackages({ activeOnly: false })
+      .catch(() => [] as PackagePlan[])
+      .then((pkgs) => {
+        if (!cancelled) setPackages(pkgs);
+      });
+    api
+      .getRewardPlan()
+      .catch(() => ({ levels: [] as { level: number }[] }))
+      .then((plan) => {
+        if (cancelled) return;
+        const levels = (plan.levels || [])
+          .map((level) => Number(level.level))
+          .filter((level) => Number.isFinite(level) && level > 0)
+          .sort((a, b) => a - b);
+        if (levels.length) setLevelOptions(levels);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    const handle = window.setTimeout(() => {
+      void loadUsers(q);
+    }, q.trim() ? 300 : 0);
+    return () => window.clearTimeout(handle);
+  }, [q, loadUsers]);
 
   useEffect(() => {
     setPage(1);
@@ -205,20 +310,13 @@ export default function AdminUsersPage() {
         if (levelFilter !== 'all' && r.level !== levelFilter) return false;
         return true;
       }),
-    [rows, q, statusFilter, packageFilter, levelFilter]
+    [rows, statusFilter, packageFilter, levelFilter]
   );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const paginated = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
   const pageNumbers = getPageNumbers(currentPage, totalPages);
-
-  async function toggle(userId: string, current: string) {
-    const next = current === 'active' ? 'suspended' : 'active';
-    await api.toggleUserStatus(userId, next);
-    toast.success(t.statusUpdated);
-    load();
-  }
 
   async function confirmDelete() {
     if (!pendingDelete) return;
@@ -227,7 +325,7 @@ export default function AdminUsersPage() {
       await api.deleteAdminUser(pendingDelete.id);
       toast.success(t.deleted);
       setPendingDelete(null);
-      load();
+      loadUsers(q);
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail;
       toast.error(typeof detail === 'string' ? detail : t.deleteFailed);
@@ -259,12 +357,27 @@ export default function AdminUsersPage() {
                 <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/40" />
                 <input
                   id="search"
-                  type="search"
+                  type="text"
                   placeholder={t.searchPlaceholder}
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  className={cn(controlClass, 'w-full pl-9 pr-3 placeholder:text-ink-muted dark:placeholder:text-white/40')}
+                  className={cn(
+                    controlClass,
+                    'w-full pl-9 placeholder:text-ink-muted dark:placeholder:text-white/40',
+                    q ? 'pr-12' : 'pr-3'
+                  )}
                 />
+                {q ? (
+                  <button
+                    type="button"
+                    aria-label="Backspace"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => setQ((current) => current.slice(0, -1))}
+                    className="absolute right-1.5 top-1/2 flex h-7 w-8 -translate-y-1/2 items-center justify-center rounded-md transition hover:bg-surface-muted dark:hover:bg-white/[0.06]"
+                  >
+                    <BackspaceKeyIcon className="h-5 w-6" />
+                  </button>
+                ) : null}
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
@@ -278,6 +391,7 @@ export default function AdminUsersPage() {
                     <option value="all">Status: All</option>
                     <option value="active">Status: {common.status.active}</option>
                     <option value="inactive">Status: {common.status.inactive}</option>
+                    <option value="pending">Status: {common.status.pending}</option>
                   </select>
                   <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-muted dark:text-white/50" />
                 </label>
@@ -351,7 +465,7 @@ export default function AdminUsersPage() {
                         { label: t.table.package, align: 'left' as const },
                         { label: t.table.level, align: 'left' as const },
                         { label: t.table.earnings, align: 'right' as const },
-                        { label: t.table.status, align: 'left' as const },
+                        { label: t.activation.column, align: 'left' as const },
                         { label: t.table.joined, align: 'left' as const },
                         { label: t.table.actions, align: 'left' as const },
                       ].map((header) => (
@@ -410,7 +524,7 @@ export default function AdminUsersPage() {
                           <td className="px-4 py-4 text-right font-medium text-emerald-600 dark:text-[#22C55E]">
                             {formatCurrency(getUserEarnings(u))}
                           </td>
-                          <td className="px-4 py-4">
+                          <td className="whitespace-nowrap px-4 py-4">
                             <StatusBadge
                               status={u.status}
                               label={common.status[u.status] || u.status}
@@ -423,15 +537,10 @@ export default function AdminUsersPage() {
                             <div className="flex items-center gap-2">
                               <button
                                 type="button"
-                                onClick={() => toggle(u.id, u.status)}
-                                className={cn(
-                                  'rounded-full px-3.5 py-1.5 text-xs font-semibold transition duration-300',
-                                  u.status === 'active'
-                                    ? 'bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:shadow-[0_0_16px_rgba(239,68,68,0.15)] dark:bg-[#EF4444]/15 dark:text-[#EF4444] dark:hover:bg-[#EF4444]/25 dark:hover:shadow-[0_0_16px_rgba(239,68,68,0.25)]'
-                                    : 'bg-emerald-500/10 text-emerald-700 hover:bg-emerald-500/20 hover:shadow-[0_0_16px_rgba(34,197,94,0.15)] dark:bg-[#22C55E]/15 dark:text-[#22C55E] dark:hover:bg-[#22C55E]/25 dark:hover:shadow-[0_0_16px_rgba(34,197,94,0.25)]'
-                                )}
+                                onClick={() => setViewUser(u)}
+                                className="rounded-full bg-[#6C63FF] px-3.5 py-1.5 text-xs font-semibold text-white transition duration-300 hover:bg-[#5b54e6]"
                               >
-                                {u.status === 'active' ? t.deactivate : t.activate}
+                                {t.activation.view}
                               </button>
                               <button
                                 type="button"
@@ -502,28 +611,136 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      {pendingDelete
+      {mounted
         ? createPortal(
-            <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4">
-              <div
-                role="dialog"
-                aria-modal="true"
-                className="w-full max-w-md rounded-xl border border-line bg-surface-card p-6 shadow-card"
+            <>
+              <ConfirmDialog
+                open={Boolean(pendingDelete)}
+                title={t.deleteTitle}
+                description={pendingDelete ? t.deleteBody.replace('{name}', pendingDelete.name) : ''}
+                confirmLabel={t.deleteConfirm}
+                cancelLabel={t.cancel}
+                loading={deleting}
+                icon={Trash2}
+                onConfirm={confirmDelete}
+                onClose={() => {
+                  if (!deleting) setPendingDelete(null);
+                }}
               >
-                <h3 className="text-lg font-semibold text-ink">{t.deleteTitle}</h3>
-                <p className="mt-2 text-sm text-ink-muted">
-                  {t.deleteBody.replace('{name}', pendingDelete.name)}
-                </p>
-                <div className="mt-5 flex justify-end gap-2">
-                  <Button type="button" variant="outline" size="sm" disabled={deleting} onClick={() => setPendingDelete(null)}>
-                    {t.cancel}
-                  </Button>
-                  <Button type="button" variant="danger" size="sm" loading={deleting} onClick={confirmDelete}>
-                    {t.deleteConfirm}
-                  </Button>
-                </div>
-              </div>
-            </div>,
+                {pendingDelete ? (
+                  <MemberIdentity
+                    user={pendingDelete}
+                    packageName={packageNameByCode.get(pendingDelete.packageId) || pendingDelete.packageId || '—'}
+                    statusLabel={common.status[pendingDelete.status] || pendingDelete.status}
+                  />
+                ) : null}
+              </ConfirmDialog>
+              <AnimatePresence>
+              {viewUser ? (
+                <motion.div
+                  key="member-view"
+                  className="fixed inset-0 z-[80] flex items-center justify-center p-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.18 }}
+                >
+                  <button
+                    type="button"
+                    aria-label={common.actions.close}
+                    className="absolute inset-0 bg-[#0f172a]/50 backdrop-blur-[3px] dark:bg-black/65"
+                    onClick={() => setViewUser(null)}
+                  />
+                  <motion.div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="member-view-title"
+                    className="relative w-full max-w-[420px] overflow-hidden rounded-2xl border border-line bg-surface-card shadow-[0_24px_70px_-28px_rgba(15,23,42,0.55)] dark:border-white/10 dark:shadow-[0_24px_70px_-28px_rgba(0,0,0,0.85)]"
+                    initial={reduceMotion ? false : { opacity: 0, y: 12, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8, scale: 0.98 }}
+                    transition={{ duration: reduceMotion ? 0 : 0.22, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <div className="h-1 bg-primary" />
+                    <div className="flex items-start justify-between gap-3 px-5 pb-4 pt-5 sm:px-6">
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div
+                          className={cn(
+                            'flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br text-sm font-semibold text-white',
+                            avatarGradient(viewUser.name)
+                          )}
+                        >
+                          {getInitials(viewUser.name)}
+                        </div>
+                        <div className="min-w-0">
+                          <h3 id="member-view-title" className="truncate font-display text-lg font-bold tracking-tight text-ink">
+                            {viewUser.name}
+                          </h3>
+                          <p className="truncate text-sm text-ink-muted">{t.activation.viewTitle}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        aria-label={common.actions.close}
+                        onClick={() => setViewUser(null)}
+                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition hover:bg-surface-muted hover:text-ink"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <dl className="space-y-3 px-5 pb-5 sm:px-6">
+                      <div className="flex items-center justify-between gap-3 rounded-xl border border-line bg-surface-muted/70 px-3 py-2.5 dark:border-white/10 dark:bg-white/[0.04]">
+                        <dt className="text-xs font-medium text-ink-muted">{t.table.referralId}</dt>
+                        <dd className="truncate font-mono text-sm font-semibold text-primary">
+                          {viewUser.referralCode || '—'}
+                        </dd>
+                      </div>
+                      <div className="rounded-xl border border-line px-3 py-2.5 dark:border-white/10">
+                        <dt className="text-xs font-medium text-ink-muted">{t.table.sponsor}</dt>
+                        <dd className="mt-1 text-sm text-ink">
+                          <p className="font-medium">{viewUser.sponsorName || t.activation.noSponsor}</p>
+                          <p className="mt-0.5 font-mono text-xs text-ink-muted">
+                            {t.table.userId}: {viewUser.sponsorUsosId || '—'}
+                          </p>
+                        </dd>
+                      </div>
+                      <div className="flex items-center justify-between gap-3 rounded-xl border border-line px-3 py-2.5 dark:border-white/10">
+                        <dt className="text-xs font-medium text-ink-muted">{t.activation.accountStatus}</dt>
+                        <dd>
+                          <StatusBadge
+                            status={viewUser.status}
+                            label={common.status[viewUser.status] || viewUser.status}
+                          />
+                        </dd>
+                      </div>
+                      <div
+                        className={cn(
+                          'rounded-xl px-3 py-3',
+                          viewUser.status === 'active'
+                            ? 'bg-emerald-500/10'
+                            : 'bg-red-500/10'
+                        )}
+                      >
+                        <dt className="text-xs font-medium text-ink-muted">
+                          {viewUser.status === 'active' ? t.activation.reason : t.activation.inactiveReason}
+                        </dt>
+                        <dd className="mt-1 text-sm leading-snug text-ink">
+                          {viewUser.status === 'active'
+                            ? viewUser.statusReason || t.activation.activeNote
+                            : viewUser.statusReason || t.activation.noReason}
+                        </dd>
+                      </div>
+                    </dl>
+                    <div className="flex justify-end border-t border-line bg-surface-muted/50 px-5 py-3.5 dark:bg-white/[0.03] sm:px-6">
+                      <Button type="button" variant="outline" size="sm" onClick={() => setViewUser(null)}>
+                        {common.actions.close}
+                      </Button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ) : null}
+              </AnimatePresence>
+            </>,
             document.body
           )
         : null}

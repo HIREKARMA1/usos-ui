@@ -39,6 +39,7 @@ export interface OverviewStats {
   directReferrals: number;
   maxDirectReferrals?: number;
   referralSlotsFull?: boolean;
+  treeSlotsUsed?: number;
   qualifiedDirects?: number;
   daysLeftInWindow?: number | null;
   isSmart?: boolean;
@@ -113,12 +114,53 @@ export interface AdminUserRow {
   name: string;
   email: string;
   phone: string;
+  referralCode?: string;
+  sponsorName?: string;
+  sponsorUsosId?: string;
   packageId: PackageId;
   status: AccountStatus;
+  rawStatus?: string;
+  statusReason?: string;
+  initialPaymentStatus?: string;
+  monthlyEligiblePaise?: number;
+  monthlyThresholdPaise?: number;
+  monthlyPeriod?: string;
   level: number;
   joinedAt: string;
   totalEarningsPaise: number;
   earnings: number;
+}
+
+export interface ActivationMonthRow {
+  period: string;
+  eligiblePaise: number;
+  thresholdPaise: number;
+  exempt: boolean;
+  closed: boolean;
+  outcome: string;
+}
+
+export interface ActivationHistoryEntry {
+  id: string;
+  period?: string | null;
+  previousStatus?: string | null;
+  newStatus?: string | null;
+  reason: string;
+  eligiblePaise?: number | null;
+  thresholdPaise?: number | null;
+  source: string;
+  createdAt: string;
+}
+
+export interface AdminActivationDetail {
+  displayStatus: AccountStatus;
+  statusReason: string;
+  initialPaymentStatus: string;
+  monthlyEligiblePaise: number;
+  monthlyThresholdPaise: number;
+  monthlyPeriod?: string;
+  months: ActivationMonthRow[];
+  history: ActivationHistoryEntry[];
 }
 
 export type RewardClaimStatus = 'pending' | 'approved' | 'fulfilled' | 'rejected';
@@ -135,6 +177,16 @@ export interface RewardClaim {
   status: RewardClaimStatus;
 }
 
+export interface MemberGrowthPoint {
+  label: string;
+  members: number;
+}
+
+export interface RevenueMonthPoint {
+  month: string;
+  value: number;
+}
+
 export interface AdminStats {
   totalRevenue: number;
   totalUsers: number;
@@ -147,6 +199,8 @@ export interface AdminStats {
   kycPending: any;
   kycApproved: any;
   kycRejected: any;
+  memberGrowth: MemberGrowthPoint[];
+  revenueMonths: RevenueMonthPoint[];
 }
 
 export type KycStatus = 'not_submitted' | 'pending' | 'approved' | 'rejected';

@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { mockMemberGrowthSeries } from '@/lib/mock';
+import type { MemberGrowthPoint } from '@/types';
 
 const CHART_BLUE = '#3b82f6';
 
@@ -31,13 +31,13 @@ function ChartTooltip({
   );
 }
 
-export function MemberGrowthChart({ title }: { title: string }) {
+export function MemberGrowthChart({ title, data }: { title: string; data: MemberGrowthPoint[] }) {
   return (
     <div className="rounded-xl border border-line bg-surface-card p-3.5 shadow-none transition hover:shadow-none sm:p-4">
       <h3 className="text-sm font-semibold text-ink">{title}</h3>
       <div className="mt-3 h-[180px] w-full sm:h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={mockMemberGrowthSeries} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 4, right: 4, left: -18, bottom: 0 }}>
             <defs>
               <linearGradient id="memberGrowthFill" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor={CHART_BLUE} stopOpacity={0.35} />
